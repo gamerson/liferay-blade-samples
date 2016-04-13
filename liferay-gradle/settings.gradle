@@ -16,6 +16,7 @@ include(
 	'blade.portlet.filter',
 	'blade.portlet.jsp',
 	'blade.portlet.osgiapi',
+	'blade.portlet.soy',
 	'blade.rest',
 	'blade.service.hook.user',
 	'blade.servicebuilder.api',
