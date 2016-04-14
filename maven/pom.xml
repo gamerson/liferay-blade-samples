@@ -23,6 +23,7 @@
 		<module>blade.friendlyurl</module>
 		<module>blade.gogo</module>
 		<module>blade.hook.jsp</module>
+		<module>blade.hook.resourcebundle</module>
 		<module>blade.indexerpostprocessor</module>
 		<module>blade.jsf.portlet.ds</module>
 		<module>blade.lifecycle.loginpreaction</module>
@@ -34,6 +35,7 @@
 		<module>blade.portlet.filter</module>
 		<module>blade.portlet.jsp</module>
 		<module>blade.portlet.osgiapi</module>
+		<module>blade.resourcebundle</module>
 		<module>blade.rest</module>
 		<module>blade.service.hook.user</module>
 		<module>blade.servicebuilder.api</module>
