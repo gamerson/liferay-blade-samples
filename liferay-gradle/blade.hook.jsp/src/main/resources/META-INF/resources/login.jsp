@@ -15,7 +15,7 @@
 --%>
 
 <%@ include file="/init.jsp" %>
-<p style="color: red">changed</p>
+<h1 style="color: red">MODIFIED</h1>
 <c:choose>
 	<c:when test="<%= themeDisplay.isSignedIn() %>">
 
