@@ -1,6 +1,7 @@
 include(
 	'blade.authenticator.shiro',
 	'blade.authfailure',
+	'blade.controlmenuentry',
 	'blade.configurationaction',
 	'blade.corejsphook',
 	'blade.friendlyurl',
@@ -8,7 +9,6 @@ include(
 	'blade.hook.jsp',
 	'blade.hook.resourcebundle',
 	'blade.indexerpostprocessor',
-	'blade.jsf.portlet.ds',
 	'blade.lifecycle.loginpreaction',
 	'blade.modellistener',
 	'blade.pollprocessor',
