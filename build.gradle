@@ -78,10 +78,7 @@ repositories {
 
 task diff << {
 	[bndtoolsOutputFiles, gradleOutputFiles, mavenOutputFiles].each { replicationFiles ->
-		println "${replicationFiles}"
-
 		replicationFiles.each { replicationFile ->
-
 			def liferayGradleOutputFile = liferayGradleOutputFiles.find {
 				it.name == replicationFile.name
 			}
@@ -101,7 +98,7 @@ task diff << {
 
 				if (output?.trim()) {
 					println "\n"
-					println replicationFile.name
+					println "${replicationFiles}${replicationFile.name}"
 					println "*******************************************************"
 					println output
 				}
