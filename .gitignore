@@ -16,6 +16,8 @@ bndtools/*/generated
 bndtools/cnf/cache/
 bndtools/dist/
 
+build/*
+
 gradle/.project
 gradle/.settings
 gradle/*/.classpath
