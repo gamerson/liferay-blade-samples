@@ -1,0 +1,112 @@
+FileTree liferayGradleOutputFiles = fileTree(dir: '../liferay-gradle/', include: '**/libs/*.jar')
+
+buildscript {
+    repositories {
+            jcenter()
+    }
+
+    dependencies {
+    		classpath 'biz.aQute.bnd:biz.aQute.bnd.gradle:3.2.0'
+    		classpath 'com.jcabi:jcabi-manifests:1.1'
+            classpath 'com.squareup.okhttp3:okhttp:3.3.1'
+            classpath 'de.undercouch:gradle-download-task:2.1.0'
+    }
+}
+
+apply plugin: 'biz.aQute.bnd.builder'
+apply plugin: 'de.undercouch.download'
+
+import com.jcabi.manifests.Manifests
+import java.util.jar.JarInputStream;
+import de.undercouch.gradle.tasks.download.Download;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+
+def bladeclijar = 'com.liferay.blade.cli_1.0.1.201606142156.jar'
+
+task downloadBladeCLI(type: Download) {
+    dest buildDir
+    overwrite false
+    src "http://releases.liferay.com/tools/blade-cli/1.0.1.201606142156/plugins/${bladeclijar}"
+}
+
+def sampleBundles = liferayGradleOutputFiles.files
+def sampleBundle = sampleBundles.name
+
+def blade(String... args) {
+	javaexec {
+		classpath = files("build/${bladeclijar}")
+		main = "com.liferay.blade.cli.blade"
+		standardOutput = os
+	}
+}
+
+task installBundlesTest(dependsOn: 'downloadBladeCLI') << {
+	blade("server", "start", "-b")
+
+	OkHttpClient client = new OkHttpClient();
+	Request request = new Request.Builder().url("http://localhost:8080").build();
+
+	boolean pingSucceeded = false;
+
+	while (!pingSucceeded) {
+		try {
+			client.newCall(request).execute();
+			pingSucceeded = true;
+		}
+		catch( Exception e) {
+		}
+	}
+
+	def bundleIDAllList = []
+	def bundleIDStartList = []
+	def errorList = []
+
+	sampleBundles.each { sampleBundlefile ->
+		def os = new ByteArrayOutputStream()
+
+		blade("sh", "install", "file:${sampleBundlefile}")
+
+		def installOutput = os.toString()
+
+		def bundleID = installOutput.substring(installOutput.length() - 3)
+
+		bundleIDAllList.add(bundleID)
+
+		def jarInputStream = new JarInputStream(new FileInputStream(sampleBundlefile))
+
+		jarInputStream.withCloseable {
+			if (jarInputStream.manifest.getMainAttributes().getValue( "Fragment-Host" ) == null ) {
+				bundleIDStartList.add(bundleID)
+			}
+		}
+
+		bundleIDAllList = bundleIDAllList.unique()
+		bundleIDStartList = bundleIDStartList.unique()
+	}
+
+	bundleIDStartList.each { startBundleID ->
+		def os = new ByteArrayOutputStream()
+
+		blade("sh", "start", startBundleID)
+
+		def startOutput = os.toString()
+
+		if (startOutput.contains('Exception')) {
+			errorList.add(startOutput)
+		}
+	}
+
+	bundleIDAllList.each { bundleIDAll ->
+		def os = new ByteArrayOutputStream()
+
+		blade("sh", "uninstall", bundleIDAll)
+	}
+
+	blade("server", "stop")
+
+	if (!errorList.empty) {
+		throw new GradleException(errorList.toListString())
+	}
+
+}
