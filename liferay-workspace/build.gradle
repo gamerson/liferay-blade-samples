@@ -1,15 +1,15 @@
 FileTree liferayGradleOutputFiles = fileTree(dir: '../liferay-gradle/', include: '**/libs/*.jar')
 
 buildscript {
-    repositories {
-            jcenter()
-    }
+	repositories {
+		jcenter()
+	}
 
-    dependencies {
-    		classpath 'biz.aQute.bnd:biz.aQute.bnd.gradle:3.2.0'
-            classpath 'com.squareup.okhttp3:okhttp:3.3.1'
-            classpath 'de.undercouch:gradle-download-task:2.1.0'
-    }
+	dependencies {
+		classpath 'biz.aQute.bnd:biz.aQute.bnd.gradle:3.2.0'
+		classpath 'com.squareup.okhttp3:okhttp:3.3.1'
+		classpath 'de.undercouch:gradle-download-task:2.1.0'
+	}
 }
 
 apply plugin: 'biz.aQute.bnd.builder'
@@ -21,6 +21,8 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Request.Builder
 
+def bladeclijar = "com.liferay.blade.cli_1.0.1.201606142156.jar"
+
 task downloadBladeCLI(type: Download) {
     dest buildDir
     overwrite false
@@ -30,17 +32,19 @@ task downloadBladeCLI(type: Download) {
 def sampleBundles = liferayGradleOutputFiles.files
 def sampleBundle = sampleBundles.name
 
-def blade(String... args) {
-	javaexec {
-		classpath = files("build/${bladeclijar}")
-		main = "com.liferay.blade.cli.blade"
-		standardOutput = os
-	}
+task blade(type: JavaExec) {
+	classpath = files("build/${bladeclijar}")
+	main = "com.liferay.blade.cli.blade"
 }
 
 task installBundlesTest(dependsOn: 'downloadBladeCLI') << {
-	blade("server", "start", "-b")
+	def os = new ByteArrayOutputStream()
 
+	println "start bundle"
+	blade {
+		args "server", "start", "-b"
+	}
+	println "ping localhost"
 	OkHttpClient client = new OkHttpClient()
 	Request request = new Builder().url("http://localhost:8080").build()
 
@@ -59,10 +63,12 @@ task installBundlesTest(dependsOn: 'downloadBladeCLI') << {
 	def bundleIDStartList = []
 	def errorList = []
 
+	println "start loop"
 	sampleBundles.each { sampleBundlefile ->
-		def os = new ByteArrayOutputStream()
-
-		blade("sh", "install", "file:${sampleBundlefile}")
+		blade {
+			args "sh", "install", "file:${sampleBundlefile}"
+			standardOutput = os
+		}
 
 		def installOutput = os.toString()
 
@@ -83,9 +89,10 @@ task installBundlesTest(dependsOn: 'downloadBladeCLI') << {
 	}
 
 	bundleIDStartList.each { startBundleID ->
-		def os = new ByteArrayOutputStream()
-
-		blade("sh", "start", startBundleID)
+		blade {
+			args "sh", "start", startBundleID
+			standardOutput = os
+		}
 
 		def startOutput = os.toString()
 
@@ -95,12 +102,14 @@ task installBundlesTest(dependsOn: 'downloadBladeCLI') << {
 	}
 
 	bundleIDAllList.each { bundleIDAll ->
-		def os = new ByteArrayOutputStream()
-
-		blade("sh", "uninstall", bundleIDAll)
+		blade {
+			args "sh", "uninstall", bundleIDAll
+		}
 	}
 
-	blade("server", "stop")
+	blade {
+		args "server", "stop"
+	}
 
 	if (!errorList.empty) {
 		throw new GradleException(errorList.toListString())
