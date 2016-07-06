@@ -4,24 +4,21 @@ import org.gradle.testkit.runner.GradleRunner
 import static org.gradle.testkit.runner.TaskOutcome.*
 import spock.lang.Specification
 import de.undercouch.gradle.tasks.download.Download;
-import java.util.jar.JarInputStream;
 import java.io.FileNotFoundException;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Request.Builder;
 import aQute.bnd.osgi.Jar;
+import aQute.bnd.osgi.Processor;
+import aQute.bnd.deployer.repository.FixedIndexedRepo;
+import org.gradle.api.file.FileTree;
+import org.gradle.api.GradleException;
+import org.eclipse.core.runtime.Path;
 
 class BladeTests extends Specification {
-	public void executeBlade(String[] args) {
-		"java -jar build/${bladeclijar} args".execute()
-	}
-
-	def setup () {
-	    private static String getLatestRemoteBladeCLIJar() throws BladeCLIException
-	    {
-	        _settingsDir.mkdirs();
-	        repoCache.mkdirs();
-
+    public static String getLatestRemoteBladeCLIJar() throws GradleException
+    {
+    		def repoCache = new File("build");
 	        Processor reporter = new Processor();
 	        FixedIndexedRepo repo = new FixedIndexedRepo();
 	        Map<String, String> props = new HashMap<String, String>();
@@ -38,19 +35,26 @@ class BladeTests extends Specification {
 
 	            File cliJar = files[0];
 
-	            cachedBladeCLIPath = new Path( cliJar.getCanonicalPath() );
+	            def cachedBladeCLIPath = new Path( cliJar.getCanonicalPath() );
 
 	            return cliJar.getName();
 	        }
 	        catch( Exception e )
 	        {
-	            throw new BladeCLIException( "Could not get blade cli jar from repository." );
+	            throw new GradleException( "Could not get blade cli jar from repository." );
 	        }
-	    }
+    }
 
-		def bladeclijar = cliJar.getName();
+	public void executeBlade(String... args) {
+  		def bladeclijar = new String(getLatestRemoteBladeCLIJar.execute())
 
-		executeBlade(new String[]{'server','start', '-b'});
+  		println bladeclijar
+
+		"java -jar build/${bladeclijar} args".execute()
+	}
+
+	def setup () {
+		executeBlade('server','start', '-b');
 
 		OkHttpClient client = new OkHttpClient()
 		Request request = new Builder().url("http://localhost:8080").build()
@@ -79,11 +83,11 @@ class BladeTests extends Specification {
 
 		when:
 			sampleBundles.each { sampleBundlefile ->
-				def installBundleOutput = executeBlade(new String[]{'sh', 'install', "file:${sampleBundlefile}"}).text()
+				def installBundleOutput = executeBlade(args.add('sh', 'install', "file:${sampleBundlefile}")).text()
 
 				def bundleID = installBundleOutput.substring(installBundleOutput.length() - 3)
 
-				if(installBundleOutput.contains("Failed") {
+				if(installBundleOutput.contains("Failed")) {
 					throw new GradleException(installBundleOutput)
 				}
 
@@ -100,7 +104,7 @@ class BladeTests extends Specification {
 			}
 
 			bundleIDStartList.each { startBundleID ->
-				def startOutput = executeBlade(new String[]{'sh', 'start', startBundleID}).text()
+				def startOutput = executeBlade(args.add('sh', 'start', startBundleID)).text()
 
 				if (startOutput.contains('Exception')) {
 					errorList.add(startOutput)
@@ -116,16 +120,13 @@ class BladeTests extends Specification {
 
 		cleanup:
 			bundleIDAllList.each { bundleIDAll ->
-				def uninstallOutput = executeBlade(new String[]{'sh', 'uninstall', bundleIDAll}).text()
+				def uninstallOutput = executeBlade(args.add('sh', 'uninstall', bundleIDAll)).text()
 			}
 	}
 
-	def "verify new blade template projects"() {
-
-	}
 	def teardown(){
 		doLast {
-			executeBlade(new String[]{'server', 'stop'})
+			executeBlade(args.add('server', 'stop'))
 		}
 	}
 
