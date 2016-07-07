@@ -14,8 +14,10 @@ dependencies {
   compile group: "org.spockframework", name: "spock-core", version: "1.0-groovy-2.4"
 }
 
-//check.dependsOn 'initBundle'
-//test.dependsOn 'build'
+test {
+  dependsOn ":initBundle"
+}
 
-
-
+//project(":modules").subprojects { p ->
+//    test.dependsOn p.tasks["jar"]
+//}
