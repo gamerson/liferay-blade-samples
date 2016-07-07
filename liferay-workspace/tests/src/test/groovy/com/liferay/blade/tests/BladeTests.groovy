@@ -41,7 +41,6 @@ class BladeTests extends Specification {
 	def executeBlade(String... args) {
 		def bladeclijar = getLatestBladeCLIJar()
 		def cmdline = "java -jar ${bladeclijar} ${args.join(' ')}"
-		println cmdline
 		cmdline.execute()
 	}
 
@@ -75,7 +74,7 @@ class BladeTests extends Specification {
 
 		when:
 			sampleBundles.each { sampleBundlefile ->
-				def installBundleOutput = executeBlade(args.add('sh', 'install', "file:${sampleBundlefile}")).text()
+				def installBundleOutput = executeBlade('sh', 'install', "file:${sampleBundlefile}").text()
 
 				def bundleID = installBundleOutput.substring(installBundleOutput.length() - 3)
 
@@ -96,7 +95,7 @@ class BladeTests extends Specification {
 			}
 
 			bundleIDStartList.each { startBundleID ->
-				def startOutput = executeBlade(args.add('sh', 'start', startBundleID)).text()
+				def startOutput = executeBlade('sh', 'start', startBundleID).text()
 
 				if (startOutput.contains('Exception')) {
 					errorList.add(startOutput)
@@ -112,13 +111,13 @@ class BladeTests extends Specification {
 
 		cleanup:
 			bundleIDAllList.each { bundleIDAll ->
-				def uninstallOutput = executeBlade(args.add('sh', 'uninstall', bundleIDAll)).text()
+				def uninstallOutput = executeBlade('sh', 'uninstall', bundleIDAll).text()
 			}
 	}
 
 	def teardown(){
 		doLast {
-			executeBlade(args.add('server', 'stop'))
+			executeBlade('server', 'stop')
 		}
 	}
 
