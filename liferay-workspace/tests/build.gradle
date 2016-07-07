@@ -15,8 +15,10 @@ dependencies {
 
 test {
   dependsOn ":initBundle"
-}
 
-//project(":modules").subprojects { p ->
-//    test.dependsOn p.tasks["jar"]
-//}
+  project(":modules").subprojects { p ->
+      p.plugins.withType(JavaPlugin) {
+        dependsOn p.tasks["jar"]
+      }
+  }
+}
