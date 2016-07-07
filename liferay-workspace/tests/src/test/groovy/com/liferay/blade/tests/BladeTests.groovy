@@ -17,19 +17,25 @@ import org.eclipse.core.runtime.Path;
 
 class BladeTests extends Specification {
 
+	def bladeJarPath
+
 	def getLatestBladeCLIJar() {
-		def repo = new FixedIndexedRepo()
-    repo.setProperties([
-			"name" : "index1",
-			"locations" : getRepoURL() + "index.xml.gz",
-			FixedIndexedRepo.PROP_CACHE : new File("build").absolutePath
-		])
-    repo.setReporter(new Processor())
+		if (bladeJarPath == null) {
+			def repo = new FixedIndexedRepo()
+	    repo.setProperties([
+				"name" : "index1",
+				"locations" : getRepoURL() + "index.xml.gz",
+				FixedIndexedRepo.PROP_CACHE : new File("build").absolutePath
+			])
+	    repo.setReporter(new Processor())
 
-		File[] files = repo.get( "com.liferay.blade.cli", "[1,2)" );
-		File cliJar = files[0];
+			File[] files = repo.get( "com.liferay.blade.cli", "[1,2)" );
+			File cliJar = files[0];
 
-		return cliJar.canonicalPath
+			bladeJarPath = cliJar.canonicalPath
+		}
+
+		return bladeJarPath
   }
 
 	def executeBlade(String... args) {
