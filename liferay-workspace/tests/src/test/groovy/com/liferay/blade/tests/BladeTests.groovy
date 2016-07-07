@@ -3,7 +3,6 @@ package com.liferay.blade.tests
 import org.gradle.testkit.runner.GradleRunner
 import static org.gradle.testkit.runner.TaskOutcome.*
 import spock.lang.Specification
-import de.undercouch.gradle.tasks.download.Download;
 import java.io.FileNotFoundException;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -21,11 +20,12 @@ class BladeTests extends Specification {
 
 	def getLatestBladeCLIJar() {
 		if (bladeJarPath == null) {
+			def repoPath = new File("build").absolutePath
 			def repo = new FixedIndexedRepo()
 	    repo.setProperties([
 				"name" : "index1",
-				"locations" : getRepoURL() + "index.xml.gz",
-				FixedIndexedRepo.PROP_CACHE : new File("build").absolutePath
+				"locations" : "http://releases.liferay.com/tools/blade-cli/1.x/index.xml.gz",
+				"${FixedIndexedRepo.PROP_CACHE}" : repoPath
 			])
 	    repo.setReporter(new Processor())
 
