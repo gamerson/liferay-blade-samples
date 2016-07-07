@@ -16,41 +16,27 @@ import org.gradle.api.GradleException;
 import org.eclipse.core.runtime.Path;
 
 class BladeTests extends Specification {
-    public static String getLatestRemoteBladeCLIJar() throws GradleException
-    {
-    		def repoCache = new File("build");
-	        Processor reporter = new Processor();
-	        FixedIndexedRepo repo = new FixedIndexedRepo();
-	        Map<String, String> props = new HashMap<String, String>();
-	        props.put( "name", "index1" );
-	        props.put( "locations", getRepoURL()+"index.xml.gz" );
-	        props.put( FixedIndexedRepo.PROP_CACHE, repoCache.getAbsolutePath() );
 
-	        repo.setProperties( props );
-	        repo.setReporter( reporter );
+	def getLatestBladeCLIJar() {
+		def repo = new FixedIndexedRepo()
+    repo.setProperties([
+			"name" : "index1",
+			"locations" : getRepoURL() + "index.xml.gz",
+			FixedIndexedRepo.PROP_CACHE : new File("build").absolutePath
+		])
+    repo.setReporter(new Processor())
 
-	        try
-	        {
-	            File[] files = repo.get( "com.liferay.blade.cli", "[1,2)" );
+		File[] files = repo.get( "com.liferay.blade.cli", "[1,2)" );
+		File cliJar = files[0];
 
-	            File cliJar = files[0];
-
-	            def cachedBladeCLIPath = new Path( cliJar.getCanonicalPath() );
-
-	            return cliJar.getName();
-	        }
-	        catch( Exception e )
-	        {
-	            throw new GradleException( "Could not get blade cli jar from repository." );
-	        }
-    }
+		return cliJar.canonicalPath
+  }
 
 	public void executeBlade(String... args) {
-  		def bladeclijar = new String(getLatestRemoteBladeCLIJar.execute())
+		def bladeclijar = getLatestBladeCLIJar()
+		println bladeclijar
 
-  		println bladeclijar
-
-		"java -jar build/${bladeclijar} args".execute()
+		"java -jar ${bladeclijar} args".execute()
 	}
 
 	def setup () {
