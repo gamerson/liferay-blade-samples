@@ -12,7 +12,6 @@ import aQute.bnd.osgi.Processor;
 import aQute.bnd.deployer.repository.FixedIndexedRepo;
 import org.gradle.api.file.FileTree;
 import org.gradle.api.GradleException;
-import org.eclipse.core.runtime.Path;
 
 class BladeTests extends Specification {
 
