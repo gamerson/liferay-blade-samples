@@ -32,11 +32,11 @@ class BladeTests extends Specification {
 		return cliJar.canonicalPath
   }
 
-	public void executeBlade(String... args) {
+	def executeBlade(String... args) {
 		def bladeclijar = getLatestBladeCLIJar()
-		println bladeclijar
-
-		"java -jar ${bladeclijar} args".execute()
+		def cmdline = "java -jar ${bladeclijar} ${args.join(' ')}"
+		println cmdline
+		cmdline.execute()
 	}
 
 	def setup () {
