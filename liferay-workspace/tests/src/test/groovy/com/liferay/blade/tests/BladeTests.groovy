@@ -65,7 +65,7 @@ class BladeTests extends Specification {
 
 	def "verify all blade samples"() {
 		given:
-			FileTree bladeSampleOutputFiles = fileTree(dir: 'modules/', include: '**/libs/*.jar')
+			FileTree bladeSampleOutputFiles = fileTree(dir: 'modules/', include: '**/build/libs/*.jar')
 
 			def sampleBundles = bladeSampleOutputFiles.files
 			def sampleBundle = sampleBundles.name
