@@ -39,8 +39,8 @@ class BladeTests extends Specification {
 
 	def executeBlade(String... args) {
 		def bladeclijar = getLatestBladeCLIJar()
-		def cmdline = "java -jar ${bladeclijar} ${args.join(' ')}"
-		cmdline.execute()
+		def cmdline = "java -jar \"${bladeclijar}\" ${args.join(' ')}"
+		return cmdline.execute()
 	}
 
 	def setup () {
