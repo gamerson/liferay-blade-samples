@@ -3,7 +3,6 @@ package com.liferay.blade.tests
 import org.gradle.testkit.runner.GradleRunner
 import static org.gradle.testkit.runner.TaskOutcome.*
 import spock.lang.Specification
-import java.io.FileNotFoundException;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Request.Builder;
@@ -12,6 +11,9 @@ import aQute.bnd.osgi.Processor;
 import aQute.bnd.deployer.repository.FixedIndexedRepo;
 import org.gradle.api.file.FileTree;
 import org.gradle.api.GradleException;
+import groovy.io.FileType;
+import org.gradle.api.Project;
+
 
 class BladeTests extends Specification {
 
@@ -23,7 +25,7 @@ class BladeTests extends Specification {
 			def repo = new FixedIndexedRepo()
 	    repo.setProperties([
 				"name" : "index1",
-				"locations" : "http://releases.liferay.com/tools/blade-cli/1.x/index.xml.gz",
+				"locations" : "https://liferay-test-01.ci.cloudbees.com/job/liferay-blade-cli/lastSuccessfulBuild/artifact/build/generated/p2/index.xml.gz",
 				"${FixedIndexedRepo.PROP_CACHE}" : repoPath
 			])
 	    repo.setReporter(new Processor())
@@ -39,11 +41,18 @@ class BladeTests extends Specification {
 
 	def executeBlade(String... args) {
 		def bladeclijar = getLatestBladeCLIJar()
-		def cmdline = "java -jar \"${bladeclijar}\" ${args.join(' ')}"
+		def cmdline = "java -jar ${bladeclijar} ${args.join(' ')}"
+		println "*****************"
+		println "${cmdline}"
 		return cmdline.execute()
+		//"java -jar ${bladeclijar} ${args.join(' ')}".execute()
 	}
 
-	def setup () {
+	def setupSpec () {
+		println "Starting Server"
+		def bladeclijar = getLatestBladeCLIJar()
+		println "bladeclijar = ${bladeclijar}"
+		//"java -jar ${bladeclijar} server start -b".execute()
 		executeBlade('server','start', '-b');
 
 		OkHttpClient client = new OkHttpClient()
@@ -59,21 +68,32 @@ class BladeTests extends Specification {
 			catch( Exception e) {
 			}
 		}
+		println "Server Started"
 	}
 
 	def "verify all blade samples"() {
 		given:
-			FileTree bladeSampleOutputFiles = fileTree(dir: 'modules/', include: '**/build/libs/*.jar')
+			//FileTree bladeSampleOutputFiles = FileTree matching(PatternFilterable **/build/libs/\*.jar)
 
+			def bladeSampleOutputFiles = []
 			def sampleBundles = bladeSampleOutputFiles.files
 			def sampleBundle = sampleBundles.name
 			def bundleIDAllList = []
 			def bundleIDStartList = []
 			def errorList = []
 
+			new File("../modules/**/build/libs/").eachFileRecurse(FileType.FILES) {
+   				if(it.name.endsWith('.jar')) {
+        			bladeSampleOutputFiles.add(it)
+    			}
+			}
+
+
 		when:
 			sampleBundles.each { sampleBundlefile ->
 				def installBundleOutput = executeBlade('sh', 'install', "file:${sampleBundlefile}").text()
+
+				println "Installing ${sampleBundlefile}"
 
 				def bundleID = installBundleOutput.substring(installBundleOutput.length() - 3)
 
@@ -96,6 +116,8 @@ class BladeTests extends Specification {
 			bundleIDStartList.each { startBundleID ->
 				def startOutput = executeBlade('sh', 'start', startBundleID).text()
 
+				println "Starting ${startBundleID}"
+
 				if (startOutput.contains('Exception')) {
 					errorList.add(startOutput)
 				}
@@ -111,13 +133,14 @@ class BladeTests extends Specification {
 		cleanup:
 			bundleIDAllList.each { bundleIDAll ->
 				def uninstallOutput = executeBlade('sh', 'uninstall', bundleIDAll).text()
+
+				println "Uninstalling ${bundleIDAll}"
 			}
 	}
 
-	def teardown(){
-		doLast {
-			executeBlade('server', 'stop')
-		}
+	def cleanupSpec(){
+		executeBlade('server', 'stop')
+		println "Stop Server"
 	}
 
 }
