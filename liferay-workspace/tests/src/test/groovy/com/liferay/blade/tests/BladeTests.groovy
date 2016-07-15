@@ -23,12 +23,12 @@ class BladeTests extends Specification {
 		if (bladeJarPath == null) {
 			def repoPath = new File("build").absolutePath
 			def repo = new FixedIndexedRepo()
-	    repo.setProperties([
+			repo.setProperties([
 				"name" : "index1",
 				"locations" : "https://liferay-test-01.ci.cloudbees.com/job/liferay-blade-cli/lastSuccessfulBuild/artifact/build/generated/p2/index.xml.gz",
 				"${FixedIndexedRepo.PROP_CACHE}" : repoPath
 			])
-	    repo.setReporter(new Processor())
+			repo.setReporter(new Processor())
 
 			File[] files = repo.get( "com.liferay.blade.cli", "[1,2)" );
 			File cliJar = files[0];
@@ -37,7 +37,7 @@ class BladeTests extends Specification {
 		}
 
 		return bladeJarPath
-  }
+	}
 
 	def executeBlade(String... args) {
 		def bladeclijar = getLatestBladeCLIJar()
@@ -49,6 +49,9 @@ class BladeTests extends Specification {
 	}
 
 	def setupSpec () {
+		System.getProperty('moduleOutputPaths').split(",").each {
+			println it
+		}
 		println "Starting Server"
 		def bladeclijar = getLatestBladeCLIJar()
 		println "bladeclijar = ${bladeclijar}"
@@ -74,6 +77,7 @@ class BladeTests extends Specification {
 	def "verify all blade samples"() {
 		given:
 			//FileTree bladeSampleOutputFiles = FileTree matching(PatternFilterable **/build/libs/\*.jar)
+			println System.getProperty('moduleOutputPaths')
 
 			def bladeSampleOutputFiles = []
 			def sampleBundles = bladeSampleOutputFiles.files
@@ -83,11 +87,10 @@ class BladeTests extends Specification {
 			def errorList = []
 
 			new File("../modules/**/build/libs/").eachFileRecurse(FileType.FILES) {
-   				if(it.name.endsWith('.jar')) {
-        			bladeSampleOutputFiles.add(it)
-    			}
+				if(it.name.endsWith('.jar')) {
+					bladeSampleOutputFiles.add(it)
+				}
 			}
-
 
 		when:
 			sampleBundles.each { sampleBundlefile ->
