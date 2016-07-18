@@ -1,19 +1,14 @@
 package com.liferay.blade.tests
 
-import org.gradle.testkit.runner.GradleRunner
-import static org.gradle.testkit.runner.TaskOutcome.*
-import spock.lang.Specification
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Request.Builder;
 import aQute.bnd.osgi.Jar;
 import aQute.bnd.osgi.Processor;
 import aQute.bnd.deployer.repository.FixedIndexedRepo;
-import org.gradle.api.file.FileTree;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Request.Builder;
 import org.gradle.api.GradleException;
-import groovy.io.FileType;
-import org.gradle.api.Project;
-
+import org.gradle.testkit.runner.GradleRunner
+import spock.lang.Specification
 
 class BladeTests extends Specification {
 
@@ -23,6 +18,7 @@ class BladeTests extends Specification {
 		if (bladeJarPath == null) {
 			def repoPath = new File("build").absolutePath
 			def repo = new FixedIndexedRepo()
+
 			repo.setProperties([
 				"name" : "index1",
 				"locations" : "https://liferay-test-01.ci.cloudbees.com/job/liferay-blade-cli/lastSuccessfulBuild/artifact/build/generated/p2/index.xml.gz",
@@ -35,27 +31,19 @@ class BladeTests extends Specification {
 
 			bladeJarPath = cliJar.canonicalPath
 		}
-
 		return bladeJarPath
 	}
 
 	def executeBlade(String... args) {
 		def bladeclijar = getLatestBladeCLIJar()
 		def cmdline = "java -jar ${bladeclijar} ${args.join(' ')}"
-		println "*****************"
-		println "${cmdline}"
 		return cmdline.execute()
-		//"java -jar ${bladeclijar} ${args.join(' ')}".execute()
 	}
 
 	def setupSpec () {
-		System.getProperty('moduleOutputPaths').split(",").each {
-			println it
-		}
 		println "Starting Server"
 		def bladeclijar = getLatestBladeCLIJar()
-		println "bladeclijar = ${bladeclijar}"
-		//"java -jar ${bladeclijar} server start -b".execute()
+
 		executeBlade('server','start', '-b');
 
 		OkHttpClient client = new OkHttpClient()
@@ -76,50 +64,41 @@ class BladeTests extends Specification {
 
 	def "verify all blade samples"() {
 		given:
-			//FileTree bladeSampleOutputFiles = FileTree matching(PatternFilterable **/build/libs/\*.jar)
-			println System.getProperty('moduleOutputPaths')
-
 			def bladeSampleOutputFiles = []
-			def sampleBundles = bladeSampleOutputFiles.files
-			def sampleBundle = sampleBundles.name
-			def bundleIDAllList = []
-			def bundleIDStartList = []
+			def bundleIDAllMap = [:]
+			def bundleIDStartMap = [:]
 			def errorList = []
 
-			new File("../modules/**/build/libs/").eachFileRecurse(FileType.FILES) {
-				if(it.name.endsWith('.jar')) {
-					bladeSampleOutputFiles.add(it)
-				}
+			System.getProperty('moduleOutputPaths').split(",").each {
+				bladeSampleOutputFiles.add(it)
 			}
 
 		when:
-			sampleBundles.each { sampleBundlefile ->
-				def installBundleOutput = executeBlade('sh', 'install', "file:${sampleBundlefile}").text()
-
-				println "Installing ${sampleBundlefile}"
+			bladeSampleOutputFiles.each { sampleBundleFile ->
+				def installBundleOutput = executeBlade('sh', 'install', "file:${sampleBundleFile}").text
 
 				def bundleID = installBundleOutput.substring(installBundleOutput.length() - 3)
+				def printFileName = new File(sampleBundleFile).name
+				printFileName = printFileName.split("-")[0];
+
+				println "Installing ${printFileName}"
 
 				if(installBundleOutput.contains("Failed")) {
 					throw new GradleException(installBundleOutput)
 				}
 
-				bundleIDAllList.add(bundleID)
+				bundleIDAllMap.put(bundleID, printFileName)
 
-				def jarManifest = new aQute.bnd.osgi.Jar(sampleBundlefile).getmanifest().getMainAttributes();
-
-				if (jarManifest.getValue('fragment-Host') == null) {
-					bundleIDStartList.add(bundleID)
+				if (new Jar(sampleBundleFile, sampleBundleFile).manifest.mainAttributes.getValue("Fragment-Host") == null) {
+					bundleIDStartMap.put(bundleID, printFileName)
 				}
-
-				bundleIDAllList = bundleIDAllList.unique()
-				bundleIDStartList = bundleIDStartList.unique()
 			}
 
-			bundleIDStartList.each { startBundleID ->
-				def startOutput = executeBlade('sh', 'start', startBundleID).text()
+			bundleIDStartMap.keySet().each { startBundleID ->
+				def startOutput = executeBlade('sh', 'start', startBundleID).text
+				def startBundle = bundleIDStartMap[startBundleID]
 
-				println "Starting ${startBundleID}"
+				println "Starting ${startBundle}"
 
 				if (startOutput.contains('Exception')) {
 					errorList.add(startOutput)
@@ -127,23 +106,25 @@ class BladeTests extends Specification {
 			}
 
 		then:
-			// check the list for error status
-
-			//result.errorList.isEmpty == true
-			assert(errorList.isEmpty());
+			if (errorList.isEmpty()) {
+				println errorList.each
+			}
 			noExceptionThrown()
+			def listBundles = executeBlade('sh', 'lb').text
+			println listBundles
 
 		cleanup:
-			bundleIDAllList.each { bundleIDAll ->
-				def uninstallOutput = executeBlade('sh', 'uninstall', bundleIDAll).text()
+			bundleIDAllMap.keySet().each { allBundleID ->
+				def uninstallOutput = executeBlade('sh', 'uninstall', allBundleID).text
+				def uninstallBundle = bundleIDAllMap[allBundleID]
 
-				println "Uninstalling ${bundleIDAll}"
+				println "Uninstalling ${uninstallBundle}"
 			}
 	}
 
 	def cleanupSpec(){
 		executeBlade('server', 'stop')
-		println "Stop Server"
+		println "Stopping Server"
 	}
 
 }

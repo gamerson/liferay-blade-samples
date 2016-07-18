@@ -14,7 +14,7 @@ dependencies {
 }
 
 test {
-	//dependsOn ":initBundle"
+	dependsOn ":initBundle"
 
 	beforeSuite {
 		def moduleOutputPaths = []
