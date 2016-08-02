@@ -9,6 +9,16 @@ import okhttp3.Request.Builder;
 import org.gradle.api.GradleException;
 import org.gradle.testkit.runner.GradleRunner
 import spock.lang.Specification
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
+
+import aQute.lib.io.IO;
+import java.nio.file.Files;
+
+import org.gradle.testkit.runner.BuildResult;
+import org.gradle.testkit.runner.BuildTask;
+import org.gradle.testkit.runner.TaskOutcome;
+
 
 class BladeTests extends Specification {
 	def bladeJarPath
@@ -17,6 +27,37 @@ class BladeTests extends Specification {
 		def bladeclijar = getLatestBladeCLIJar()
 		def cmdline = "java -jar ${bladeclijar} ${args.join(' ')}"
 		return cmdline.execute()
+	}
+
+	BuildTask executeGradleRunner (String projectPath, String... taskPath) {
+		def projectDir = new File(projectPath)
+
+		BuildResult buildResult = GradleRunner.create()
+									.withProjectDir(projectDir)
+									.withArguments(taskPath)
+									.build()
+		BuildTask buildtask = null;
+
+		for (BuildTask task : buildResult.Tasks) {
+			if (task.Path.endsWith(taskPath[taskPath.length - 1])) {
+				buildtask = task;
+				break;
+			}
+		}
+
+		return buildtask;
+	}
+
+	def verifyGradleRunnerOutput (BuildTask buildtask) {
+		assertNotNull(buildtask)
+
+		assertEquals(buildtask.Outcome, TaskOutcome.SUCCESS)
+	}
+
+	def verifyBuildOutput (String projectPath, String filename) {
+		def file = IO.getFile("${projectPath}/build/libs/${filename}")
+
+		assertTrue(file.exists())
 	}
 
 	def getLatestBladeCLIJar() {
@@ -41,7 +82,6 @@ class BladeTests extends Specification {
 
 	def setupSpec () {
 		println "Starting Server"
-		def bladeclijar = getLatestBladeCLIJar()
 
 		executeBlade('server','start', '-b');
 
@@ -61,7 +101,7 @@ class BladeTests extends Specification {
 		println "Server Started"
 	}
 
-	def "verify all blade samples"() {
+	/*def "verify all blade samples"() {
 		given:
 			def bladeSampleOutputFiles = []
 			def bundleIDAllMap = [:]
@@ -82,7 +122,7 @@ class BladeTests extends Specification {
 
 				println "Installing ${printFileName}"
 
-				if(installBundleOutput.contains("Failed")) {
+				if (installBundleOutput.contains("Failed")) {
 					throw new GradleException(installBundleOutput)
 				}
 
@@ -119,7 +159,144 @@ class BladeTests extends Specification {
 
 				println "Uninstalling ${uninstallBundle}"
 			}
+	}*/
+
+	def "verify controlmenuentry gradle templates"() {
+		given:
+			def gradleTemplate = "controlmenuentry"
+			def errorList = []
+
+		when:
+			def testDir = Files.createTempDirectory("samplestest").toFile();
+
+			println "Testdir = ${testDir.absolutePath}"
+
+			executeBlade('create', '-d', "${testDir.absolutePath}", '-t', "${gradleTemplate}", "helloworld");
+
+			def projectPath = new File("${testDir}/helloworld")
+
+			println "Project Path = ${projectPath}"
+
+			def buildResult = GradleRunner.create()
+           						.withProjectDir(projectPath)
+            					.withArguments('build')
+            					.build()
+
+      def file = IO.getFile("${projectPath.absolutePath}/build/libs/helloworld-1.0.0.jar")
+
+      assertTrue(file.exists())
+
+			println "file.toURI() ${file.toURI()}"
+
+      def installBundleOutput = executeBlade('sh', 'install', "${file.toURI()}").text
+
+      def bundleID = installBundleOutput.substring(installBundleOutput.length() - 3)
+      def printFileName = file.name
+      printFileName = printFileName.split("-")[0];
+
+      println "Installing ${printFileName}"
+
+      if (installBundleOutput.contains("Failed")) {
+				throw new GradleException(installBundleOutput)
+      }
+
+      def startOutput = executeBlade('sh', 'start', bundleID).text
+
+      println "Starting ${printFileName}"
+
+      if (startOutput.contains("Exception")) {
+				errorList.add(startOutput)
+      }
+
+		then:
+			if (errorList.isEmpty()) {
+				println errorList.each
+			}
+			noExceptionThrown()
+			def listBundles = executeBlade('sh', 'lb').text
+			println listBundles
+
+		cleanup:
+			def uninstallOutput = executeBlade('sh', 'uninstall', bundleID).text
+
+			println "Uninstalling ${printFileName}"
+
+			/*if (testDir.exists()) {
+				IO.delete(testDir);
+				assertFalse(testDir.exists());
+			}*/
 	}
+
+	/*def "mvcportlet gradle template"() {
+		given:
+			def gradleTemplate = "mvcportlet"
+			def errorList = []
+
+
+		when:
+			def testDir = Files.createTempDirectory("samplestest").toFile();
+
+			if (testDir.exists()) {
+				IO.delete(testDir);
+				assertFalse(testDir.exists());
+			}
+
+			testDir.mkdirs()
+
+			executeBlade('create', '-d', "${testDir.absolutePath}", '-t', "${gradleTemplate}", "helloworld");
+
+			println "Testdir = ${testDir.absolutePath}"
+
+			def projectPath = new File("${testDir}/helloworld")
+
+			println "Project Path = ${projectPath}"
+
+			BuildTask buildtask = executeGradleRunner(projectPath, "build")
+
+			verifyGradleRunnerOutput(buildtask)
+
+			verifyBuildOutput(projectPath, "helloworld-1.0.0.jar")
+
+			def file = IO.getFile("${projectPath}/build/libs/helloworld-1.0.0.jar")
+
+            def installBundleOutput = executeBlade('sh', 'install', "file:${file}").text
+
+            def bundleID = installBundleOutput.substring(installBundleOutput.length() - 3)
+            def printFileName = new File(file).name
+            printFileName = printFileName.split("-")[0];
+
+            println "Installing ${printFileName}"
+
+            if (installBundleOutput.contains("Failed")) {
+            	throw new GradleException(installBundleOutput)
+            }
+
+            def startOutput = executeBlade('sh', 'start', bundleID).text
+
+            println "Starting ${printFileName}"
+
+            if (startOutput.contains("Exception")) {
+            	errorList.add(startOutput)
+            }
+
+		then:
+			if (errorList.isEmpty()) {
+				println errorList.each
+			}
+			noExceptionThrown()
+			def listBundles = executeBlade('sh', 'lb').text
+			println listBundles
+
+		cleanup:
+			def uninstallOutput = executeBlade('sh', 'uninstall', bundleID).text
+
+			println "Uninstalling ${printFileName}"
+
+			if (testDir.exists()) {
+				IO.delete(testDir);
+				assertFalse(testDir.exists());
+			}
+	}*/
 
 	def cleanupSpec(){
 		executeBlade('server', 'stop')
