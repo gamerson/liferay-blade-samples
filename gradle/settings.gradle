@@ -30,4 +30,5 @@ include(
 	'blade.servicebuilder.web',
 	'blade.strutsaction',
 	'blade.strutsportletaction',
+	'blade.theme'
 )

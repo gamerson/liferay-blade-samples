@@ -1,0 +1,68 @@
+import com.liferay.gradle.plugins.tasks.BuildThumbnailsTask
+import com.liferay.gradle.plugins.tasks.CompileThemeTask
+
+apply plugin: "com.liferay.css.builder"
+apply plugin: "war"
+
+configurations {
+	frontendThemes
+}
+
+task buildTheme(type: CompileThemeTask)
+task buildThumbnails(type: BuildThumbnailsTask)
+
+File themeDestinationDir = new File(buildDir, "compiled-theme")
+
+buildCSS {
+	dependsOn buildTheme
+	dependsOn buildThumbnails
+
+	docrootDir = themeDestinationDir
+}
+
+buildTheme {
+	diffsDir = file('src/main/webapp')
+	frontendThemeFiles = configurations.frontendThemes
+	themeParent = "_styled"
+	themeRootDir = themeDestinationDir
+	themeTypes = ["ftl"]
+}
+
+buildThumbnails {
+	dependsOn buildTheme
+
+	imageDirs themeDestinationDir
+}
+
+dependencies {
+	frontendThemes group: "com.liferay", name: "com.liferay.frontend.theme.styled", version: "2.0.4"
+	frontendThemes group: "com.liferay", name: "com.liferay.frontend.theme.unstyled", version: "2.0.4"
+
+	portalToolsThumbnailBuilder group: "com.liferay.portal", name: "com.liferay.portal.impl", version: "2.0.0"
+	portalToolsThumbnailBuilder group: "com.liferay.portal", name: "com.liferay.portal.kernel", version: "2.0.0"
+	portalToolsThumbnailBuilder group: "com.liferay.portal", name: "com.liferay.util.java", version: "2.0.0"
+	portalToolsThumbnailBuilder group: "com.thoughtworks.xstream", name: "xstream", version: "1.4.3"
+	portalToolsThumbnailBuilder group: "commons-configuration", name: "commons-configuration", version: "1.6"
+	portalToolsThumbnailBuilder group: "commons-lang", name: "commons-lang", version: "2.6"
+	portalToolsThumbnailBuilder group: "easyconf", name: "easyconf", transitive: false, version: "0.9.5"
+	portalToolsThumbnailBuilder group: "javax.servlet", name: "javax.servlet-api", version: "3.0.1"
+	portalToolsThumbnailBuilder group: "xdoclet", name: "xdoclet", version: "1.2.3"
+	portalToolsThumbnailBuilder group: "xdoclet", name: "xdoclet-web-module", version: "1.2.3"
+	portalToolsThumbnailBuilder group: "com.liferay", name: "org.monte", version: "0.7.7"
+}
+
+war {
+	dependsOn buildTheme
+
+	exclude('**/*.scss')
+
+	filesMatching("**/.sass-cache/") {
+		it.path = it.path.replace(".sass-cache/", "")
+	}
+
+	from themeDestinationDir
+
+	includeEmptyDirs = false
+
+	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
