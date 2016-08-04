@@ -29,6 +29,7 @@ task outputFilesSortTest << {
 
 task outputFilesTest << {}
 
+
 outputFilesTest.dependsOn outputFilesSizeTest
 outputFilesTest.dependsOn outputFilesSortTest
 
