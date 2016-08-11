@@ -6,7 +6,7 @@ com.liferay:com.liferay.portal.spring.extender:2.0.0
 com.liferay:com.liferay.product.navigation.control.menu.api:2.0.0
 com.liferay:com.liferay.product.navigation.control.menu.api:3.0.0
 com.liferay.portal:com.liferay.portal.impl:2.0.0
-com.liferay.portal:com.liferay.portal.kernel:2.0.0
+com.liferay.portal:com.liferay.portal.kernel:2.6.0
 com.liferay.portal:com.liferay.portal.test:1.0.0
 com.liferay.portal:com.liferay.portal.test.integration:1.0.0
 com.liferay.portal:com.liferay.util.bridges:2.0.0
