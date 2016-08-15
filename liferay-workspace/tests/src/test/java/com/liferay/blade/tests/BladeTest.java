@@ -299,30 +299,22 @@ public class BladeTest {
 
 	@Test
 	public void verifyServiceBuilderBladeSample() throws Exception {
-		String[] sampleOutputFiles = System.getProperty("moduleOutputPaths").split(",");
+		File projectPath = new File(System.getProperty("user.dir")).getParentFile();
 
-		File projectPath = null;
-
-		for (String filePath : sampleOutputFiles) {
-
-			if(filePath.contains("blade.servicebuilder.svc")) {
-				filePath = filePath.split("/build")[0];
-
-				projectPath = new File(filePath);
-			}
-
-		}
-
-		BuildTask buildService = GradleRunnerUtil.executeGradleRunner(projectPath, "buildService");
+		BuildTask buildService = GradleRunnerUtil.executeGradleRunner(projectPath, ":modules:blade.servicebuilder.svc:buildService");
 		GradleRunnerUtil.verifyGradleRunnerOutput(buildService);
-		BuildTask buildtask = GradleRunnerUtil.executeGradleRunner(projectPath, "build");
 
-		GradleRunnerUtil.verifyGradleRunnerOutput(buildtask);
-		GradleRunnerUtil.verifyBuildOutput(projectPath + "/guestbook-api", "guestbook-api-1.0.0.jar");
-		GradleRunnerUtil.verifyBuildOutput(projectPath + "/guestbook-service", "guestbook-service-1.0.0.jar");
+		BuildTask buildApiTask = GradleRunnerUtil.executeGradleRunner(projectPath, ":modules:blade.servicebuilder.api:build");
+		GradleRunnerUtil.verifyGradleRunnerOutput(buildApiTask);
 
-		File buildApiOutput = new File(projectPath + "/guestbook-api/build/libs/guestbook-api-1.0.0.jar");
-		File buildServiceOutput = new File(projectPath + "/guestbook-service/build/libs/guestbook-service-1.0.0.jar");
+		BuildTask buildSvcTask = GradleRunnerUtil.executeGradleRunner(projectPath, ":modules:blade.servicebuilder.svc:build");
+		GradleRunnerUtil.verifyGradleRunnerOutput(buildSvcTask);
+
+		GradleRunnerUtil.verifyBuildOutput(projectPath.toString() + "/modules/blade.servicebuilder.api", "blade.servicebuilder.api-1.0.0.jar");
+		GradleRunnerUtil.verifyBuildOutput(projectPath.toString() + "/modules/blade.servicebuilder.svc", "blade.servicebuilder.svc-1.0.0.jar");
+
+		File buildApiOutput = new File(projectPath + "/modules/blade.servicebuilder.api/build/libs/blade.servicebuilder.api-1.0.0.jar");
+		File buildServiceOutput = new File(projectPath + "/modules/blade.servicebuilder.svc/build/libs/blade.servicebuilder.api-1.0.0.jar");
 
 		String bundleIDApi = BladeCLI.installBundle(buildApiOutput);
 		String bundleIDService = BladeCLI.installBundle(buildServiceOutput);
