@@ -298,6 +298,43 @@ public class BladeTest {
 	}
 
 	@Test
+	public void verifyServiceBuilderBladeSample() throws Exception {
+		String[] sampleOutputFiles = System.getProperty("moduleOutputPaths").split(",");
+
+		File projectPath = null;
+
+		for (String filePath : sampleOutputFiles) {
+
+			if(filePath.contains("blade.servicebuilder.svc")) {
+				filePath = filePath.split("/build")[0];
+
+				projectPath = new File(filePath);
+			}
+
+		}
+
+		BuildTask buildService = GradleRunnerUtil.executeGradleRunner(projectPath, "buildService");
+		GradleRunnerUtil.verifyGradleRunnerOutput(buildService);
+		BuildTask buildtask = GradleRunnerUtil.executeGradleRunner(projectPath, "build");
+
+		GradleRunnerUtil.verifyGradleRunnerOutput(buildtask);
+		GradleRunnerUtil.verifyBuildOutput(projectPath + "/guestbook-api", "guestbook-api-1.0.0.jar");
+		GradleRunnerUtil.verifyBuildOutput(projectPath + "/guestbook-service", "guestbook-service-1.0.0.jar");
+
+		File buildApiOutput = new File(projectPath + "/guestbook-api/build/libs/guestbook-api-1.0.0.jar");
+		File buildServiceOutput = new File(projectPath + "/guestbook-service/build/libs/guestbook-service-1.0.0.jar");
+
+		String bundleIDApi = BladeCLI.installBundle(buildApiOutput);
+		String bundleIDService = BladeCLI.installBundle(buildServiceOutput);
+
+		BladeCLI.startBundle(bundleIDApi);
+		BladeCLI.startBundle(bundleIDService);
+
+		BladeCLI.uninstallBundle(bundleIDApi, bundleIDService);
+
+	}
+
+	@Test
 	public void verifyServiceWrapperGradleTemplate () throws Exception {
 		File projectPath = BladeCLI.createProject(testDir, "servicewrapper", "serviceoverride", "-s",
 				"com.liferay.portal.kernel.service.UserLocalServiceWrapper");
