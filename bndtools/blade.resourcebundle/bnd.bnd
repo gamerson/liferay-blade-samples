@@ -6,3 +6,4 @@ Private-Package: com.liferay.blade.samples.resourcebundle
 	com.liferay.portal:com.liferay.portal.kernel;version='2.0.0',\
 	org.osgi.service.component.annotations;version='1.3.0'
 -plugin.bundle: com.liferay.ant.bnd.resource.bundle.ResourceBundleLoaderAnalyzerPlugin
+src: src/main/java,src/main/resources

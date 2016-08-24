@@ -10,3 +10,4 @@ Private-Package: com.liferay.blade.samples.corejsphook
 -includeresource: META-INF/jsps=src/main/resources/META-INF/jsps
 -jsp: *.jsp,*.jspf
 -plugin.jsp: com.liferay.ant.bnd.jsp.JspAnalyzerPlugin
+src: src/main/java,src/main/resources

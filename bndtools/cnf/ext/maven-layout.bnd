@@ -1,2 +1,2 @@
--sourcepath: src/main/java
+src: src/main/java
 -includeresource.maven: -src/main/resources
