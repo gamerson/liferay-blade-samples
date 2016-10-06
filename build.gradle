@@ -1,4 +1,4 @@
-FileTree bndtoolsOutputFiles = fileTree(dir: 'bndtools/', include: '**/dist/bundles/**/*.jar', exclude: '**/*latest.jar')
+  FileTree bndtoolsOutputFiles = fileTree(dir: 'bndtools/', include: '**/dist/bundles/**/*.jar', exclude: '**/*latest.jar')
 FileTree gradleOutputFiles = fileTree(dir: 'gradle/', include: '**/libs/*.jar')
 FileTree liferayGradleOutputFiles = fileTree(dir: 'liferay-gradle/', include: '**/libs/*.jar')
 FileTree liferayWorkspaceOutputFiles = fileTree(dir: 'liferay-workspace/modules', include: '**/libs/*.jar')
