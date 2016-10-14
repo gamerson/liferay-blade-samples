@@ -20,6 +20,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import aQute.bnd.osgi.Jar;
+
 import aQute.lib.io.IO;
 
 import java.io.BufferedReader;
@@ -27,13 +28,16 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.Writer;
+
 import java.nio.file.Files;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.gradle.testkit.runner.BuildTask;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -50,7 +54,12 @@ import okhttp3.Request.Builder;
 public class BladeTest {
 	@BeforeClass
 	public static void startServer() throws Exception {
-		BladeCLI.execute(new File(".."), "server", "start", "-b");
+		if (isWindows()) {
+			BladeCLI.startServerWindows(new File(System.getProperty("user.dir")).getParentFile(), "server", "start", "-b");
+		}
+		else {
+			BladeCLI.execute(new File(System.getProperty("user.dir")).getParentFile(), "server", "start", "-b");
+		}
 
 		OkHttpClient client = new OkHttpClient();
 		Request request = new Builder().url("http://localhost:8080").build();
@@ -365,6 +374,10 @@ public class BladeTest {
 		BladeCLI.startBundle(bundleID);
 
 		BladeCLI.uninstallBundle(bundleID);
+	}
+
+	private static boolean isWindows() {
+		return System.getProperty("os.name").toLowerCase().contains("windows");
 	}
 
 	private static final File _bundleDir = IO.getFile("../bundles");
