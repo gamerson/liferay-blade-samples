@@ -15,7 +15,7 @@ function buildAll() {
   mvn --fail-at-end clean package
   cd "$repoDir"
   cd liferay-workspace
-  ./gradlew clean build
+  ./gradlew clean build -Pliferay.workspace.bundle.url=http://mirrors/releases.liferay.com/portal/7.0.2-ga3/liferay-ce-portal-tomcat-7.0-ga3-20160804222206210.zip
   cd "$repoDir"
   ./gradlew outputFilesTest diff
 }
