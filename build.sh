@@ -19,4 +19,6 @@ function buildAll() {
   cd "$repoDir"
   ./gradlew outputFilesTest diff
 }
+
+
 buildAll
