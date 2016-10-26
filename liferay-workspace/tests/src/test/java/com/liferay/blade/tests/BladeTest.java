@@ -54,6 +54,7 @@ import okhttp3.Request.Builder;
 public class BladeTest {
 	@BeforeClass
 	public static void startServer() throws Exception {
+		System.out.println("***BUNDLEDIR***" + _bundleDir.toString() + "tomcat-8.0.32/bin/catalina.sh run");
 		if (isWindows()) {
 			UtilTest.startTomcat(_bundleDir.toString() + "tomcat-8.0.32/bin/catalina.sh run");
 		}
