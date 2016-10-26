@@ -55,7 +55,7 @@ public class BladeTest {
 	@BeforeClass
 	public static void startServer() throws Exception {
 		if (isWindows()) {
-			UtilTest.startTomcat(_bundleDir.toString() + "/tomcat-8.0.32/bin/catalina.sh run");
+			UtilTest.startTomcat(_bundleDir.toString() + "tomcat-8.0.32/bin/catalina.sh run");
 		}
 		else {
 			BladeCLI.execute(new File(System.getProperty("user.dir")).getParentFile(), "server", "start", "-b");
@@ -82,7 +82,7 @@ public class BladeTest {
 	@AfterClass
 	public static void cleanUpTest() throws Exception {
 		if (isWindows()) {
-			UtilTest.stopTomcat(_bundleDir.toString() + "/tomcat-8.0.32/bin/catalina.sh stop");
+			UtilTest.stopTomcat(_bundleDir.toString() + "tomcat-8.0.32/bin/catalina.sh stop");
 		}
 		else {
 			BladeCLI.execute("server", "stop");
@@ -386,6 +386,6 @@ public class BladeTest {
 		return System.getProperty("os.name").toLowerCase().contains("windows");
 	}
 
-	public static final File _bundleDir = IO.getFile("../bundles");
+	private static final File _bundleDir = IO.getFile("../bundles");
 	private File testDir;
 }
