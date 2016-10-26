@@ -55,32 +55,38 @@ public class BladeTest {
 	@BeforeClass
 	public static void startServer() throws Exception {
 		if (isWindows()) {
-			BladeCLI.startServerWindows(new File(System.getProperty("user.dir")).getParentFile(), "server", "start", "-b");
+			UtilTest.startTomcat(_bundleDir.toString() + "/tomcat-8.0.32/bin/catalina.sh run");
 		}
 		else {
 			BladeCLI.execute(new File(System.getProperty("user.dir")).getParentFile(), "server", "start", "-b");
-		}
 
-		OkHttpClient client = new OkHttpClient();
-		Request request = new Builder().url("http://localhost:8080").build();
 
-		boolean pingSucceeded = false;
+			OkHttpClient client = new OkHttpClient();
+			Request request = new Builder().url("http://localhost:8080").build();
 
-		while (!pingSucceeded) {
-			try {
-				client.newCall(request).execute();
-				pingSucceeded = true;
-				break;
+			boolean pingSucceeded = false;
+
+			while (!pingSucceeded) {
+				try {
+					client.newCall(request).execute();
+					pingSucceeded = true;
+					break;
+				}
+				catch( Exception e) {
+				}
+				Thread.sleep(100);
 			}
-			catch( Exception e) {
-			}
-			Thread.sleep(100);
 		}
 	}
 
 	@AfterClass
 	public static void cleanUpTest() throws Exception {
-		BladeCLI.execute("server", "stop");
+		if (isWindows()) {
+			UtilTest.stopTomcat(_bundleDir.toString() + "/tomcat-8.0.32/bin/catalina.sh stop");
+		}
+		else {
+			BladeCLI.execute("server", "stop");
+		}
 
 		if (_bundleDir.exists()) {
 			IO.delete(_bundleDir);
@@ -380,6 +386,6 @@ public class BladeTest {
 		return System.getProperty("os.name").toLowerCase().contains("windows");
 	}
 
-	private static final File _bundleDir = IO.getFile("../bundles");
+	public static final File _bundleDir = IO.getFile("../bundles");
 	private File testDir;
 }
