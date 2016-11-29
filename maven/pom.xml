@@ -54,6 +54,7 @@
 		<module>blade.servicebuilder.svc</module>
 		<module>blade.servicebuilder.test</module>
 		<module>blade.servicebuilder.web</module>
+		<module>blade.servlet.filter</module>
 		<module>blade.simulation.panel.app</module>
 		<module>blade.strutsaction</module>
 		<module>blade.strutsportletaction</module>
