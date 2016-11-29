@@ -33,6 +33,7 @@ include(
 	'blade.servicebuilder.svc',
 	'blade.servicebuilder.test',
 	'blade.servicebuilder.web',
+	'blade.servlet.filter',
 	'blade.simulation.panel.app',
 	'blade.strutsaction',
 	'blade.strutsportletaction',
