@@ -5,6 +5,7 @@ include(
 	'blade.configurationaction',
 	'blade.controlmenuentry',
 	'blade.corejsphook',
+	'blade.document.action',
 	'blade.friendlyurl',
 	'blade.gogo',
 	'blade.hook.jsp',
