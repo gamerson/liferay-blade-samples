@@ -16,36 +16,39 @@
 
 package blade.document.action.configurationicon;
 
+import com.liferay.portal.kernel.portlet.configuration.icon.BasePortletConfigurationIcon;
+import com.liferay.portal.kernel.portlet.configuration.icon.PortletConfigurationIcon;
+
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletResponse;
 
 import org.osgi.service.component.annotations.Component;
 
-import com.liferay.portal.kernel.portlet.configuration.icon.BasePortletConfigurationIcon;
-import com.liferay.portal.kernel.portlet.configuration.icon.PortletConfigurationIcon;
-
 /**
- * @author liferay
+ * @author Liferay
  */
 @Component(
-		immediate = true,
-		property = {
-				"javax.portlet.name=com_liferay_document_library_web_portlet_DLAdminPortlet",
-				"path=/document_library/view_file_entry"
-		},
-		service = PortletConfigurationIcon.class
+	immediate = true,
+	property = {
+		"javax.portlet.name=com_liferay_document_library_web_portlet_DLAdminPortlet",
+		"path=/document_library/view_file_entry"
+	},
+	service = PortletConfigurationIcon.class
 )
 public class BladeActionConfigurationIcon extends BasePortletConfigurationIcon {
-
-	public boolean isShow(PortletRequest portletRequest) {
-		return true;
-	}
 
 	public String getMessage(PortletRequest portletRequest) {
 		return "Blade Action";
 	}
 
-	public String getURL(PortletRequest portletRequest, PortletResponse portletResponse) {
+	public String getURL(
+		PortletRequest portletRequest, PortletResponse portletResponse) {
+
 		return "javascript:;";
 	}
+
+	public boolean isShow(PortletRequest portletRequest) {
+		return true;
+	}
+
 }

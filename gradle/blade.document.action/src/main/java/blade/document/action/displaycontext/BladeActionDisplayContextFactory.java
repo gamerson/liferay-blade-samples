@@ -16,11 +16,6 @@
 
 package blade.document.action.displaycontext;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.osgi.service.component.annotations.Component;
-
 import com.liferay.document.library.display.context.DLDisplayContextFactory;
 import com.liferay.document.library.display.context.DLEditFileEntryDisplayContext;
 import com.liferay.document.library.display.context.DLViewFileVersionDisplayContext;
@@ -29,32 +24,50 @@ import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.repository.model.FileShortcut;
 import com.liferay.portal.kernel.repository.model.FileVersion;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.osgi.service.component.annotations.Component;
+
 /**
  * @author liferay
  */
-@Component(
-		immediate = true,
-		service = DLDisplayContextFactory.class
-)
-public class BladeActionDisplayContextFactory implements DLDisplayContextFactory {
+@Component(immediate = true, service = DLDisplayContextFactory.class)
+public class BladeActionDisplayContextFactory
+	implements DLDisplayContextFactory {
 
-	public DLEditFileEntryDisplayContext getDLEditFileEntryDisplayContext(DLEditFileEntryDisplayContext parentDLEditFileEntryDisplayContext, HttpServletRequest request, HttpServletResponse response,
-			DLFileEntryType dlFileEntryType) {
-		return parentDLEditFileEntryDisplayContext;
+	public DLEditFileEntryDisplayContext getDLEditFileEntryDisplayContext(
+		DLEditFileEntryDisplayContext parentDisplayContext,
+		HttpServletRequest request, HttpServletResponse response,
+		DLFileEntryType dlFileEntryType) {
+
+		return parentDisplayContext;
 	}
 
-	public DLEditFileEntryDisplayContext getDLEditFileEntryDisplayContext(DLEditFileEntryDisplayContext parentDLEditFileEntryDisplayContext, HttpServletRequest request, HttpServletResponse response,
-			FileEntry fileEntry) {
-		return parentDLEditFileEntryDisplayContext;
+	public DLEditFileEntryDisplayContext getDLEditFileEntryDisplayContext(
+		DLEditFileEntryDisplayContext parentDisplayContext,
+		HttpServletRequest request, HttpServletResponse response,
+		FileEntry fileEntry) {
+
+		return parentDisplayContext;
 	}
 
-	public DLViewFileVersionDisplayContext getDLViewFileVersionDisplayContext(DLViewFileVersionDisplayContext parentDLViewFileVersionDisplayContext, HttpServletRequest request,
-			HttpServletResponse response, FileShortcut fileShortcut) {
-		return parentDLViewFileVersionDisplayContext;
+	public DLViewFileVersionDisplayContext getDLViewFileVersionDisplayContext(
+		DLViewFileVersionDisplayContext parentDisplayContext,
+		HttpServletRequest request, HttpServletResponse response,
+		FileShortcut fileShortcut) {
+
+		return parentDisplayContext;
 	}
 
-	public DLViewFileVersionDisplayContext getDLViewFileVersionDisplayContext(DLViewFileVersionDisplayContext parentDLViewFileVersionDisplayContext, HttpServletRequest request,
-			HttpServletResponse response, FileVersion fileVersion) {
-		return new BladeActionDisplayContext(parentDLViewFileVersionDisplayContext.getUuid(),parentDLViewFileVersionDisplayContext, request, response, fileVersion);
+	public DLViewFileVersionDisplayContext getDLViewFileVersionDisplayContext(
+		DLViewFileVersionDisplayContext parentDisplayContext,
+		HttpServletRequest request, HttpServletResponse response,
+		FileVersion fileVersion) {
+
+		return new BladeActionDisplayContext(
+			parentDisplayContext.getUuid(), parentDisplayContext, request,
+			response, fileVersion);
 	}
+
 }
