@@ -1,4 +1,28 @@
+buildscript {
+	repositories {
+		maven {
+			url "https://cdn.lfrs.sl/repository.liferay.com/nexus/content/groups/public"
+		}
+	}
+	dependencies {
+		classpath group: "com.liferay", name: "com.liferay.gradle.plugins", version: "latest.release"
+	}
+}
+
+
+apply plugin: "com.liferay.plugin"
+sourceCompatibility = 1.7
+
+repositories {
+	maven {
+		url "https://cdn.lfrs.sl/repository.liferay.com/nexus/content/groups/public"
+	}
+}
 dependencies {
 	compile 'com.liferay.portal:com.liferay.portal.kernel:2.0.0'
 	compile 'org.osgi:org.osgi.service.component.annotations:1.3.0'
+	compile 'javax.servlet:javax.servlet-api:3.0.1'
+	compile 'javax.portlet:portlet-api:2.0'
+	compile 'com.liferay.portal:com.liferay.portal.impl:2.0.0'
+	
 }
