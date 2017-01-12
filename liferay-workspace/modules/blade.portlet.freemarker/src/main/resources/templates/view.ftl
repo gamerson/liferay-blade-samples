@@ -18,4 +18,4 @@
 
 <#include "init.ftl">
 
-We are in the control panel
+Hello from Blade FreeMarker Portlet!

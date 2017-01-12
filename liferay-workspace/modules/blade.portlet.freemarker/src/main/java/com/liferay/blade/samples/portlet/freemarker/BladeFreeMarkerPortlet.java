@@ -35,7 +35,6 @@ import org.osgi.service.component.annotations.Component;
 		"javax.portlet.display-name=Blade FreeMarker Portlet",
 		"javax.portlet.init-param.template-path=/",
 		"javax.portlet.init-param.view-template=/templates/view.ftl",
-		"javax.portlet.resource-bundle=content.Language",
 		"javax.portlet.security-role-ref=power-user,user"
 	},
 	service = Portlet.class
