@@ -4,4 +4,12 @@ subprojects {
 			project.sourceCompatibility = 1.8
 		}
 	}
+	buildscript {
+		repositories {
+			mavenLocal()
+		}
+		dependencies {
+			classpath group: "com.liferay", name: "com.liferay.ant.bnd", version: "2.0.35"
+		}
+	}
 }
