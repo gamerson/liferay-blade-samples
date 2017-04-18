@@ -18,4 +18,7 @@
 
 <p>
 	<b class="redBackground"><liferay-ui:message key="blade_portlet_jsp_JSPPortlet.caption" /></b>
+	<b class="redBackground"><liferay-ui:message key="blade_portlet_jsp_JSPPortlet.caption" /></b>
+	<b class="redBackground"><liferay-ui:message key="blade_portlet_jsp_JSPPortlet.caption" /></b>
+	<b class="redBackground"><liferay-ui:message key="blade_portlet_jsp_JSPPortlet.caption" /></b>
 </p>
