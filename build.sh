@@ -16,4 +16,6 @@ function buildAll() {
   cd liferay-workspace
   ./gradlew check -Pliferay.workspace.modules.dir=modules,tests $@
 }
+
+
 buildAll
