@@ -56,4 +56,4 @@ stopTestableTomcat {
 	}
 }
 
-test.dependsOn testFunctional
+check.dependsOn testFunctional
