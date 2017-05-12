@@ -1,3 +1,19 @@
+sourceSets {
+    testFunctional {
+        java {
+            compileClasspath += main.output + test.output
+            runtimeClasspath += main.output + test.output
+            srcDir file('src/testFunctional/java')
+        }
+        resources.srcDir file('src/testFunctional/resources')
+    }
+}
+
+configurations {
+    testFunctionalCompile.extendsFrom testCompile
+    testFunctionalRuntime.extendsFrom testRuntime
+}
+
 apply plugin: 'groovy'
 
 dependencies {
@@ -22,7 +38,9 @@ startTestableTomcat {
 	checkTimeout = 10 * 60 * 1000
 }
 
-testIntegration {
+task testFunctional(type: Test) {
+    testClassesDir = sourceSets.testFunctional.output.classesDir
+    classpath = sourceSets.testFunctional.runtimeClasspath
     outputs.upToDateWhen { false }
 
 	dependsOn ":initBundle", startTestableTomcat
@@ -41,7 +59,7 @@ testIntegration {
 
 	project(":modules").subprojects { p ->
 		p.plugins.withType(JavaPlugin) {
-			dependsOn p.tasks["build"]
+			dependsOn p.tasks["jar"]
 		}
 	}
 
@@ -53,9 +71,9 @@ testIntegration {
 }
 
 stopTestableTomcat {
-	dependsOn testIntegration
-	mustRunAfter testIntegration
 	doLast {
 		delete new File(liferay.liferayHome, "data")
 	}
 }
+
+check.dependsOn testFunctional

@@ -15,6 +15,7 @@
 package com.liferay.blade.samples.servicebuilder.test;
 
 import com.liferay.arquillian.portal.annotation.PortalURL;
+import com.liferay.blade.samples.servicebuilder.model.FooModel;
 import com.liferay.portal.kernel.exception.PortalException;
 
 import java.io.File;
@@ -31,6 +32,7 @@ import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -45,12 +47,33 @@ import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import org.osgi.framework.FrameworkUtil;
+
 /**
  * @author Liferay
  */
 @RunAsClient
 @RunWith(Arquillian.class)
 public class BladeServiceBuilderTest {
+	
+	@BeforeClass
+	public static void setUp() throws InterruptedException {		
+		boolean bundleActivated = false;
+		
+		while (!bundleActivated) {
+			try {
+				FrameworkUtil.getBundle(FooModel.class);
+				bundleActivated = true;
+				break;
+			}
+			catch (Exception e) {
+			}
+
+			Thread.sleep(100);
+		}
+		
+		Thread.sleep(10000);
+	}
 
 	@Deployment
 	public static JavaArchive create() throws Exception {
