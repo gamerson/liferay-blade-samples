@@ -51,3 +51,4 @@ task deployAries(type: Copy) {
 }
 
 initBundle.finalizedBy deployAries
+initBundle.dependsOn cleanInitBundle
