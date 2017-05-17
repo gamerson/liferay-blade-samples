@@ -25,6 +25,8 @@ dependencies {
 	testCompile group: "junit", name: "junit", version: "4.12"
 	testCompile group: "org.jboss.arquillian.graphene", name: "graphene-webdriver", version: "2.1.0.Final"
 	testCompile group: "org.jboss.arquillian.junit", name: "arquillian-junit-container", version: "1.1.11.Final"
+	testCompile group: 'org.jboss.arquillian.container', name: 'arquillian-container-spi', version: '1.1.13.Final'
+	testCompile project(':tests:arquillian.extension.lifecycle')
 }
 
 startTestableTomcat {
@@ -37,11 +39,14 @@ task testFunctional(type: Test) {
     outputs.upToDateWhen { false }
 
 	dependsOn jar, ":initBundle", startTestableTomcat
-	dependsOn ":modules:blade.servicebuilder.api:deploy"
-	dependsOn ":modules:blade.servicebuilder.svc:deploy"
-	dependsOn ":modules:blade.servicebuilder.web:deploy"
+	dependsOn ":modules:blade.servicebuilder.api:jar"
+	dependsOn ":modules:blade.servicebuilder.svc:jar"
+	dependsOn ":modules:blade.servicebuilder.web:jar"
 
 	systemProperty 'jarFile', jar.archivePath
+	systemProperty 'dependency1', project(':modules:blade.servicebuilder.api').jar.archivePath
+	systemProperty 'dependency2', project(':modules:blade.servicebuilder.svc').jar.archivePath
+	systemProperty 'dependency3', project(':modules:blade.servicebuilder.web').jar.archivePath
 
 	finalizedBy {
 		stopTestableTomcat

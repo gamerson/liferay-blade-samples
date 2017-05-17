@@ -14,26 +14,22 @@
 
 package com.liferay.blade.samples.servicebuilder.test;
 
-import com.liferay.arquillian.portal.annotation.PortalURL;
-import com.liferay.portal.kernel.exception.PortalException;
-
 import java.io.File;
-
 import java.net.URL;
-
 import java.util.List;
 
+import org.jboss.arquillian.showcase.extension.lifecycle.api.AfterDeploy;
+import org.jboss.arquillian.showcase.extension.lifecycle.api.BeforeDeploy;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.drone.api.annotation.Drone;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
-
+import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -44,21 +40,72 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.osgi.framework.dto.BundleDTO;
+
+import com.liferay.arquillian.portal.annotation.PortalURL;
+import com.liferay.portal.kernel.exception.PortalException;
 
 /**
  * @author Liferay
  */
-@RunAsClient
 @RunWith(Arquillian.class)
 public class BladeServiceBuilderTest {
+	
+	@BeforeDeploy
+	public static void deployDependencies() throws Exception {
+		final File dependency1 = new File(System.getProperty("dependency1"));
+		final File dependency2 = new File(System.getProperty("dependency2"));
+		final File dependency3 = new File(System.getProperty("dependency3"));
+		
+		System.out.println(dependency1.toString());
+		System.out.println(dependency2.toString());
+		System.out.println(dependency3.toString());
+		
+		long bundle1 = new JMXBundleDeployer().deploy(dependency1BSN, dependency1);
+		long bundle2 = new JMXBundleDeployer().deploy(dependency2BSN, dependency2);
+		long bundle3 = new JMXBundleDeployer().deploy(dependency3BSN, dependency3);
+		
+		System.out.println(bundle1);
+		System.out.println(bundle2);
+		System.out.println(bundle3);
 
-	@Deployment
+	}
+	
+	@AfterDeploy
+	public static void waitForDeployedDependencies() throws InterruptedException {	
+		boolean bundleActivated = false;
+		
+		while (!bundleActivated) {
+			try {
+				BundleDTO[] bundleList = new JMXBundleDeployer().listBundles();
+				
+				for (BundleDTO string : bundleList) {
+					if (string.symbolicName.matches(dependency1BSN)) {						
+						bundleActivated = true;
+						break;
+					}
+				}
+			}
+			catch (Exception e){	
+			}
+			Thread.sleep(100);
+		}
+	}
+	
+	@AfterClass
+	public static void tearDown() throws Exception {
+		new JMXBundleDeployer().uninstall(dependency1BSN);
+		new JMXBundleDeployer().uninstall(dependency2BSN);
+		new JMXBundleDeployer().uninstall(dependency3BSN);
+	}
+
+	@Deployment(testable = true)
 	public static JavaArchive create() throws Exception {
 		final File jarFile = new File(System.getProperty("jarFile"));
 
 		return ShrinkWrap.createFromZipFile(JavaArchive.class, jarFile);
 	}
-
+	
 	public void customClick(WebDriver webDriver, WebElement webElement) {
 		Actions action = new Actions(webDriver);
 
@@ -71,7 +118,8 @@ public class BladeServiceBuilderTest {
 
 		element.click();
 	}
-
+	
+	@RunAsClient
 	@Test
 	public void testCreateFoo() throws InterruptedException, PortalException {
 		_webDriver.get(_portletURL.toExternalForm());
@@ -95,6 +143,7 @@ public class BladeServiceBuilderTest {
 		Assert.assertTrue(_table.getText().contains("World"));
 	}
 
+	@RunAsClient
 	@Test
 	public void testDeleteFoo() throws InterruptedException, PortalException {
 		_webDriver.get(_portletURL.toExternalForm());
@@ -144,6 +193,7 @@ public class BladeServiceBuilderTest {
 			newRows == expectedFoos);
 	}
 
+	@RunAsClient
 	@Test
 	public void testReadFoo() throws PortalException {
 		_webDriver.get(_portletURL.toExternalForm());
@@ -155,6 +205,7 @@ public class BladeServiceBuilderTest {
 		Assert.assertTrue(_secondRowField1.getText().contains("new field1 entry"));
 	}
 
+	@RunAsClient
 	@Test
 	public void testUpdateFoo() throws InterruptedException, PortalException {
 		_webDriver.get(_portletURL.toExternalForm());
@@ -244,5 +295,9 @@ public class BladeServiceBuilderTest {
 
 	@Drone
 	private WebDriver _webDriver;
+	
+	private static String dependency1BSN = "blade.servicebuilder.api";
+	private static String dependency2BSN = "blade.servicebuilder.svc";
+	private static String dependency3BSN = "blade.servicebuilder.web";
 
 }
