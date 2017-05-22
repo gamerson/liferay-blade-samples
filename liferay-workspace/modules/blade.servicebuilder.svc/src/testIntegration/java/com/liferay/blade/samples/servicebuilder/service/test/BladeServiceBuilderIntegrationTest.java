@@ -29,16 +29,54 @@ import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.osgi.framework.dto.BundleDTO;
 
 /**
  * @author Lawrence Lee
  */
 @RunWith(Arquillian.class)
 public class BladeServiceBuilderIntegrationTest {
+
+	@BeforeClass
+	public static void deployDependencies() throws Exception {
+		final File dependency1 = new File(System.getProperty("dependency1"));
+
+		System.out.println(dependency1.toString());
+
+		long bundle1 = new JMXBundleDeployer().deploy(dependency1BSN, dependency1);
+
+		System.out.println(bundle1);
+
+		boolean bundleActivated = false;
+
+		while (!bundleActivated) {
+			try {
+				BundleDTO[] bundleList = new JMXBundleDeployer().listBundles();
+
+				for (BundleDTO string : bundleList) {
+					if (string.symbolicName.matches(dependency1BSN)) {
+						bundleActivated = true;
+						break;
+					}
+				}
+			}
+			catch (Exception e){
+			}
+			Thread.sleep(100);
+		}
+
+	}
+
+	@AfterClass
+	public static void tearDownBundles() throws Exception {
+		new JMXBundleDeployer().uninstall(dependency1BSN);
+	}
 
 	@Deployment
 	public static JavaArchive create() throws Exception {
@@ -172,5 +210,8 @@ public class BladeServiceBuilderIntegrationTest {
 			"Expected updatedFooEntryField5, but saw " + fooEntry.getField5(),
 			fooEntry.getField5().contentEquals("updatedFooEntryField5"));
 	}
+
+	private static String dependency1BSN = "blade.servicebuilder.api";
+
 
 }
