@@ -18,16 +18,15 @@ import java.io.File;
 import java.net.URL;
 import java.util.List;
 
-import org.jboss.arquillian.showcase.extension.lifecycle.api.AfterDeploy;
-import org.jboss.arquillian.showcase.extension.lifecycle.api.BeforeDeploy;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.drone.api.annotation.Drone;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
-import org.junit.AfterClass;
+import org.junit.After;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.Alert;
@@ -40,7 +39,6 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.osgi.framework.dto.BundleDTO;
 
 import com.liferay.arquillian.portal.annotation.PortalURL;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -50,58 +48,31 @@ import com.liferay.portal.kernel.exception.PortalException;
  */
 @RunWith(Arquillian.class)
 public class BladeServiceBuilderTest {
-	
-	@BeforeDeploy
-	public static void deployDependencies() throws Exception {
+		
+	@Before
+	public void startBundles() throws Exception {
 		final File dependency1 = new File(System.getProperty("dependency1"));
 		final File dependency2 = new File(System.getProperty("dependency2"));
 		final File dependency3 = new File(System.getProperty("dependency3"));
-		
-		System.out.println(dependency1.toString());
-		System.out.println(dependency2.toString());
-		System.out.println(dependency3.toString());
+		final File dependency4 = new File(System.getProperty("dependency4"));
 		
 		long bundle1 = new JMXBundleDeployer().deploy(dependency1BSN, dependency1);
 		long bundle2 = new JMXBundleDeployer().deploy(dependency2BSN, dependency2);
 		long bundle3 = new JMXBundleDeployer().deploy(dependency3BSN, dependency3);
-		
-		System.out.println(bundle1);
-		System.out.println(bundle2);
-		System.out.println(bundle3);
-
+		long bundle4 = new JMXBundleDeployer().deploy(dependency3BSN, dependency4);
 	}
 	
-	@AfterDeploy
-	public static void waitForDeployedDependencies() throws InterruptedException {	
-		boolean bundleActivated = false;
-		
-		while (!bundleActivated) {
-			try {
-				BundleDTO[] bundleList = new JMXBundleDeployer().listBundles();
-				
-				for (BundleDTO string : bundleList) {
-					if (string.symbolicName.matches(dependency1BSN)) {						
-						bundleActivated = true;
-						break;
-					}
-				}
-			}
-			catch (Exception e){	
-			}
-			Thread.sleep(100);
-		}
-	}
-	
-	@AfterClass
-	public static void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		new JMXBundleDeployer().uninstall(dependency1BSN);
 		new JMXBundleDeployer().uninstall(dependency2BSN);
 		new JMXBundleDeployer().uninstall(dependency3BSN);
+		new JMXBundleDeployer().uninstall(dependency4BSN);
 	}
 
 	@Deployment(testable = true)
 	public static JavaArchive create() throws Exception {
-		final File jarFile = new File(System.getProperty("jarFile"));
+		final File jarFile = new File(System.getProperty("dependency4"));
 
 		return ShrinkWrap.createFromZipFile(JavaArchive.class, jarFile);
 	}
@@ -298,6 +269,7 @@ public class BladeServiceBuilderTest {
 	
 	private static String dependency1BSN = "blade.servicebuilder.api";
 	private static String dependency2BSN = "blade.servicebuilder.svc";
-	private static String dependency3BSN = "blade.servicebuilder.web";
+	private static String dependency3BSN = "blade.servicebuilder.test";
+	private static String dependency4BSN = "blade.servicebuilder.web";
 
 }
