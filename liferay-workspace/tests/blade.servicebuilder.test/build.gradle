@@ -1,32 +1,31 @@
 sourceSets {
-    testFunctional {
-        java {
-            compileClasspath += main.output + test.output
-            runtimeClasspath += main.output + test.output
-            srcDir file('src/testFunctional/java')
-        }
-        resources.srcDir file('src/testFunctional/resources')
-    }
+	testFunctional {
+		java {
+			compileClasspath += main.output + test.output
+			runtimeClasspath += main.output + test.output
+			srcDir file('src/testFunctional/java')
+		}
+		resources.srcDir file('src/testFunctional/resources')
+	}
 }
 
 configurations {
-    testFunctionalCompile.extendsFrom testCompile
-    testFunctionalRuntime.extendsFrom testRuntime
+	testFunctionalCompile.extendsFrom testCompile
+	testFunctionalRuntime.extendsFrom testRuntime
 }
 
 dependencies {
-	compileOnly  project(':modules:blade.servicebuilder.api')
-	compileOnly 'com.liferay.portal:com.liferay.portal.kernel:2.0.0'
-	compileOnly 'javax.portlet:portlet-api:2.0'
-	compileOnly 'javax.servlet:javax.servlet-api:3.0.1'
-	compileOnly 'org.osgi:osgi.cmpn:6.0.0'
+	compileOnly  project(":modules:blade.servicebuilder.api")
+	compileOnly "com.liferay.portal:com.liferay.portal.kernel:2.0.0"
+	compileOnly "javax.portlet:portlet-api:2.0"
+	compileOnly "javax.servlet:javax.servlet-api:3.0.1"
+	compileOnly "org.osgi:osgi.cmpn:6.0.0"
 
 	testCompile group: "com.liferay.arquillian", name: "com.liferay.arquillian.arquillian-container-liferay", version: "1.0.6"
 	testCompile group: "junit", name: "junit", version: "4.12"
 	testCompile group: "org.jboss.arquillian.graphene", name: "graphene-webdriver", version: "2.1.0.Final"
 	testCompile group: "org.jboss.arquillian.junit", name: "arquillian-junit-container", version: "1.1.11.Final"
-	testCompile group: 'org.jboss.arquillian.container', name: 'arquillian-container-spi', version: '1.1.13.Final'
-	testCompile project(':tests:arquillian.extension.lifecycle')
+	testCompile project(":tests:utils")
 }
 
 startTestableTomcat {
@@ -34,19 +33,21 @@ startTestableTomcat {
 }
 
 task testFunctional(type: Test) {
-    testClassesDir = sourceSets.testFunctional.output.classesDir
-    classpath = sourceSets.testFunctional.runtimeClasspath
-    outputs.upToDateWhen { false }
+	testClassesDir = sourceSets.testFunctional.output.classesDir
+	classpath = sourceSets.testFunctional.runtimeClasspath
+	outputs.upToDateWhen { false }
 
 	dependsOn jar, ":initBundle", startTestableTomcat
-	dependsOn ":modules:blade.servicebuilder.api:deploy"
-	dependsOn ":modules:blade.servicebuilder.svc:deploy"
-	dependsOn ":modules:blade.servicebuilder.web:deploy"
+	dependsOn ":modules:blade.servicebuilder.api:jar"
+	dependsOn ":modules:blade.servicebuilder.svc:jar"
+	dependsOn ":modules:blade.servicebuilder.web:jar"
 
 	systemProperty 'dependency1', project(':modules:blade.servicebuilder.api').jar.archivePath
 	systemProperty 'dependency2', project(':modules:blade.servicebuilder.svc').jar.archivePath
-	systemProperty 'dependency3', jar.archivePath
-	systemProperty 'dependency4', project(':modules:blade.servicebuilder.web').jar.archivePath
+	systemProperty 'dependency3', project(':modules:blade.servicebuilder.web').jar.archivePath
+	systemProperty 'jarFile', jar.archivePath
+
+	systemProperty 'jmxRemotePort', testIntegrationTomcat.jmxRemotePort
 
 	finalizedBy {
 		stopTestableTomcat

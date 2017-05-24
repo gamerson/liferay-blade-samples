@@ -6,11 +6,12 @@ dependencies {
 	compileOnly "com.liferay:com.liferay.portal.spring.extender:2.0.0"
 	compileOnly project(":modules:blade.servicebuilder.api")
 
+	testCompile "org.osgi:osgi.cmpn:6.0.0"
 	testCompile group: "com.liferay.arquillian", name: "com.liferay.arquillian.arquillian-container-liferay", version: "1.0.6"
 	testCompile group: "junit", name: "junit", version: "4.12"
-	testCompile "org.osgi:osgi.cmpn:6.0.0"
 	testCompile group: "org.jboss.arquillian.junit", name: "arquillian-junit-container", version: "1.1.11.Final"
 	testCompile project(":modules:blade.servicebuilder.api")
+	testCompile project(":tests:utils")
 }
 
 buildService {
@@ -32,7 +33,6 @@ testIntegration {
 
 	systemProperty 'jarFile', jar.archivePath
 	systemProperty 'dependency1', project(':modules:blade.servicebuilder.api').jar.archivePath
-
 
 	finalizedBy {
 		stopTestableTomcat
