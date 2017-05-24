@@ -17,6 +17,7 @@
 package com.liferay.blade.samples.language.web.test;
 
 import com.liferay.arquillian.portal.annotation.PortalURL;
+import com.liferay.blade.samples.utils.JMXBundleDeployer;
 import com.liferay.portal.kernel.exception.PortalException;
 
 import java.io.File;
@@ -30,6 +31,7 @@ import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 
+import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -46,6 +48,14 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 @RunAsClient
 @RunWith(Arquillian.class)
 public class BladeLanguageWebTest {
+
+	@AfterClass
+	public static void cleanBundles() throws Exception {
+		JMXBundleDeployer jmxBundleDeployer = new JMXBundleDeployer(
+			jmxRemotePort);
+
+		jmxBundleDeployer.uninstall(dependency1BSN);
+	}
 
 	@Deployment
 	public static JavaArchive create() throws Exception {
@@ -87,6 +97,8 @@ public class BladeLanguageWebTest {
 		}
 	}
 
+	private static String dependency1BSN = "blade.language";
+
 	@FindBy(xpath = "//div[contains(@id,'_com_liferay_blade_samples_language_web')]")
 	private WebElement _bladeSampleLanguagePortlet;
 
@@ -104,5 +116,10 @@ public class BladeLanguageWebTest {
 
 	@Drone
 	private WebDriver _webDriver;
+
+	final static File dependency1 = new File(System.getProperty("dependency1"));
+
+	final static int jmxRemotePort = Integer.parseInt(
+		System.getProperty("jmxRemotePort"));
 
 }

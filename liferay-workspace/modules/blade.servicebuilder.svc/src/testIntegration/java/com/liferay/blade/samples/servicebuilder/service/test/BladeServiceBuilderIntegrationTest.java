@@ -14,12 +14,7 @@
 
 package com.liferay.blade.samples.servicebuilder.service.test;
 
-import com.liferay.blade.samples.servicebuilder.model.Foo;
-import com.liferay.blade.samples.servicebuilder.service.FooLocalServiceUtil;
-import com.liferay.portal.kernel.exception.PortalException;
-
 import java.io.File;
-
 import java.util.Date;
 import java.util.List;
 
@@ -27,15 +22,17 @@ import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
-
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.osgi.framework.dto.BundleDTO;
+
+import com.liferay.blade.samples.servicebuilder.model.Foo;
+import com.liferay.blade.samples.servicebuilder.service.FooLocalServiceUtil;
+import com.liferay.blade.samples.utils.JMXBundleDeployer;
+import com.liferay.portal.kernel.exception.PortalException;
 
 /**
  * @author Lawrence Lee
@@ -43,45 +40,17 @@ import org.osgi.framework.dto.BundleDTO;
 @RunWith(Arquillian.class)
 public class BladeServiceBuilderIntegrationTest {
 
-	@BeforeClass
-	public static void deployDependencies() throws Exception {
-		final File dependency1 = new File(System.getProperty("dependency1"));
-
-		System.out.println(dependency1.toString());
-
-		long bundle1 = new JMXBundleDeployer().deploy(dependency1BSN, dependency1);
-
-		System.out.println(bundle1);
-
-		boolean bundleActivated = false;
-
-		while (!bundleActivated) {
-			try {
-				BundleDTO[] bundleList = new JMXBundleDeployer().listBundles();
-
-				for (BundleDTO string : bundleList) {
-					if (string.symbolicName.matches(dependency1BSN)) {
-						bundleActivated = true;
-						break;
-					}
-				}
-			}
-			catch (Exception e){
-			}
-			Thread.sleep(100);
-		}
-
-	}
-
 	@AfterClass
-	public static void tearDownBundles() throws Exception {
-		new JMXBundleDeployer().uninstall(dependency1BSN);
+	public static void cleanBundles() throws Exception {
+		JMXBundleDeployer jmxBundleDeployer = new JMXBundleDeployer(jmxRemotePort);
+
+		jmxBundleDeployer.uninstall(dependency1BSN);
 	}
 
 	@Deployment
 	public static JavaArchive create() throws Exception {
 		final File jarFile = new File(System.getProperty("jarFile"));
-
+		
 		return ShrinkWrap.createFromZipFile(JavaArchive.class, jarFile);
 	}
 
@@ -213,5 +182,5 @@ public class BladeServiceBuilderIntegrationTest {
 
 	private static String dependency1BSN = "blade.servicebuilder.api";
 
-
+	final static int jmxRemotePort = 8099;
 }

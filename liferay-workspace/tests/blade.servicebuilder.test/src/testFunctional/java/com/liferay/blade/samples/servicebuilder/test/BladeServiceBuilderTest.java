@@ -14,8 +14,14 @@
 
 package com.liferay.blade.samples.servicebuilder.test;
 
+import com.liferay.arquillian.portal.annotation.PortalURL;
+import com.liferay.blade.samples.utils.JMXBundleDeployer;
+import com.liferay.portal.kernel.exception.PortalException;
+
 import java.io.File;
+
 import java.net.URL;
+
 import java.util.List;
 
 import org.jboss.arquillian.container.test.api.Deployment;
@@ -24,11 +30,12 @@ import org.jboss.arquillian.drone.api.annotation.Drone;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
-import org.junit.After;
+
+import org.junit.AfterClass;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -40,43 +47,35 @@ import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import com.liferay.arquillian.portal.annotation.PortalURL;
-import com.liferay.portal.kernel.exception.PortalException;
-
 /**
  * @author Liferay
  */
+@RunAsClient
 @RunWith(Arquillian.class)
 public class BladeServiceBuilderTest {
-		
-	@Before
-	public void startBundles() throws Exception {
-		final File dependency1 = new File(System.getProperty("dependency1"));
-		final File dependency2 = new File(System.getProperty("dependency2"));
-		final File dependency3 = new File(System.getProperty("dependency3"));
-		final File dependency4 = new File(System.getProperty("dependency4"));
-		
-		long bundle1 = new JMXBundleDeployer().deploy(dependency1BSN, dependency1);
-		long bundle2 = new JMXBundleDeployer().deploy(dependency2BSN, dependency2);
-		long bundle3 = new JMXBundleDeployer().deploy(dependency3BSN, dependency3);
-		long bundle4 = new JMXBundleDeployer().deploy(dependency3BSN, dependency4);
-	}
-	
-	@After
-	public void tearDown() throws Exception {
-		new JMXBundleDeployer().uninstall(dependency1BSN);
-		new JMXBundleDeployer().uninstall(dependency2BSN);
-		new JMXBundleDeployer().uninstall(dependency3BSN);
-		new JMXBundleDeployer().uninstall(dependency4BSN);
+
+	@AfterClass
+	public static void cleanBundles() throws Exception {
+		JMXBundleDeployer jmxBundleDeployer = new JMXBundleDeployer(
+			jmxRemotePort);
+
+		jmxBundleDeployer.uninstall(dependency1BSN);
+		jmxBundleDeployer.uninstall(dependency2BSN);
+		jmxBundleDeployer.uninstall(dependency3BSN);
 	}
 
 	@Deployment(testable = true)
 	public static JavaArchive create() throws Exception {
-		final File jarFile = new File(System.getProperty("dependency4"));
+		JMXBundleDeployer jmxBundleDeployer = new JMXBundleDeployer(
+			jmxRemotePort);
+
+		jmxBundleDeployer.deploy(dependency1BSN, dependency1);
+		jmxBundleDeployer.deploy(dependency2BSN, dependency2);
+		jmxBundleDeployer.deploy(dependency3BSN, dependency3);
 
 		return ShrinkWrap.createFromZipFile(JavaArchive.class, jarFile);
 	}
-	
+
 	public void customClick(WebDriver webDriver, WebElement webElement) {
 		Actions action = new Actions(webDriver);
 
@@ -89,8 +88,7 @@ public class BladeServiceBuilderTest {
 
 		element.click();
 	}
-	
-	@RunAsClient
+
 	@Test
 	public void testCreateFoo() throws InterruptedException, PortalException {
 		_webDriver.get(_portletURL.toExternalForm());
@@ -114,7 +112,6 @@ public class BladeServiceBuilderTest {
 		Assert.assertTrue(_table.getText().contains("World"));
 	}
 
-	@RunAsClient
 	@Test
 	public void testDeleteFoo() throws InterruptedException, PortalException {
 		_webDriver.get(_portletURL.toExternalForm());
@@ -164,19 +161,19 @@ public class BladeServiceBuilderTest {
 			newRows == expectedFoos);
 	}
 
-	@RunAsClient
 	@Test
 	public void testReadFoo() throws PortalException {
 		_webDriver.get(_portletURL.toExternalForm());
 
 		Assert.assertTrue(isVisible(_firstRowField1));
 
-		Assert.assertTrue(_firstRowField1.getText().contains("new field1 entry"));
+		Assert.assertTrue(
+			_firstRowField1.getText().contains("new field1 entry"));
 
-		Assert.assertTrue(_secondRowField1.getText().contains("new field1 entry"));
+		Assert.assertTrue(
+			_secondRowField1.getText().contains("new field1 entry"));
 	}
 
-	@RunAsClient
 	@Test
 	public void testUpdateFoo() throws InterruptedException, PortalException {
 		_webDriver.get(_portletURL.toExternalForm());
@@ -199,7 +196,8 @@ public class BladeServiceBuilderTest {
 
 		Assert.assertTrue(isVisible(_table));
 
-		Assert.assertTrue(_table.getText().contains("field1 with Updated Name"));
+		Assert.assertTrue(
+			_table.getText().contains("field1 with Updated Name"));
 	}
 
 	protected static boolean isAlertPresent(WebDriver webDriver) {
@@ -230,6 +228,10 @@ public class BladeServiceBuilderTest {
 			return false;
 		}
 	}
+
+	private static String dependency1BSN = "blade.servicebuilder.api";
+	private static String dependency2BSN = "blade.servicebuilder.svc";
+	private static String dependency3BSN = "blade.servicebuilder.web";
 
 	@FindBy(xpath = "//span[@class='lfr-btn-label']")
 	private WebElement _addButton;
@@ -266,10 +268,12 @@ public class BladeServiceBuilderTest {
 
 	@Drone
 	private WebDriver _webDriver;
-	
-	private static String dependency1BSN = "blade.servicebuilder.api";
-	private static String dependency2BSN = "blade.servicebuilder.svc";
-	private static String dependency3BSN = "blade.servicebuilder.test";
-	private static String dependency4BSN = "blade.servicebuilder.web";
 
+	final static File dependency1 = new File(System.getProperty("dependency1"));
+	final static File dependency2 = new File(System.getProperty("dependency2"));
+	final static File dependency3 = new File(System.getProperty("dependency3"));
+	final static File jarFile = new File(System.getProperty("jarFile"));
+
+	final static int jmxRemotePort = Integer.parseInt(
+		System.getProperty("jmxRemotePort"));
 }
