@@ -14,7 +14,12 @@
 
 package com.liferay.blade.samples.servicebuilder.service.test;
 
+import com.liferay.blade.samples.servicebuilder.model.Foo;
+import com.liferay.blade.samples.servicebuilder.service.FooLocalServiceUtil;
+import com.liferay.portal.kernel.exception.PortalException;
+
 import java.io.File;
+
 import java.util.Date;
 import java.util.List;
 
@@ -22,16 +27,13 @@ import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import com.liferay.blade.samples.servicebuilder.model.Foo;
-import com.liferay.blade.samples.servicebuilder.service.FooLocalServiceUtil;
-import com.liferay.portal.kernel.exception.PortalException;
 
 /**
  * @author Lawrence Lee
@@ -41,7 +43,8 @@ public class BladeServiceBuilderIntegrationTest {
 
 	@AfterClass
 	public static void cleanBundles() throws Exception {
-		JMXBundleDeployer jmxBundleDeployer = new JMXBundleDeployer(jmxRemotePort);
+		JMXBundleDeployer jmxBundleDeployer = new JMXBundleDeployer(
+			jmxRemotePort);
 
 		jmxBundleDeployer.uninstall(dependency1BSN);
 	}
@@ -49,7 +52,7 @@ public class BladeServiceBuilderIntegrationTest {
 	@Deployment
 	public static JavaArchive create() throws Exception {
 		final File jarFile = new File(System.getProperty("jarFile"));
-		
+
 		return ShrinkWrap.createFromZipFile(JavaArchive.class, jarFile);
 	}
 
