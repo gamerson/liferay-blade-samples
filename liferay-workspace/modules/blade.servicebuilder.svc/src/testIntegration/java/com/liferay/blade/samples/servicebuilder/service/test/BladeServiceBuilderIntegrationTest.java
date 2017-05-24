@@ -31,7 +31,6 @@ import org.junit.runner.RunWith;
 
 import com.liferay.blade.samples.servicebuilder.model.Foo;
 import com.liferay.blade.samples.servicebuilder.service.FooLocalServiceUtil;
-import com.liferay.blade.samples.utils.JMXBundleDeployer;
 import com.liferay.portal.kernel.exception.PortalException;
 
 /**
