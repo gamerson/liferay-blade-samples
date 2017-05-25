@@ -14,7 +14,14 @@
 
 package com.liferay.blade.samples.servicebuilder.service.test;
 
+import aQute.remote.util.JMXBundleDeployer;
+
+import com.liferay.blade.samples.servicebuilder.model.Foo;
+import com.liferay.blade.samples.servicebuilder.service.FooLocalServiceUtil;
+import com.liferay.portal.kernel.exception.PortalException;
+
 import java.io.File;
+
 import java.util.Date;
 import java.util.List;
 
@@ -22,16 +29,13 @@ import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import com.liferay.blade.samples.servicebuilder.model.Foo;
-import com.liferay.blade.samples.servicebuilder.service.FooLocalServiceUtil;
-import com.liferay.portal.kernel.exception.PortalException;
 
 /**
  * @author Lawrence Lee
@@ -41,15 +45,16 @@ public class BladeServiceBuilderIntegrationTest {
 
 	@AfterClass
 	public static void cleanBundles() throws Exception {
-		JMXBundleDeployer jmxBundleDeployer = new JMXBundleDeployer(jmxRemotePort);
+		JMXBundleDeployer jmxBundleDeployer = new JMXBundleDeployer(
+			_jmxRemotePort);
 
-		jmxBundleDeployer.uninstall(dependency1BSN);
+		jmxBundleDeployer.uninstall(_dependency1BSN);
 	}
 
 	@Deployment
 	public static JavaArchive create() throws Exception {
 		final File jarFile = new File(System.getProperty("jarFile"));
-		
+
 		return ShrinkWrap.createFromZipFile(JavaArchive.class, jarFile);
 	}
 
@@ -179,7 +184,7 @@ public class BladeServiceBuilderIntegrationTest {
 			fooEntry.getField5().contentEquals("updatedFooEntryField5"));
 	}
 
-	private static String dependency1BSN = "blade.servicebuilder.api";
+	private static String _dependency1BSN = "blade.servicebuilder.api";
+	private static int _jmxRemotePort = 8099;
 
-	final static int jmxRemotePort = 8099;
 }

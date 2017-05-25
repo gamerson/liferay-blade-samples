@@ -14,6 +14,8 @@
 
 package com.liferay.blade.samples.servicebuilder.service.test;
 
+import aQute.remote.util.JMXBundleDeployer;
+
 import com.liferay.blade.samples.servicebuilder.model.Foo;
 import com.liferay.blade.samples.servicebuilder.service.FooLocalServiceUtil;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -44,9 +46,9 @@ public class BladeServiceBuilderIntegrationTest {
 	@AfterClass
 	public static void cleanBundles() throws Exception {
 		JMXBundleDeployer jmxBundleDeployer = new JMXBundleDeployer(
-			jmxRemotePort);
+			_jmxRemotePort);
 
-		jmxBundleDeployer.uninstall(dependency1BSN);
+		jmxBundleDeployer.uninstall(_dependency1BSN);
 	}
 
 	@Deployment
@@ -182,7 +184,7 @@ public class BladeServiceBuilderIntegrationTest {
 			fooEntry.getField5().contentEquals("updatedFooEntryField5"));
 	}
 
-	private static String dependency1BSN = "blade.servicebuilder.api";
+	private static String _dependency1BSN = "blade.servicebuilder.api";
+	private static int _jmxRemotePort = 8099;
 
-	final static int jmxRemotePort = 8099;
 }
