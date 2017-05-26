@@ -45,6 +45,7 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -119,6 +120,7 @@ public class BladeSamplesTest {
 			try (Jar jar = new Jar(sampleBundleFile, sampleBundleFile)) {
 				if (jar.getManifest().getMainAttributes().getValue(
 						"Fragment-Host") == null) {
+
 							bundleIDStartMap.put(
 								installBundleOutput, printFileName);
 				}
@@ -244,6 +246,7 @@ public class BladeSamplesTest {
 		BladeCLIUtil.uninstallBundle(bundleID);
 	}
 
+	@Ignore
 	@Test
 	public void testServiceBuilderBladeSample() throws Exception {
 		File projectPath = new File(

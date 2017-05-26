@@ -15,6 +15,7 @@
 package com.liferay.blade.samples.servicebuilder.test;
 
 import com.liferay.arquillian.portal.annotation.PortalURL;
+import com.liferay.blade.samples.utils.JMXBundleDeployer;
 import com.liferay.portal.kernel.exception.PortalException;
 
 import java.io.File;
@@ -30,6 +31,7 @@ import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 
+import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -52,9 +54,24 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 @RunWith(Arquillian.class)
 public class BladeServiceBuilderTest {
 
-	@Deployment
+	@AfterClass
+	public static void cleanBundles() throws Exception {
+		JMXBundleDeployer jmxBundleDeployer = new JMXBundleDeployer(
+			jmxRemotePort);
+
+		jmxBundleDeployer.uninstall(dependency1BSN);
+		jmxBundleDeployer.uninstall(dependency2BSN);
+		jmxBundleDeployer.uninstall(dependency3BSN);
+	}
+
+	@Deployment(testable = true)
 	public static JavaArchive create() throws Exception {
-		final File jarFile = new File(System.getProperty("jarFile"));
+		JMXBundleDeployer jmxBundleDeployer = new JMXBundleDeployer(
+			jmxRemotePort);
+
+		jmxBundleDeployer.deploy(dependency1BSN, dependency1);
+		jmxBundleDeployer.deploy(dependency2BSN, dependency2);
+		jmxBundleDeployer.deploy(dependency3BSN, dependency3);
 
 		return ShrinkWrap.createFromZipFile(JavaArchive.class, jarFile);
 	}
@@ -150,9 +167,11 @@ public class BladeServiceBuilderTest {
 
 		Assert.assertTrue(isVisible(_firstRowField1));
 
-		Assert.assertTrue(_firstRowField1.getText().contains("new field1 entry"));
+		Assert.assertTrue(
+			_firstRowField1.getText().contains("new field1 entry"));
 
-		Assert.assertTrue(_secondRowField1.getText().contains("new field1 entry"));
+		Assert.assertTrue(
+			_secondRowField1.getText().contains("new field1 entry"));
 	}
 
 	@Test
@@ -177,7 +196,8 @@ public class BladeServiceBuilderTest {
 
 		Assert.assertTrue(isVisible(_table));
 
-		Assert.assertTrue(_table.getText().contains("field1 with Updated Name"));
+		Assert.assertTrue(
+			_table.getText().contains("field1 with Updated Name"));
 	}
 
 	protected static boolean isAlertPresent(WebDriver webDriver) {
@@ -208,6 +228,10 @@ public class BladeServiceBuilderTest {
 			return false;
 		}
 	}
+
+	private static String dependency1BSN = "blade.servicebuilder.api";
+	private static String dependency2BSN = "blade.servicebuilder.svc";
+	private static String dependency3BSN = "blade.servicebuilder.web";
 
 	@FindBy(xpath = "//span[@class='lfr-btn-label']")
 	private WebElement _addButton;
@@ -245,4 +269,11 @@ public class BladeServiceBuilderTest {
 	@Drone
 	private WebDriver _webDriver;
 
+	final static File dependency1 = new File(System.getProperty("dependency1"));
+	final static File dependency2 = new File(System.getProperty("dependency2"));
+	final static File dependency3 = new File(System.getProperty("dependency3"));
+	final static File jarFile = new File(System.getProperty("jarFile"));
+
+	final static int jmxRemotePort = Integer.parseInt(
+		System.getProperty("jmxRemotePort"));
 }
