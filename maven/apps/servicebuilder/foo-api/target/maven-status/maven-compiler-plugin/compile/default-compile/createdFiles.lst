@@ -1,0 +1,14 @@
+com/liferay/blade/samples/servicebuilder/model/Foo.class
+com/liferay/blade/samples/servicebuilder/service/FooServiceUtil.class
+com/liferay/blade/samples/servicebuilder/service/FooServiceWrapper.class
+com/liferay/blade/samples/servicebuilder/service/persistence/FooUtil.class
+com/liferay/blade/samples/servicebuilder/service/FooService.class
+com/liferay/blade/samples/servicebuilder/model/FooSoap.class
+com/liferay/blade/samples/servicebuilder/service/FooLocalServiceWrapper.class
+com/liferay/blade/samples/servicebuilder/service/FooLocalServiceUtil.class
+com/liferay/blade/samples/servicebuilder/service/persistence/FooPersistence.class
+com/liferay/blade/samples/servicebuilder/exception/NoSuchFooException.class
+com/liferay/blade/samples/servicebuilder/model/FooWrapper.class
+com/liferay/blade/samples/servicebuilder/model/Foo$1.class
+com/liferay/blade/samples/servicebuilder/service/FooLocalService.class
+com/liferay/blade/samples/servicebuilder/model/FooModel.class

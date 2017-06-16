@@ -1,0 +1,19 @@
+com.liferay.asset.kernel.service.AssetEntryLocalService
+com.liferay.asset.kernel.service.AssetEntryService
+com.liferay.asset.kernel.service.AssetTagLocalService
+com.liferay.asset.kernel.service.AssetTagService
+com.liferay.asset.kernel.service.persistence.AssetEntryPersistence
+com.liferay.asset.kernel.service.persistence.AssetTagPersistence
+com.liferay.counter.kernel.service.CounterLocalService
+com.liferay.portal.kernel.dao.orm.EntityCache
+com.liferay.portal.kernel.dao.orm.FinderCache
+com.liferay.portal.kernel.model.Release (&(release.bundle.symbolic.name=blade.servicebuilder.svc)(release.schema.version=1.0.0))
+com.liferay.portal.kernel.service.ClassNameLocalService
+com.liferay.portal.kernel.service.ClassNameService
+com.liferay.portal.kernel.service.PersistedModelLocalServiceRegistry
+com.liferay.portal.kernel.service.ResourceLocalService
+com.liferay.portal.kernel.service.UserLocalService
+com.liferay.portal.kernel.service.UserService
+com.liferay.portal.kernel.service.persistence.ClassNamePersistence
+com.liferay.portal.kernel.service.persistence.CompanyProvider
+com.liferay.portal.kernel.service.persistence.UserPersistence

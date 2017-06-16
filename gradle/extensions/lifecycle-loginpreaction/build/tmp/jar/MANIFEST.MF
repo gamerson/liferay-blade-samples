@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: lifecycle-loginpreaction
+Bundle-SymbolicName: lifecycle-loginpreaction
+Bundle-Version: 1.0.0
+Created-By: 1.8.0_102 (Oracle Corporation)
+Import-Package: com.liferay.portal.kernel.events;version="[6.3,7)"
+Javac-Debug: on
+Javac-Deprecation: off
+Javac-Encoding: UTF-8
+Private-Package: com.liferay.blade.samples.lifecycle.loginpreaction
+Provide-Capability: osgi.service;objectClass:List<String>="com.liferay
+ .portal.kernel.events.LifecycleAction"
+Require-Capability: osgi.ee;filter:="(&(osgi.ee=JavaSE)(version=1.8))"
+Service-Component: OSGI-INF/com.liferay.blade.samples.lifecycle.loginp
+ reaction.LoginPreAction.xml
+Tool: Bnd-3.2.0.201605172007

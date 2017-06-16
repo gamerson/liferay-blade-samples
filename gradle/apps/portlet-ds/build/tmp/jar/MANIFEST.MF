@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: portlet-ds
+Bundle-SymbolicName: portlet-ds
+Bundle-Version: 1.0.0
+Created-By: 1.8.0_102 (Oracle Corporation)
+Import-Package: javax.portlet;version="[2.0,3)"
+Javac-Debug: on
+Javac-Deprecation: off
+Javac-Encoding: UTF-8
+Private-Package: com.liferay.blade.samples.portlet.ds
+Provide-Capability: osgi.service;objectClass:List<String>="javax.portl
+ et.Portlet"
+Require-Capability: osgi.ee;filter:="(&(osgi.ee=JavaSE)(version=1.8))"
+Service-Component: OSGI-INF/com.liferay.blade.samples.portlet.ds.DSPor
+ tlet.xml
+Tool: Bnd-3.2.0.201605172007

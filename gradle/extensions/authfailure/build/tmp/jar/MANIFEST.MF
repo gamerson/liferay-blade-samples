@@ -1,0 +1,21 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: authfailure
+Bundle-SymbolicName: authfailure
+Bundle-Version: 1.0.0
+Created-By: 1.8.0_102 (Oracle Corporation)
+Import-Package: com.liferay.portal.kernel.exception;version="[7.0,8)",
+ com.liferay.portal.kernel.log;version="[7.0,8)",com.liferay.portal.ke
+ rnel.model;version="[1.0,2)",com.liferay.portal.kernel.security.auth;
+ version="[1.0,2)",com.liferay.portal.kernel.service;version="[1.0,2)"
+Javac-Debug: on
+Javac-Deprecation: off
+Javac-Encoding: UTF-8
+Private-Package: com.liferay.blade.samples.authfailure
+Provide-Capability: osgi.service;objectClass:List<String>="com.liferay
+ .portal.kernel.security.auth.AuthFailure"
+Require-Capability: osgi.ee;filter:="(&(osgi.ee=JavaSE)(version=1.8))"
+Service-Component: OSGI-INF/com.liferay.blade.samples.authfailure.LogA
+ uthFailure.xml,OSGI-INF/com.liferay.blade.samples.authfailure.LogMaxF
+ ailures.xml
+Tool: Bnd-3.2.0.201605172007

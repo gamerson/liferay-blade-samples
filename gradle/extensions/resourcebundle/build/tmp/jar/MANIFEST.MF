@@ -1,0 +1,18 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: resourcebundle
+Bundle-SymbolicName: resourcebundle
+Bundle-Version: 1.0.0
+Created-By: 1.8.0_102 (Oracle Corporation)
+Import-Package: com.liferay.portal.kernel.language;version="[7.0,8)"
+Javac-Debug: on
+Javac-Deprecation: off
+Javac-Encoding: UTF-8
+Private-Package: com.liferay.blade.samples.resourcebundle,content
+Provide-Capability: osgi.service;objectClass:List<String>="java.util.R
+ esourceBundle",liferay.resource.bundle;bundle.symbolic.name=resourceb
+ undle;resource.bundle.base.name="content.Language"
+Require-Capability: osgi.ee;filter:="(&(osgi.ee=JavaSE)(version=1.8))"
+Service-Component: OSGI-INF/com.liferay.blade.samples.resourcebundle.C
+ ustomResourceBundle.xml
+Tool: Bnd-3.2.0.201605172007
