@@ -1,0 +1,19 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: service-hook-user
+Bundle-SymbolicName: service-hook-user
+Bundle-Version: 1.0.0
+Created-By: 1.8.0_102 (Oracle Corporation)
+Import-Package: com.liferay.portal.kernel.exception;version="[7.0,8)",
+ com.liferay.portal.kernel.model;version="[1.0,2)",com.liferay.portal.
+ kernel.service;version="[1.0,2)"
+Javac-Debug: on
+Javac-Deprecation: off
+Javac-Encoding: UTF-8
+Private-Package: com.liferay.blade.samples.service.hook.user
+Provide-Capability: osgi.service;objectClass:List<String>="com.liferay
+ .portal.kernel.service.ServiceWrapper"
+Require-Capability: osgi.ee;filter:="(&(osgi.ee=JavaSE)(version=1.8))"
+Service-Component: OSGI-INF/com.liferay.blade.samples.service.hook.use
+ r.UserLocalServiceHook.xml
+Tool: Bnd-3.2.0.201605172007

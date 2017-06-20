@@ -1,0 +1,12 @@
+/opt/dev/projects/github/liferay-blade-samples/maven/blade.servicebuilder.svc/src/main/java/com/liferay/blade/samples/servicebuilder/service/base/FooServiceBaseImpl.java
+/opt/dev/projects/github/liferay-blade-samples/maven/blade.servicebuilder.svc/src/main/java/com/liferay/blade/samples/servicebuilder/service/http/FooServiceSoap.java
+/opt/dev/projects/github/liferay-blade-samples/maven/blade.servicebuilder.svc/src/main/java/com/liferay/blade/samples/servicebuilder/service/base/FooLocalServiceBaseImpl.java
+/opt/dev/projects/github/liferay-blade-samples/maven/blade.servicebuilder.svc/src/main/java/com/liferay/blade/samples/servicebuilder/service/impl/FooLocalServiceImpl.java
+/opt/dev/projects/github/liferay-blade-samples/maven/blade.servicebuilder.svc/src/main/java/com/liferay/blade/samples/servicebuilder/service/impl/FooServiceImpl.java
+/opt/dev/projects/github/liferay-blade-samples/maven/blade.servicebuilder.svc/src/main/java/com/liferay/blade/samples/servicebuilder/service/util/PropsUtil.java
+/opt/dev/projects/github/liferay-blade-samples/maven/blade.servicebuilder.svc/src/main/java/com/liferay/blade/samples/servicebuilder/service/persistence/impl/FooPersistenceImpl.java
+/opt/dev/projects/github/liferay-blade-samples/maven/blade.servicebuilder.svc/src/main/java/com/liferay/blade/samples/servicebuilder/model/impl/FooCacheModel.java
+/opt/dev/projects/github/liferay-blade-samples/maven/blade.servicebuilder.svc/src/main/java/com/liferay/blade/samples/servicebuilder/model/impl/FooImpl.java
+/opt/dev/projects/github/liferay-blade-samples/maven/blade.servicebuilder.svc/src/main/java/com/liferay/blade/samples/servicebuilder/service/http/FooServiceHttp.java
+/opt/dev/projects/github/liferay-blade-samples/maven/blade.servicebuilder.svc/src/main/java/com/liferay/blade/samples/servicebuilder/model/impl/FooModelImpl.java
+/opt/dev/projects/github/liferay-blade-samples/maven/blade.servicebuilder.svc/src/main/java/com/liferay/blade/samples/servicebuilder/model/impl/FooBaseImpl.java

@@ -1,0 +1,22 @@
+Manifest-Version: 1.0
+Bundle-Description: Adds a custom command to Liferay Portal's Gogo she
+ ll environment.
+Bundle-ManifestVersion: 2
+Bundle-Name: gogo
+Bundle-SymbolicName: gogo
+Bundle-Version: 1.0.0
+Created-By: 1.8.0_102 (Oracle Corporation)
+Import-Package: com.liferay.portal.kernel.service;version="[1.0,2)"
+Javac-Debug: on
+Javac-Deprecation: off
+Javac-Encoding: UTF-8
+Private-Package: com.liferay.blade.samples.gogo
+Provide-Capability: osgi.service;objectClass:List<String>="java.lang.O
+ bject"
+Require-Capability: osgi.extender;filter:="(&(osgi.extender=osgi.compo
+ nent)(version>=1.3.0)(!(version>=2.0.0)))",osgi.service;filter:="(obj
+ ectClass=com.liferay.portal.kernel.service.UserLocalService)";effecti
+ ve:=active,osgi.ee;filter:="(&(osgi.ee=JavaSE)(version=1.8))"
+Service-Component: OSGI-INF/com.liferay.blade.samples.gogo.UserCountCo
+ mmand.xml
+Tool: Bnd-3.2.0.201605172007

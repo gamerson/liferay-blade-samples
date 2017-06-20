@@ -1,0 +1,13 @@
+/opt/dev/projects/github/liferay-blade-samples/maven/apps/servicebuilder/foo-api/src/main/java/com/liferay/blade/samples/servicebuilder/service/persistence/FooUtil.java
+/opt/dev/projects/github/liferay-blade-samples/maven/apps/servicebuilder/foo-api/src/main/java/com/liferay/blade/samples/servicebuilder/exception/NoSuchFooException.java
+/opt/dev/projects/github/liferay-blade-samples/maven/apps/servicebuilder/foo-api/src/main/java/com/liferay/blade/samples/servicebuilder/model/Foo.java
+/opt/dev/projects/github/liferay-blade-samples/maven/apps/servicebuilder/foo-api/src/main/java/com/liferay/blade/samples/servicebuilder/service/FooLocalServiceUtil.java
+/opt/dev/projects/github/liferay-blade-samples/maven/apps/servicebuilder/foo-api/src/main/java/com/liferay/blade/samples/servicebuilder/model/FooModel.java
+/opt/dev/projects/github/liferay-blade-samples/maven/apps/servicebuilder/foo-api/src/main/java/com/liferay/blade/samples/servicebuilder/service/FooServiceUtil.java
+/opt/dev/projects/github/liferay-blade-samples/maven/apps/servicebuilder/foo-api/src/main/java/com/liferay/blade/samples/servicebuilder/service/FooLocalServiceWrapper.java
+/opt/dev/projects/github/liferay-blade-samples/maven/apps/servicebuilder/foo-api/src/main/java/com/liferay/blade/samples/servicebuilder/model/FooSoap.java
+/opt/dev/projects/github/liferay-blade-samples/maven/apps/servicebuilder/foo-api/src/main/java/com/liferay/blade/samples/servicebuilder/service/FooServiceWrapper.java
+/opt/dev/projects/github/liferay-blade-samples/maven/apps/servicebuilder/foo-api/src/main/java/com/liferay/blade/samples/servicebuilder/model/FooWrapper.java
+/opt/dev/projects/github/liferay-blade-samples/maven/apps/servicebuilder/foo-api/src/main/java/com/liferay/blade/samples/servicebuilder/service/FooLocalService.java
+/opt/dev/projects/github/liferay-blade-samples/maven/apps/servicebuilder/foo-api/src/main/java/com/liferay/blade/samples/servicebuilder/service/FooService.java
+/opt/dev/projects/github/liferay-blade-samples/maven/apps/servicebuilder/foo-api/src/main/java/com/liferay/blade/samples/servicebuilder/service/persistence/FooPersistence.java

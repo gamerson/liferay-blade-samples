@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0" name="com.liferay.blade.samples.servicebuilder.web.JSPPortlet" immediate="true">
+  <implementation class="com.liferay.blade.samples.servicebuilder.web.JSPPortlet"/>
+  <service>
+    <provide interface="javax.portlet.Portlet"/>
+  </service>
+  <reference name="_fooLocalService" policy="dynamic" interface="com.liferay.blade.samples.servicebuilder.service.FooLocalService" field="_fooLocalService"/>
+  <property name="javax.portlet.init-param.view-template" type="String" value="/view.jsp"/>
+  <property name="javax.portlet.security-role-ref" type="String" value="power-user,user"/>
+  <property name="javax.portlet.resource-bundle" type="String" value="content.Language"/>
+  <property name="javax.portlet.init-param.template-path" type="String" value="/"/>
+  <property name="javax.portlet.name" type="String" value="com_liferay_blade_samples_servicebuilder_web"/>
+  <property name="com.liferay.portlet.instanceable" type="String" value="true"/>
+  <property name="com.liferay.portlet.display-category" type="String" value="category.sample"/>
+</scr:component>

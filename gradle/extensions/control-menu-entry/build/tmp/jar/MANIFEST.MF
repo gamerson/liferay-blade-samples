@@ -1,0 +1,24 @@
+Manifest-Version: 1.0
+Bundle-Description: Provides a simple customizable button that is adde
+ d to Liferay's default Control Menu.
+Bundle-ManifestVersion: 2
+Bundle-Name: controlmenuentry
+Bundle-SymbolicName: controlmenuentry
+Bundle-Version: 1.0.0
+Created-By: 1.8.0_102 (Oracle Corporation)
+Import-Package: com.liferay.portal.kernel.exception;version="[7.0,8)",
+ com.liferay.portal.kernel.language;version="[7.0,8)",com.liferay.port
+ al.kernel.util;version="[7.0,8)",com.liferay.product.navigation.contr
+ ol.menu;version="[2.0,3)",javax.servlet.http;version="[3.0,4)"
+Javac-Debug: on
+Javac-Deprecation: off
+Javac-Encoding: UTF-8
+Private-Package: com.liferay.blade.samples.controlmenuentry,content
+Provide-Capability: osgi.service;objectClass:List<String>="com.liferay
+ .product.navigation.control.menu.ProductNavigationControlMenuEntry",l
+ iferay.resource.bundle;bundle.symbolic.name=controlmenuentry;resource
+ .bundle.base.name="content.Language"
+Require-Capability: osgi.ee;filter:="(&(osgi.ee=JavaSE)(version=1.8))"
+Service-Component: OSGI-INF/com.liferay.blade.samples.controlmenuentry
+ .BladeProductNavigationControlMenuEntry.xml
+Tool: Bnd-3.2.0.201605172007

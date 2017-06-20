@@ -1,0 +1,15 @@
+com/liferay/blade/samples/servicebuilder/model/impl/FooBaseImpl.class
+com/liferay/blade/samples/servicebuilder/service/impl/FooLocalServiceImpl.class
+com/liferay/blade/samples/servicebuilder/service/impl/FooServiceImpl.class
+com/liferay/blade/samples/servicebuilder/model/impl/FooImpl.class
+com/liferay/blade/samples/servicebuilder/model/impl/FooModelImpl.class
+com/liferay/blade/samples/servicebuilder/service/base/FooLocalServiceBaseImpl$1.class
+com/liferay/blade/samples/servicebuilder/service/persistence/impl/FooPersistenceImpl.class
+com/liferay/blade/samples/servicebuilder/service/base/FooLocalServiceBaseImpl.class
+com/liferay/blade/samples/servicebuilder/service/base/FooServiceBaseImpl.class
+com/liferay/blade/samples/servicebuilder/service/http/FooServiceSoap.class
+com/liferay/blade/samples/servicebuilder/service/http/FooServiceHttp.class
+com/liferay/blade/samples/servicebuilder/service/util/PropsUtil.class
+com/liferay/blade/samples/servicebuilder/service/base/FooLocalServiceBaseImpl$2.class
+com/liferay/blade/samples/servicebuilder/service/base/FooLocalServiceBaseImpl$3.class
+com/liferay/blade/samples/servicebuilder/model/impl/FooCacheModel.class
