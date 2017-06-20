@@ -1,0 +1,21 @@
+Manifest-Version: 1.0
+Bundle-Description: Overrides core/kernel JSPs by providing new JSPs i
+ n the META-INF/jsps folder.
+Bundle-ManifestVersion: 2
+Bundle-Name: corejspoverride
+Bundle-SymbolicName: corejspoverride
+Bundle-Version: 1.0.0
+Created-By: 1.8.0_102 (Oracle Corporation)
+Import-Package: com.liferay.portal.deploy.hot;version="[1.0,2)",com.li
+ feray.portal.kernel.url;version="[1.0,2)",javax.servlet,javax.servlet
+ .http,org.osgi.framework;version="[1.8,2)"
+Javac-Debug: on
+Javac-Deprecation: off
+Javac-Encoding: UTF-8
+Private-Package: com.liferay.blade.samples.corejsphook
+Provide-Capability: osgi.service;objectClass:List<String>="com.liferay
+ .portal.deploy.hot.CustomJspBag"
+Require-Capability: osgi.ee;filter:="(&(osgi.ee=JavaSE)(version=1.8))"
+Service-Component: OSGI-INF/com.liferay.blade.samples.corejsphook.Blad
+ eCustomJspBag.xml
+Tool: Bnd-3.2.0.201605172007

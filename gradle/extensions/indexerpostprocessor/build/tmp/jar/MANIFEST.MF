@@ -1,0 +1,23 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: indexerpostprocessor
+Bundle-SymbolicName: indexerpostprocessor
+Bundle-Version: 1.0.0
+Created-By: 1.8.0_102 (Oracle Corporation)
+Import-Package: com.liferay.portal.kernel.log;version="[7.0,8)",com.li
+ feray.portal.kernel.search;version="[7.0,8)",com.liferay.portal.kerne
+ l.search.filter;version="[1.0,2)"
+Javac-Debug: on
+Javac-Deprecation: off
+Javac-Encoding: UTF-8
+Private-Package: com.liferay.blade.samples.indexerpostprocessor
+Provide-Capability: osgi.service;objectClass:List<String>="com.liferay
+ .portal.kernel.search.IndexerPostProcessor"
+Require-Capability: osgi.ee;filter:="(&(osgi.ee=JavaSE)(version=1.8))"
+Service-Component: OSGI-INF/com.liferay.blade.samples.indexerpostproce
+ ssor.BlogsIndexerPostProcessor.xml,OSGI-INF/com.liferay.blade.samples
+ .indexerpostprocessor.MultipleEntityIndexerPostProcessor.xml,OSGI-INF
+ /com.liferay.blade.samples.indexerpostprocessor.MultipleIndexerPostPr
+ ocessor.xml,OSGI-INF/com.liferay.blade.samples.indexerpostprocessor.U
+ serEntityIndexerPostProcessor.xml
+Tool: Bnd-3.2.0.201605172007

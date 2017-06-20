@@ -1,0 +1,22 @@
+Manifest-Version: 1.0
+Bundle-Description: Conveys the recommended approach to override an ap
+ plication's language keys file for any module that is deployed to Lif
+ eray Portal's OSGi runtime.
+Bundle-ManifestVersion: 2
+Bundle-Name: override-resourcebundle
+Bundle-SymbolicName: override-resourcebundle
+Bundle-Version: 1.0.0
+Created-By: 1.8.0_102 (Oracle Corporation)
+Import-Package: com.liferay.portal.kernel.util;version="[7.0,8)"
+Javac-Debug: on
+Javac-Deprecation: off
+Javac-Encoding: UTF-8
+Private-Package: com.liferay.blade.samples.hook.resourcebundle,content
+Provide-Capability: osgi.service;objectClass:List<String>="com.liferay
+ .portal.kernel.util.ResourceBundleLoader"
+Require-Capability: osgi.service;filter:="(objectClass=com.liferay.por
+ tal.kernel.util.ResourceBundleLoader)";effective:=active,osgi.ee;filt
+ er:="(&(osgi.ee=JavaSE)(version=1.8))"
+Service-Component: OSGI-INF/com.liferay.blade.samples.hook.resourcebun
+ dle.ResourceBundleLoaderComponent.xml
+Tool: Bnd-3.2.0.201605172007
