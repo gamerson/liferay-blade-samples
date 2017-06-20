@@ -11,7 +11,7 @@
 
 	<parent>
 		<groupId>blade</groupId>
-		<artifactId>blade.servicebuilder</artifactId>
+		<artifactId>blade-servicebuilder</artifactId>
 		<version>1.0.0</version>
 	</parent>
 
@@ -29,7 +29,7 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>blade.servicebuilder</groupId>
+			<groupId>blade-servicebuilder</groupId>
 			<artifactId>foo-api</artifactId>
 			<version>1.0.0</version>
 		</dependency>

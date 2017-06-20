@@ -4,14 +4,14 @@
 
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>blade</groupId>
-	<artifactId>blade.servicebuilder</artifactId>
+	<artifactId>blade-servicebuilder</artifactId>
 	<version>1.0.0</version>
 	<name>BLADE Maven Apps Servicebuilder</name>
 	<packaging>pom</packaging>
 
 	<parent>
 		<groupId>blade</groupId>
-		<artifactId>blade.apps</artifactId>
+		<artifactId>blade-apps</artifactId>
 		<version>1.0.0</version>
 	</parent>
 

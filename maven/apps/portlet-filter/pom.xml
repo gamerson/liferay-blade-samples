@@ -11,7 +11,7 @@
 
 	<parent>
 		<groupId>blade</groupId>
-		<artifactId>blade.apps</artifactId>
+		<artifactId>blade-apps</artifactId>
 		<version>1.0.0</version>
 	</parent>
 
