@@ -78,13 +78,9 @@ public class BladeSamplesUpdatePortletTest {
 		catch (Exception e) {
 			e.printStackTrace();
 		}
-
-		_buildPath = new File(
-			_projectPath.getParentFile().getParentFile().getAbsolutePath());
 		
 		try {
-			_buildStatus = BladeCLIUtil.execute(_buildPath, "gw", "assemble",
-				"-Pdir=" + _buildPath.getAbsolutePath());
+			_buildStatus = BladeCLIUtil.execute(_projectPath, "gw", "assemble");
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -194,8 +190,7 @@ public class BladeSamplesUpdatePortletTest {
 		}
 		
 		try {
-			_buildStatus = BladeCLIUtil.execute(_buildPath, "gw", "assemble",
-				"-Pdir=" + _buildPath.getAbsolutePath());
+			_buildStatus = BladeCLIUtil.execute(_projectPath, "gw", "assemble");
 		}
 		catch (Exception e) {
 			e.printStackTrace();
