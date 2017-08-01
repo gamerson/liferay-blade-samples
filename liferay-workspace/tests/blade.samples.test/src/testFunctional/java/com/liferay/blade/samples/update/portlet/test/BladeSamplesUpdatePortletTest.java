@@ -66,6 +66,8 @@ public class BladeSamplesUpdatePortletTest {
 
 	@Deployment
 	public static JavaArchive create() throws Exception {
+		final File jarFile = new File(System.getProperty("jspPortletJarFile"));
+		
 		_testIntegrationDir = new File(
 			System.getProperty("user.dir")).getParentFile();
 
@@ -92,6 +94,24 @@ public class BladeSamplesUpdatePortletTest {
 			_projectPath + "/build/libs/helloworld-1.0.0.jar");
 
 		new JMXBundleDeployer().deploy(_helloWorldJarBSN, buildOutput);
+
+		return ShrinkWrap.createFromZipFile(JavaArchive.class, jarFile);
+	}
+	
+	@Test
+	public void testUpdateMVCPortletProject() throws Exception {
+		_webDriver.get(_portletURL.toExternalForm());
+
+		Assert.assertTrue(
+			"Portlet was not deployed", isVisible(_helloWorldPortlet));
+		Assert.assertTrue(
+			_portletTitle.getText(),
+			_portletTitle.getText().contentEquals(
+				"helloworld Portlet"));
+		Assert.assertTrue(
+			_portletBody.getText(),
+			_portletBody.getText().contentEquals(
+				"Hello from helloworld JSP!"));
 		
 		File dynamicFile = new File(
 			_projectPath +
@@ -185,14 +205,11 @@ public class BladeSamplesUpdatePortletTest {
 			"Expected Build Successful, but saw: " + _buildStatus,
 			!_buildStatus.contains("failed"));
 		
-		buildOutput = new File(
+		File buildOutput = new File(
 			_projectPath + "/build/libs/helloworld-1.0.0.jar");
-
-		return ShrinkWrap.createFromZipFile(JavaArchive.class, buildOutput);
-	}
-	
-	@Test
-	public void testUpdateMVCPortletProject() throws Exception {
+		
+		new JMXBundleDeployer().deploy(_helloWorldJarBSN, buildOutput);
+		
 		_webDriver.get(_portletURL.toExternalForm());
 		
 		Assert.assertTrue(
