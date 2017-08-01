@@ -98,7 +98,9 @@ public class BladeCLIUtil {
 
 		for (String string : errorList) {
 			if (!string.isEmpty() &&
-				!string.contains("Picked up JAVA_TOOL_OPTIONS:")) {
+				(!string.contains("Picked up JAVA_TOOL_OPTIONS:")) ||
+				(!string.startsWith("sh: warning: setlocale: LC_ALL: " +
+					"cannot change locale (en_US.UTF-8)"))) {
 
 				filteredErrorList.add(string);
 			}
