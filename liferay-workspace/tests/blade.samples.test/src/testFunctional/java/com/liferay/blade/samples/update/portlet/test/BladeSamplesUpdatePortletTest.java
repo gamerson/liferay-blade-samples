@@ -58,6 +58,8 @@ public class BladeSamplesUpdatePortletTest {
 
 	@AfterClass
 	public static void tearDownClass() throws Exception {
+		new JMXBundleDeployer().uninstall(_helloWorldJarBSN);
+		
 		if (_projectPath.exists()) {
 			IO.delete(_projectPath);
 			assertFalse(_projectPath.exists());
@@ -205,6 +207,8 @@ public class BladeSamplesUpdatePortletTest {
 		
 		new JMXBundleDeployer().deploy(_helloWorldJarBSN, buildOutput);
 		
+		Thread.sleep(10000);
+		
 		_webDriver.get(_portletURL.toExternalForm());
 		
 		Assert.assertTrue(
@@ -220,7 +224,7 @@ public class BladeSamplesUpdatePortletTest {
 	}
 
 	protected boolean isVisible(WebElement webelement) {
-		WebDriverWait webDriverWait = new WebDriverWait(_webDriver, 5);
+		WebDriverWait webDriverWait = new WebDriverWait(_webDriver, 60);
 
 		try {
 			webDriverWait.until(ExpectedConditions.visibilityOf(webelement));
