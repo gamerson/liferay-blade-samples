@@ -14,8 +14,6 @@
 
 package com.liferay.blade.samples.integration.test.utils;
 
-import static org.junit.Assert.assertTrue;
-
 import aQute.bnd.osgi.Domain;
 import aQute.bnd.version.Version;
 
@@ -32,6 +30,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
+
+import org.junit.Assert;
 
 /**
  * @author Lawrence Lee
@@ -101,14 +101,21 @@ public class BladeCLIUtil {
 
 			if (!string.isEmpty() &&
 				(!string.contains("Picked up JAVA_TOOL_OPTIONS:")) ||
-				(!string.startsWith("sh: warning: setlocale: LC_ALL: " +
-					"cannot change locale (en_US.UTF-8)"))) {
+				(!string.contains("sh: warning: setlocale: LC_ALL: cannot " +
+					"change locale"))) {
 
 				filteredErrorList.add(string);
 			}
 		}
 
-		assertTrue(filteredErrorList.toString(), filteredErrorList.isEmpty());
+		Assert.assertTrue(
+			filteredErrorList.toString(), filteredErrorList.size() <= 1);
+
+		if (filteredErrorList.size() == 1) {
+			Assert.assertTrue(
+				filteredErrorList.toString(),
+				filteredErrorList.get(0).isEmpty());
+		}
 
 		output = StringUtil.toLowerCase(output);
 
