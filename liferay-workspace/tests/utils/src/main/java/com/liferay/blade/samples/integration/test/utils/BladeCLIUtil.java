@@ -94,25 +94,21 @@ public class BladeCLIUtil {
 			errorList.add(new String(IO.read(errorStream)));
 		}
 
-		List<String> filteredErrorList = new ArrayList<>();
-
 		for (String string : errorList) {
 			string = string.trim();
 
-			if (!string.contains("Picked up JAVA_TOOL_OPTIONS:") || 
-				!string.contains("sh: warning: setlocale")) {
+			if (string.contains("Picked up JAVA_TOOL_OPTIONS:") || 
+				string.contains("setlocale")) {
 
-				filteredErrorList.add(string);
+				errorList.remove(string);
 			}
 		}
 
 		Assert.assertTrue(
-			filteredErrorList.toString(), filteredErrorList.size() <= 1);
+			errorList.toString(), errorList.size() <= 1);
 
-		if (filteredErrorList.size() == 1) {
-			Assert.assertTrue(
-				filteredErrorList.toString(),
-				filteredErrorList.get(0).isEmpty());
+		if (errorList.size() == 1) {
+			Assert.assertTrue(errorList.toString(), errorList.get(0).isEmpty());
 		}
 
 		output = StringUtil.toLowerCase(output);
