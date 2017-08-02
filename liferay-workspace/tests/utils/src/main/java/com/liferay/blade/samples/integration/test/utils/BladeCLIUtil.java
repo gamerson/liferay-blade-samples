@@ -28,6 +28,8 @@ import java.net.URL;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.io.FileUtils;
 
@@ -96,19 +98,32 @@ public class BladeCLIUtil {
 
 		for (String string : errorList) {
 			string = string.trim();
-
-			if (string.contains("Picked up JAVA_TOOL_OPTIONS:") || 
-				string.contains("setlocale")) {
-
-				errorList.remove(string);
-			}
+			
+			String exclusion = "Picked up JAVA_TOOL_OPTIONS:";
+			
+		    Pattern p = Pattern.compile(exclusion, Pattern.CASE_INSENSITIVE);
+		    Matcher m = p.matcher(string);
+		    
+		    if (m.matches()) {
+		    	errorList.remove(string);
+		    }
+			
+		    exclusion = ".*setlocale.*";
+		    
+		    p = Pattern.compile(exclusion, Pattern.DOTALL);
+		    m = p.matcher(string.toLowerCase());
+		    
+		    if (m.matches()) {
+		    	errorList.remove(string);
+		    }
+			
 		}
 
 		Assert.assertTrue(
 			errorList.toString(), errorList.size() <= 1);
 
 		if (errorList.size() == 1) {
-			Assert.assertTrue(errorList.toString(), errorList.get(0).isEmpty());
+			Assert.assertTrue(errorList.get(0), errorList.get(0).isEmpty());
 		}
 
 		output = StringUtil.toLowerCase(output);
