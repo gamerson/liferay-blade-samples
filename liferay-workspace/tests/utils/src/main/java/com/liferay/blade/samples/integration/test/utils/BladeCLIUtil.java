@@ -92,38 +92,34 @@ public class BladeCLIUtil {
 
 		List<String> errorList = new ArrayList<>();
 
+		String stringStream = null;
+		
 		if (errorStream != null) {
-			errorList.add(new String(IO.read(errorStream)));
+			stringStream = new String(IO.read(errorStream));
+			errorList.add(stringStream);
 		}
-
+		
+		List<String> filteredErrorList = new ArrayList<>();
+				
 		for (String string : errorList) {
-			string = string.trim();
+			String exclusion = ".*setlocale.*setlocale.*";
 			
-			String exclusion = "Picked up JAVA_TOOL_OPTIONS:";
-			
-		    Pattern p = Pattern.compile(exclusion, Pattern.CASE_INSENSITIVE);
+		    Pattern p = Pattern.compile(exclusion, Pattern.DOTALL);
 		    Matcher m = p.matcher(string);
 		    
-		    if (m.matches()) {
-		    	errorList.remove(string);
+		    if (!m.matches() || !string.contains(
+		    	"Picked up JAVA_TOOL_OPTIONS:")) {
+		    	filteredErrorList.add(string);
 		    }
-			
-		    exclusion = ".*setlocale.*";
-		    
-		    p = Pattern.compile(exclusion, Pattern.DOTALL);
-		    m = p.matcher(string.toLowerCase());
-		    
-		    if (m.matches()) {
-		    	errorList.remove(string);
-		    }
-			
 		}
 
 		Assert.assertTrue(
-			errorList.toString(), errorList.size() <= 1);
+			filteredErrorList.toString(), filteredErrorList.size() <= 1);
 
-		if (errorList.size() == 1) {
-			Assert.assertTrue(errorList.get(0), errorList.get(0).isEmpty());
+		if (filteredErrorList.size() == 1) {
+			Assert.assertTrue(
+				filteredErrorList.get(0),
+				filteredErrorList.get(0).isEmpty());
 		}
 
 		output = StringUtil.toLowerCase(output);
