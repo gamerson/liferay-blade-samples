@@ -16,9 +16,6 @@
 
 package com.liferay.blade.samples.update.fragment.test;
 
-import com.liferay.arquillian.portal.annotation.PortalURL;
-import com.liferay.blade.samples.integration.test.utils.BladeCLIUtil;
-
 import java.io.File;
 import java.net.URL;
 import java.nio.file.Files;
@@ -38,6 +35,9 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
+import com.liferay.arquillian.portal.annotation.PortalURL;
+import com.liferay.blade.samples.integration.test.utils.BladeCLIUtil;
 
 import aQute.lib.io.IO;
 
@@ -94,15 +94,14 @@ public class BladeSamplesUpdateFragmentTest {
 
 		File staticFile = new File(
 			_projectPath +
-			"/src/main/resources/META-INF/resources/login.jsp");
+				"/src/main/resources/META-INF/resources/login.jsp");
 
 		String content = new String(Files.readAllBytes(staticFile.toPath()));
-		
-		// do some regex to modify this string
-		// lines.set(17, "<p style=\"color: red\">samples work!</p>");
 
-		Files.write(staticFile.toPath(), content.getBytes());
-		
+		String newContent = content.replaceFirst("changed", "samples work!");
+
+		Files.write(staticFile.toPath(), newContent.getBytes());
+
 		BladeCLIUtil.execute(_projectPath, "deploy");
 
 		Thread.sleep(1000);
@@ -132,6 +131,7 @@ public class BladeSamplesUpdateFragmentTest {
 			return false;
 		}
 	}
+
 
 	private static String _moduleJspOverrideJarBSN =
 		"module-jsp-override-samples";
