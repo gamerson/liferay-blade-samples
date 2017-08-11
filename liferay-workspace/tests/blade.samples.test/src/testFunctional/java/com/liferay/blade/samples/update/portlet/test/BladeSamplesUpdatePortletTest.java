@@ -30,7 +30,7 @@ import java.io.FileWriter;
 import java.io.Writer;
 
 import java.net.URL;
-
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,20 +68,10 @@ public class BladeSamplesUpdatePortletTest {
 
 		_appsDir = new File(_appsDir, "apps");
 
-		try {
-			_projectPath = BladeCLIUtil.createProject(
-				_appsDir, "mvc-portlet", "helloworld");
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
+		_projectPath = BladeCLIUtil.createProject(
+			_appsDir, "mvc-portlet", "helloworld");
 
-		try {
-			_buildStatus = BladeCLIUtil.execute(_projectPath, "gw", "assemble");
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
+		_buildStatus = BladeCLIUtil.execute(_projectPath, "gw", "assemble");
 
 		File buildOutput = new File(
 			_projectPath + "/build/libs/helloworld-1.0.0.jar");
@@ -177,6 +167,16 @@ public class BladeSamplesUpdatePortletTest {
 		File staticFile = new File(
 			_projectPath + "/src/main/resources/META-INF/resources/view.jsp");
 
+		String content = new String(Files.readAllBytes(staticFile.toPath()));
+
+		StringBuilder sb = new StringBuilder(content);
+
+		sb.insert(
+			content.indexOf("</b>\\n"),
+			"<b><%= renderRequest.getAttribute(\"foo\") %></b>\\n");
+
+		Files.write(staticFile.toPath(), sb.toString().getBytes());
+
 		lines = new ArrayList<>();
 		line = null;
 
@@ -187,7 +187,7 @@ public class BladeSamplesUpdatePortletTest {
 				lines.add(line);
 
 				if (line.contains("liferay-ui:message key=")) {
-					String s = 
+					String s =
 						"<b><%= renderRequest.getAttribute(\"foo\") %></b>";
 
 					lines.add(s);
@@ -201,12 +201,7 @@ public class BladeSamplesUpdatePortletTest {
 			}
 		}
 
-		try {
-			_buildStatus = BladeCLIUtil.execute(_projectPath, "gw", "assemble");
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
+		_buildStatus = BladeCLIUtil.execute(_projectPath, "gw", "assemble");
 
 		Assert.assertTrue(
 			"Expected Build Successful, but saw: " + _buildStatus,
