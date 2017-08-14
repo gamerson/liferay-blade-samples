@@ -61,7 +61,7 @@ public class BladePortletConfigurationIconTest {
 
 		action.moveToElement(webElement).build().perform();
 
-		WebDriverWait wait = new WebDriverWait(webDriver, 15);
+		WebDriverWait wait = new WebDriverWait(webDriver, 30);
 
 		WebElement element = wait.until(
 			ExpectedConditions.elementToBeClickable(webElement));
