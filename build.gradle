@@ -250,7 +250,6 @@ task wrapper(type: Wrapper) {
 	jarFile = "${project.projectDir}/gradle/.gradle-wrapper/gradle-wrapper.jar"
 }
 
-task diff
-
-diff.dependsOn bundlesDiffTest
-diff.dependsOn warsDiffTest
+task diff {
+	dependsOn bundlesTest,warsTest,bundlesDiffTest,warsDiffTest
+}
