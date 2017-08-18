@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.liferay.blade.samples.spring.mvc.portlet.test;
+package com.liferay.blade.samples.jsp.war.portlet.test;
 
 import aQute.remote.util.JMXBundleDeployer;
 
@@ -56,13 +56,13 @@ import org.openqa.selenium.support.ui.WebDriverWait;
  */
 @RunAsClient
 @RunWith(Arquillian.class)
-public class BladeSpringMVCPortletTest {
+public class BladeJspWarPortletTest {
 
 	@AfterClass
 	public static void cleanUpDependencies() throws Exception {
 		new JMXBundleDeployer().uninstall(_fooApiJarBSN);
 		new JMXBundleDeployer().uninstall(_fooServiceJarBSN);
-		new JMXBundleDeployer().uninstall(_springmvcPortletWarBSN);
+		new JMXBundleDeployer().uninstall(_jspPortletWarBSN);
 	}
 
 	@Deployment
@@ -72,13 +72,13 @@ public class BladeSpringMVCPortletTest {
 		final File fooApiJar = new File(System.getProperty("fooApiJarFile"));
 		final File fooServiceJar = new File(
 			System.getProperty("fooServiceJarFile"));
-		final File springmvcPortletWar = new File(
-			System.getProperty("springmvcPortletWarFile"));
 
 		new JMXBundleDeployer().deploy(_fooApiJarBSN, fooApiJar);
 		new JMXBundleDeployer().deploy(_fooServiceJarBSN, fooServiceJar);
 
-		String bundleID = BladeCLIUtil.installBundle(springmvcPortletWar);
+		final File jspPortletWarFile = new File(System.getProperty("jspPortletWarFile"));
+
+		String bundleID = BladeCLIUtil.installBundle(jspPortletWarFile);
 
 		BladeCLIUtil.startBundle(bundleID);
 
@@ -264,9 +264,9 @@ public class BladeSpringMVCPortletTest {
 		}
 	}
 
-	private static String _fooApiJarBSN = "com.liferay.blade.foo.api";
-	private static String _fooServiceJarBSN = "com.liferay.blade.foo.service";
-	private static String _springmvcPortletWarBSN = "springmvc-portlet";
+	private static String _fooApiJarBSN = "foo-api";
+	private static String _fooServiceJarBSN = "foo-service";
+	private static String _jspPortletWarBSN = "jsp-war-portlet";
 
 	@FindBy(xpath = "//span[@class='lfr-btn-label']")
 	private WebElement _addButton;
@@ -277,7 +277,7 @@ public class BladeSpringMVCPortletTest {
 	@FindBy(css = "input[id$='field5']")
 	private WebElement _field5Form;
 
-	@FindBy(xpath = "//div[contains(@id,'bladespringmvc_WAR_springmvcportlet')]/table/tbody/tr/td[2]")
+	@FindBy(xpath = "//div[contains(@id,'jspwarportlet_WAR_jspwarportlet')]/table/tbody/tr/td[2]")
 	private WebElement _firstRowField1;
 
 	@FindBy(xpath = "//a[contains(@id,'foosSearchContainer')]")
@@ -289,13 +289,13 @@ public class BladeSpringMVCPortletTest {
 	@FindBy(xpath = "//ul[contains(@class,'dropdown-menu')]/li[1]/a[contains(.,'Edit')]")
 	private WebElement _lfrMenuEdit;
 
-	@PortalURL("bladespringmvc_WAR_springmvcportlet")
+	@PortalURL("jspwarportlet_WAR_jspwarportlet")
 	private URL _portletURL;
 
 	@FindBy(css = "button[type=submit]")
 	private WebElement _saveButton;
 
-	@FindBy(xpath = "//div[contains(@id,'bladespringmvc_WAR_springmvcportlet')]/table/tbody/tr[2]/td[2]")
+	@FindBy(xpath = "//div[contains(@id,'jspwarportlet_WAR_jspwarportlet')]/table/tbody/tr[2]/td[2]")
 	private WebElement _secondRowField1;
 
 	@FindBy(xpath = "//table[contains(@data-searchcontainerid,'foosSearchContainer')]")
