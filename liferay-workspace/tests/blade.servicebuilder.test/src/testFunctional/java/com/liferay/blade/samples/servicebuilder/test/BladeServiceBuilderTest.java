@@ -1,18 +1,22 @@
 /**
- * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ * Copyright 2000-present Liferay, Inc.
  *
- * This library is free software; you can redistribute it and/or modify it under
- * the terms of the GNU Lesser General Public License as published by the Free
- * Software Foundation; either version 2.1 of the License, or (at your option)
- * any later version.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * This library is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
- * details.
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package com.liferay.blade.samples.servicebuilder.test;
+
+import aQute.remote.util.JMXBundleDeployer;
 
 import com.liferay.arquillian.portal.annotation.PortalURL;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -30,6 +34,7 @@ import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 
+import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -52,9 +57,25 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 @RunWith(Arquillian.class)
 public class BladeServiceBuilderTest {
 
+	@AfterClass
+	public static void cleanUpDependencies() throws Exception {
+		new JMXBundleDeployer().uninstall(_fooApiJarBSN);
+		new JMXBundleDeployer().uninstall(_fooServiceJarBSN);
+		new JMXBundleDeployer().uninstall(_fooWebJarBSN);
+	}
+
 	@Deployment
 	public static JavaArchive create() throws Exception {
 		final File jarFile = new File(System.getProperty("jarFile"));
+
+		final File fooApiJar = new File(System.getProperty("fooApiJarFile"));
+		final File fooServiceJar = new File(
+			System.getProperty("fooServiceJarFile"));
+		final File fooWebJar = new File(System.getProperty("fooWebJarFile"));
+
+		new JMXBundleDeployer().deploy(_fooApiJarBSN, fooApiJar);
+		new JMXBundleDeployer().deploy(_fooServiceJarBSN, fooServiceJar);
+		new JMXBundleDeployer().deploy(_fooWebJarBSN, fooWebJar);
 
 		return ShrinkWrap.createFromZipFile(JavaArchive.class, jarFile);
 	}
@@ -78,7 +99,7 @@ public class BladeServiceBuilderTest {
 
 		customClick(_webDriver, _addButton);
 
-		Assert.assertTrue(isVisible(_field1Form));
+		Assert.assertTrue("Field1 is not visible", isVisible(_field1Form));
 
 		_field1Form.sendKeys("Hello");
 
@@ -88,11 +109,16 @@ public class BladeServiceBuilderTest {
 
 		customClick(_webDriver, _saveButton);
 
-		Assert.assertTrue(isVisible(_table));
+		Assert.assertTrue(
+			"Service Builder Table is not visible", isVisible(_table));
 
-		Assert.assertTrue(_table.getText().contains("Hello"));
+		Assert.assertTrue(
+			"Hello World is not present in table",
+			_table.getText().contains("Hello"));
 
-		Assert.assertTrue(_table.getText().contains("World"));
+		Assert.assertTrue(
+			"Hello World is not present in table",
+			_table.getText().contains("World"));
 	}
 
 	@Test
@@ -105,13 +131,15 @@ public class BladeServiceBuilderTest {
 
 		int originalRows = rows.size();
 
-		Assert.assertTrue(isVisible(_lfrIconMenu));
+		Assert.assertTrue(
+			"Liferay Icon Menus is not visible", isVisible(_lfrIconMenu));
 
 		customClick(_webDriver, _lfrIconMenu);
 
 		JavascriptExecutor javascriptExecutor = (JavascriptExecutor)_webDriver;
 
-		Assert.assertTrue(isVisible(_lfrMenuDelete));
+		Assert.assertTrue(
+			"Action Menu Delete is not visible", isVisible(_lfrMenuDelete));
 
 		String source = _webDriver.getPageSource();
 
@@ -129,11 +157,10 @@ public class BladeServiceBuilderTest {
 
 		_webDriver.navigate().refresh();
 
-		Assert.assertTrue(isVisible(_table));
+		Assert.assertTrue(
+			"Service Builder Table is not visible", isVisible(_table));
 
-		rows = _webDriver.findElements(
-			By.xpath(
-				"//table[contains(@data-searchcontainerid,'foosSearchContainer')]/tbody/tr"));
+		rows = _webDriver.findElements(By.xpath(_tableRow));
 
 		int newRows = rows.size();
 
@@ -148,26 +175,34 @@ public class BladeServiceBuilderTest {
 	public void testReadFoo() throws PortalException {
 		_webDriver.get(_portletURL.toExternalForm());
 
-		Assert.assertTrue(isVisible(_firstRowField1));
+		Assert.assertTrue(
+			"First Row Field 1 is not visible", isVisible(_firstRowField1));
 
-		Assert.assertTrue(_firstRowField1.getText().contains("new field1 entry"));
+		Assert.assertTrue(
+			"First row field 1 does not contain entry",
+			_firstRowField1.getText().contains("new field1 entry"));
 
-		Assert.assertTrue(_secondRowField1.getText().contains("new field1 entry"));
+		Assert.assertTrue(
+			"Second row field 1 does not contain entry",
+			_secondRowField1.getText().contains("new field1 entry"));
 	}
 
 	@Test
 	public void testUpdateFoo() throws InterruptedException, PortalException {
 		_webDriver.get(_portletURL.toExternalForm());
 
-		Assert.assertTrue(isVisible(_lfrIconMenu));
+		Assert.assertTrue(
+			"Liferay Icon menu is not visible", isClickable(_lfrIconMenu));
 
 		customClick(_webDriver, _lfrIconMenu);
 
-		Assert.assertTrue(isVisible(_lfrMenuEdit));
+		Assert.assertTrue(
+			"Liferay Menu Edit is not visible", isClickable(_lfrMenuEdit));
 
 		customClick(_webDriver, _lfrMenuEdit);
 
-		Assert.assertTrue(isVisible(_field1Form));
+		Assert.assertTrue(
+			"Field 1 form is not visible", isVisible(_field1Form));
 
 		_field1Form.clear();
 
@@ -175,9 +210,12 @@ public class BladeServiceBuilderTest {
 
 		customClick(_webDriver, _saveButton);
 
-		Assert.assertTrue(isVisible(_table));
+		Assert.assertTrue(
+			"Service Builder Table is not visible", isVisible(_table));
 
-		Assert.assertTrue(_table.getText().contains("field1 with Updated Name"));
+		Assert.assertTrue(
+			"Service Builder Table does not contain Updated Name",
+			_table.getText().contains("field1 with Updated Name"));
 	}
 
 	protected static boolean isAlertPresent(WebDriver webDriver) {
@@ -196,8 +234,22 @@ public class BladeServiceBuilderTest {
 		}
 	}
 
+	protected boolean isClickable(WebElement webelement) {
+		WebDriverWait webDriverWait = new WebDriverWait(_webDriver, 15);
+
+		try {
+			webDriverWait.until(
+				ExpectedConditions.elementToBeClickable(webelement));
+
+			return true;
+		}
+		catch (org.openqa.selenium.TimeoutException te) {
+			return false;
+		}
+	}
+
 	protected boolean isVisible(WebElement webelement) {
-		WebDriverWait webDriverWait = new WebDriverWait(_webDriver, 5);
+		WebDriverWait webDriverWait = new WebDriverWait(_webDriver, 10);
 
 		try {
 			webDriverWait.until(ExpectedConditions.visibilityOf(webelement));
@@ -208,6 +260,10 @@ public class BladeServiceBuilderTest {
 			return false;
 		}
 	}
+
+	private static String _fooApiJarBSN = "com.liferay.blade.foo.api";
+	private static String _fooServiceJarBSN = "com.liferay.blade.foo.service";
+	private static String _fooWebJarBSN = "com.liferay.blade.foo.web";
 
 	@FindBy(xpath = "//span[@class='lfr-btn-label']")
 	private WebElement _addButton;
@@ -241,6 +297,9 @@ public class BladeServiceBuilderTest {
 
 	@FindBy(xpath = "//table[contains(@data-searchcontainerid,'foosSearchContainer')]")
 	private WebElement _table;
+
+	private String _tableRow =
+		"//table[contains(@data-searchcontainerid,'foosSearchContainer')]/tbody/tr";
 
 	@Drone
 	private WebDriver _webDriver;

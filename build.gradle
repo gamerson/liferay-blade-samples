@@ -1,6 +1,8 @@
 buildscript {
 	dependencies {
 		classpath group: "net.diibadaaba.zipdiff", name: "zipdiff", version: "1.0"
+		classpath group: "org.apache.commons", name: "commons-io", version: "1.3.2"
+
 	}
 	repositories {
 		mavenCentral()
@@ -10,95 +12,119 @@ buildscript {
 import net.diibadaaba.zipdiff.DifferenceCalculator
 import net.diibadaaba.zipdiff.Differences
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry
+import groovy.io.FileType
 
-FileTree liferayGradleBundles = fileTree(dir: 'liferay-gradle', include: '**/libs/*.jar')
-FileTree liferayWorkspaceBundles = fileTree(dir: 'liferay-workspace/modules', include: '**/libs/*.jar')
+
+
+FileTree gradleBundles = fileTree(dir: 'gradle', include: '**/libs/*.jar')
+FileTree liferayWorkspaceBundles = fileTree(dir: 'liferay-workspace', include: '**/libs/*.jar', exclude: 'tests/*')
 FileTree mavenBundles = fileTree(dir: 'maven', include: '**/target/*.jar')
 
-int canonicalBundlesSize = liferayGradleBundles.size()
+int canonicalBundlesSize = gradleBundles.size()
 
-task bundlesSizeTest << {
+task bundlesSizeTest
+
+bundlesSizeTest.doLast {
 	assert canonicalBundlesSize == liferayWorkspaceBundles.size()
 	assert canonicalBundlesSize == mavenBundles.size()
 }
 
-FileTree liferayGradleWars = fileTree(dir: 'liferay-gradle', include: '**/libs/*.war')
+FileTree gradleWars = fileTree(dir: 'gradle', include: '**/libs/*.war')
 FileTree liferayWorkspaceWars = fileTree(dir: 'liferay-workspace/wars', include: '**/libs/*.war')
 FileTree mavenWars = fileTree(dir: 'maven', include: '**/target/*.war')
 
-int canonicalWarsSize = liferayGradleWars.size()
+int canonicalWarsSize = gradleWars.size()
 
-task warsSizeTest << {
-	assert canonicalWarsSize == liferayGradleWars.size()
+task warsSizeTest
+
+warsSizeTest.doLast {
+	assert canonicalWarsSize == gradleWars.size()
 	assert canonicalWarsSize == liferayWorkspaceWars.size()
 	assert canonicalWarsSize == mavenWars.size()
 }
 
-task bundlesSortTest << {
-	def fileNamesDiff = liferayGradleBundles.files.name.sort() - liferayWorkspaceBundles.files.name.sort()
-	assert [] == fileNamesDiff : "liferay-gradle vs liferay-workspace"
+task bundlesSortTest
 
-	fileNamesDiff = liferayGradleBundles.files.name.sort() - mavenBundles.files.name.sort()
-	assert [] == fileNamesDiff : "liferay-gradle vs maven"
+bundlesSortTest.doLast {
+	def fileNamesDiff = gradleBundles.files.name.sort() - liferayWorkspaceBundles.files.name.sort()
+	assert [] == fileNamesDiff : "gradle vs liferay-workspace"
+
+	fileNamesDiff = gradleBundles.files.name.sort() - mavenBundles.files.name.sort()
+	assert [] == fileNamesDiff : "gradle vs maven"
 }
 
-task bundlesTest << {}
+task bundlesTest
 
 bundlesTest.dependsOn bundlesSizeTest
 bundlesTest.dependsOn bundlesSortTest
 
-task warsTest << {}
+task warsTest
 
 warsTest.dependsOn warsSizeTest
 
-task replicateSources << {
-	Closure projectFilter = {
-		it.isDirectory() && it.name.startsWith("blade") && !it.name.matches("\\..*")
-	}
+task replicateSources
 
+replicateSources.doLast {
 	def canonicalSource
 
 	if (project.hasProperty('sourceProjectProp')) {
-		canonicalSource = sourceProjectProp
+		canonicalSource = file(project.getProperty('sourceProjectProp'))
 	}
 	else {
-		canonicalSource = 'liferay-gradle'
+		canonicalSource = file('gradle')
 	}
 
-	def canonicalProjects = file(canonicalSource).listFiles().findAll(projectFilter)
-	def replicationParents = files(['liferay-gradle', 'liferay-workspace/modules', 'maven'] - canonicalSource)
+	def replicationParents = files(['gradle', 'liferay-workspace', 'maven']) - canonicalSource
+
+	def canonicalProjects = []
+
+	canonicalSource.eachFileRecurse (FileType.DIRECTORIES) { dir ->
+		if(new File(dir,"bnd.bnd").exists()) {
+			canonicalProjects.add(dir);
+		}
+		if((new File(dir,"build.gradle").exists() && new File(dir,"build.gradle").text.contains("apply plugin: \'war\'")) || (new File(dir, "pom.xml").exists() && new File(dir, "pom.xml").text.contains("maven-war-plugin"))){
+			canonicalProjects.add(dir);
+		}
+		if ((new File(dir, "build.gradle").exists() && new File(dir,"build.gradle").text.contains("apply plugin: \"com.liferay.portal.tools.theme.builder\""))) {
+			canonicalProjects.add(dir);
+		}
+
+		canonicalProjects.removeAll { it.name.contains("test") }
+	}
 
 	canonicalProjects.each { canonicalProject ->
-		if ((new File(canonicalProject, "bnd.bnd").exists())) {
-			replicationParents.each { replicationParent ->
-				def replicationProjects = replicationParent.listFiles().findAll(projectFilter)
+		replicationParents.each { replicationParent ->
+			def replicationProjects = []
 
-				def replicationProject = replicationProjects.find{ it.name == canonicalProject.name }
+			replicationParent.eachFileRecurse (FileType.DIRECTORIES) { replicationProject ->
 
-				if (replicationProject == null) {
-					replicationProject = new File(replicationParent, canonicalProject.name)
-					replicationProject.mkdirs()
+				replicationProjects.add(replicationProject);
+			}
 
-					def buildFilesProject = new File(replicationParent, "blade.portlet.jsp")
+			def replicationProject = replicationProjects.find{ it.name == canonicalProject.name }
 
-					ant.copy(todir: replicationProject) {
-						fileset(dir: buildFilesProject, includes: "*")
-					}
-				}
-
+			if ((canonicalSource == ("gradle" || "liferay-workspace")) && (replicationProject == ("gradle" || "liferay-workspace"))) {
 				ant.copy(todir: replicationProject) {
-					fileset(dir: canonicalProject, includes: "*.markdown")
+					fileset(dir: canonicalProject, includes: "bnd.bnd", "build.gradle")
 				}
+			}
 
-				def replicationSrc = new File( replicationProject, 'src/' )
+			ant.copy(todir: replicationProject) {
+				fileset(dir: canonicalProject, includes: "*.markdown")
+			}
 
-				replicationSrc.deleteDir()
+			def replicationSrc = new File( replicationProject, 'src/' )
 
-				def canonicalSrc = new File( canonicalProject, 'src/' )
-
-				ant.copy(todir: replicationSrc) {
-					fileset(dir: canonicalSrc, includes: "**")
+			replicationSrc.listFiles().each { dir ->
+				if (!dir.name.startsWith("test")) {
+					dir.deleteDir()
 				}
+			}
+
+			def canonicalSrc = new File( canonicalProject, 'src/' )
+
+			ant.copy(todir: replicationSrc) {
+				fileset(dir: canonicalSrc, includes: "**", excludes: "**/test**/")
 			}
 		}
 	}
@@ -116,13 +142,15 @@ repositories {
 	mavenCentral()
 }
 
-task bundlesDiffTest << {
+task bundlesDiffTest
+
+bundlesDiffTest.doLast{
 	def errorList = []
 
 	[liferayWorkspaceBundles, mavenBundles].each { replicationFiles ->
 		replicationFiles.each { replicationFile ->
 
-			def liferayGradleOutputFile = liferayGradleBundles.find {
+			def gradleOutputFile = gradleBundles.find {
 				it.name == replicationFile.name
 			}
 
@@ -131,7 +159,7 @@ task bundlesDiffTest << {
 			def os = new ByteArrayOutputStream()
 
 			javaexec {
-				args "diff", "-i", "${exclusions}", replicationFile, liferayGradleOutputFile
+				args "diff", "-i", "${exclusions}", replicationFile, gradleOutputFile
 
 				classpath = configurations.bnd
 				main = "aQute.bnd.main.bnd"
@@ -151,16 +179,18 @@ task bundlesDiffTest << {
 	}
 }
 
-task warsDiffTest << {
+task warsDiffTest
+
+warsDiffTest.doLast{
 	[mavenWars, liferayWorkspaceWars].each { replicationWars ->
 		replicationWars.each { replicationWar ->
 
-			def liferayGradleWar = liferayGradleWars.find {
+			def gradleWar = gradleWars.find {
 				it.name == replicationWar.name.replaceAll("-1.0.0", "")
 			}
 
 			DifferenceCalculator differenceCalculator = new DifferenceCalculator(
-				replicationWar, liferayGradleWar)
+				replicationWar, gradleWar)
 
 			differenceCalculator.setFilenameRegexToIgnore(
 				Collections.singleton(".*META-INF.*"))
@@ -205,9 +235,9 @@ task warsDiffTest << {
 
 				if (realChange) {
 					ant.unzip(src: replicationWar.absolutePath, dest:replicationWar.getParentFile().absolutePath + "/explodedWar")
-					ant.unzip(src: liferayGradleWar.absolutePath, dest:liferayGradleWar.getParentFile().absolutePath + "/explodedWar")
+					ant.unzip(src: gradleWar.absolutePath, dest:gradleWar.getParentFile().absolutePath + "/explodedWar")
 					throw new GradleException(
-						"wars " + replicationWar + " and " + liferayGradleWar + " do not match:\n" +
+						"wars " + replicationWar + " and " + gradleWar + " do not match:\n" +
 							differences)
 				}
 			}
@@ -215,7 +245,12 @@ task warsDiffTest << {
 	}
 }
 
-task diff << {}
+task wrapper(type: Wrapper) {
+	gradleVersion = '4.1'
+	jarFile = "${projectDir}/.gradle/gradle-wrapper.jar"
+}
+
+task diff
 
 diff.dependsOn bundlesDiffTest
 diff.dependsOn warsDiffTest

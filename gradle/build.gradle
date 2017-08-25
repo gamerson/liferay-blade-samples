@@ -1,0 +1,38 @@
+buildscript {
+	repositories {
+		maven {
+			url "https://cdn.lfrs.sl/repository.liferay.com/nexus/content/groups/public"
+		}
+	}
+	dependencies {
+		classpath group: "com.liferay", name: "com.liferay.gradle.plugins", version: "latest.release"
+	}
+}
+
+subprojects {
+	buildscript {
+		repositories {
+			maven {
+				url "https://cdn.lfrs.sl/repository.liferay.com/nexus/content/groups/public"
+			}
+		}
+	}
+
+	apply plugin: "com.liferay.plugin"
+
+	plugins.withId("java") {
+		sourceCompatibility = "1.8"
+	}
+
+
+	repositories {
+		maven {
+			url "https://cdn.lfrs.sl/repository.liferay.com/nexus/content/groups/public"
+		}
+	}
+}
+
+task wrapper(type: Wrapper) {
+	gradleVersion = '4.1'
+	jarFile = "${project.projectDir}/.gradle-wrapper/gradle-wrapper.jar"
+}

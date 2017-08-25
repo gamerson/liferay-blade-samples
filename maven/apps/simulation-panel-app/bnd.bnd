@@ -1,0 +1,10 @@
+Bundle-Description: Provides a new application in Liferay Portal's Simulation Menu.
+Bundle-Name: com.liferay.blade.simulation.panel.app
+Bundle-SymbolicName: com.liferay.blade.simulation.panel.app
+Bundle-Version: 1.0.0
+Web-ContextPath: /simulation-panel-app-blade.simulation.panel.app
+-sources: true
+
+-jsp: *.jsp,*.jspf
+-plugin.bundle: com.liferay.ant.bnd.resource.bundle.ResourceBundleLoaderAnalyzerPlugin
+-plugin.jsp: com.liferay.ant.bnd.jsp.JspAnalyzerPlugin

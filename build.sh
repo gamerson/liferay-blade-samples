@@ -3,17 +3,17 @@ set -xe
 repoDir=`pwd`
 function buildAll() {
   cd "$repoDir"
-  cd liferay-gradle
-  ./gradlew checkSourceFormatting clean build
+  cd gradle
+  ./gradlew checkSourceFormatting clean assemble
   cd "$repoDir"
   cd maven
   mvn --fail-at-end clean package
   cd "$repoDir"
   cd liferay-workspace
-  ./gradlew clean build
+  ./gradlew clean assemble
   cd "$repoDir"
   ./gradlew bundlesTest warsTest diff
   cd liferay-workspace
-  ./gradlew check -Pliferay.workspace.modules.dir=modules,tests $@
+  ./gradlew check -Pliferay.workspace.modules.dir=apps,extensions,overrides,tests,themes -Pliferay.workspace.modules.jsp.precompile.enabled=true $@
 }
 buildAll
