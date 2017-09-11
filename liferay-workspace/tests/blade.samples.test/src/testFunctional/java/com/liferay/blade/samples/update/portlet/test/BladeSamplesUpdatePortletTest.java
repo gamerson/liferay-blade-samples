@@ -43,6 +43,7 @@ import org.jboss.shrinkwrap.api.spec.JavaArchive;
 
 import org.junit.AfterClass;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -73,10 +74,7 @@ public class BladeSamplesUpdatePortletTest {
 
 		_buildStatus = BladeCLIUtil.execute(_projectPath, "gw", "assemble");
 
-		File buildOutput = new File(
-			_projectPath + "/build/libs/helloworld-1.0.0.jar");
-
-		new JMXBundleDeployer().deploy(_helloWorldJarBSN, buildOutput);
+		BladeCLIUtil.execute(_projectPath, "deploy");
 
 		return ShrinkWrap.createFromZipFile(JavaArchive.class, jarFile);
 	}
@@ -91,6 +89,7 @@ public class BladeSamplesUpdatePortletTest {
 		}
 	}
 
+	@Ignore
 	@Test
 	public void testUpdateMVCPortletProject() throws Exception {
 		_webDriver.get(_portletURL.toExternalForm());
