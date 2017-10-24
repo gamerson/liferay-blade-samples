@@ -14,9 +14,7 @@ import net.diibadaaba.zipdiff.Differences
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry
 import groovy.io.FileType
 
-
-
-FileTree gradleBundles = fileTree(dir: 'gradle', include: '**/libs/*.jar')
+FileTree gradleBundles = fileTree(dir: 'gradle', include: '**/libs/*.jar', exclude: '**/npm/**/libs/*.jar')
 FileTree liferayWorkspaceBundles = fileTree(dir: 'liferay-workspace', include: '**/libs/*.jar', exclude: 'tests/*')
 FileTree mavenBundles = fileTree(dir: 'maven', include: '**/target/*.jar')
 
@@ -90,6 +88,7 @@ replicateSources.doLast {
 		}
 
 		canonicalProjects.removeAll { it.name.contains("test") }
+		canonicalProjects.removeAll { it.name.contains("npm") }
 	}
 
 	canonicalProjects.each { canonicalProject ->
@@ -101,10 +100,9 @@ replicateSources.doLast {
 				replicationProjects.add(replicationProject);
 			}
 
-			def replicationProjectName = replicationProjects.find{ it.name == canonicalProject.name }
-			File replicateProject = file(replicationProjectName)
+			def replicationProject = replicationProjects.find{ it.name == canonicalProject.name }
 
-			if ((canonicalSource == "gradle" || canonicalSource == "liferay-workspace") && (replicationProjectName == "gradle" || replicationProjectName == "liferay-workspace")) {
+			if ((canonicalSource == ("gradle" || "liferay-workspace")) && (replicationProject == ("gradle" || "liferay-workspace"))) {
 				ant.copy(todir: replicationProject) {
 					fileset(dir: canonicalProject, includes: "bnd.bnd", "build.gradle")
 				}
@@ -114,18 +112,13 @@ replicateSources.doLast {
 				fileset(dir: canonicalProject, includes: "*.markdown")
 			}
 
-			def replicationSrc = new File( replicationProject, 'src/' )
-
-			replicationSrc.listFiles().each { dir ->
-				if (!dir.name.startsWith("test")) {
-					dir.deleteDir()
+			ant.copy(todir: replicationProject) {
+				fileset(dir: canonicalProject) {
+					include(name: 'src/')
+					include(name: 'service.xml')
+					include(name: '*.properties')
+					exclude(name: '**/test**/')
 				}
-			}
-
-			def canonicalSrc = new File( canonicalProject, 'src/' )
-
-			ant.copy(todir: replicationSrc) {
-				fileset(dir: canonicalSrc, includes: "**", excludes: "**/test**/")
 			}
 		}
 	}
@@ -136,7 +129,7 @@ configurations {
 }
 
 dependencies {
-	bnd group: "biz.aQute.bnd", name: "biz.aQute.bnd", version: "3.3.0"
+	bnd group: "biz.aQute.bnd", name: "biz.aQute.bnd", version: "3.5.0"
 }
 
 repositories {
