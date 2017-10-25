@@ -13,8 +13,9 @@
 	</parent>
 
 	<modules>
-		<module>foo-api</module>
-		<module>foo-service</module>
-		<module>foo-web</module>
+		<module>simple</module>
+		<!-- 
+		<module>jdbc-service-builder</module>
+		 -->
 	</modules>
 </project>
