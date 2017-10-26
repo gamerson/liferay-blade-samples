@@ -173,14 +173,13 @@ public class BladeCLIUtil {
 
 			output = BladeCLIUtil.execute(
 				"sh", "install",
-				"webbundle:file://" + file +
-					"?Web-ContextPath=/" + printFileName);
+				"webbundle:file://" + file + "?Web-ContextPath=/" +
+					printFileName);
 
 			bundleID = output.substring(
 				output.indexOf("bundle id:") + 11,
 				output.indexOf("\n", output.indexOf("bundle id:")));
 		}
-
 		else {
 			output = execute("sh", "install", file.toURI().toASCIIString());
 

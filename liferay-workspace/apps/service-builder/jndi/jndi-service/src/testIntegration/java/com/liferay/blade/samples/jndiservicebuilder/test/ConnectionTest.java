@@ -1,24 +1,27 @@
 package com.liferay.blade.samples.jndiservicebuilder.test;
 
+import aQute.remote.util.JMXBundleDeployer;
+
+import com.liferay.blade.samples.jndiservicebuilder.service.RegionLocalServiceUtil;
+
 import java.io.File;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
 import org.hsqldb.persist.HsqlProperties;
+
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
+
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import com.liferay.blade.samples.jndiservicebuilder.service.RegionLocalServiceUtil;
-
-import aQute.remote.util.JMXBundleDeployer;
 
 /**
  * @author Liferay
@@ -56,8 +59,7 @@ public class ConnectionTest {
 	private static void _addData() throws Exception {
 		_executeNonQuery(
 			"create table region(id bigint not null primary key, name varchar(255));");
-		_executeNonQuery(
-			"insert into region(id, name) values(1, 'Tasmania');");
+		_executeNonQuery("insert into region(id, name) values(1, 'Tasmania');");
 	}
 
 	private static void _executeNonQuery(String nonQuery) throws Exception {

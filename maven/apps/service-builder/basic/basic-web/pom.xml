@@ -5,20 +5,20 @@
 >
 
 	<modelVersion>4.0.0</modelVersion>
-	<artifactId>foo-web</artifactId>
+	<artifactId>basic-web</artifactId>
 	<packaging>jar</packaging>
 
 	<parent>
 		<groupId>blade</groupId>
 		<artifactId>parent.bnd.bundle.plugin</artifactId>
 		<version>1.0.0</version>
-		<relativePath>../../../parent.bnd.bundle.plugin</relativePath>
+		<relativePath>../../../../parent.bnd.bundle.plugin</relativePath>
 	</parent>
 
 	<dependencies>
 		 <dependency>
 			<groupId>blade</groupId>
-			<artifactId>foo-api</artifactId>
+			<artifactId>basic-api</artifactId>
 			<version>1.0.0</version>
 			<scope>provided</scope>
 		</dependency>
@@ -49,6 +49,6 @@
 	</dependencies>
 
 	<build>
-		<finalName>com.liferay.blade.foo.web-${project.version}</finalName>
+		<finalName>com.liferay.blade.basic.web-${project.version}</finalName>
 	</build>
 </project>

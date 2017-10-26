@@ -30,7 +30,9 @@ import java.io.FileWriter;
 import java.io.Writer;
 
 import java.net.URL;
+
 import java.nio.file.Files;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -134,8 +136,7 @@ public class BladeSamplesUpdatePortletTest {
 				}
 
 				if (line.equals(
-						"public class HelloworldPortlet extends MVCPortlet {"
-					)) {
+						"public class HelloworldPortlet extends MVCPortlet {")) {
 
 					StringBuilder sb = new StringBuilder();
 

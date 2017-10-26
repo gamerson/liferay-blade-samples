@@ -34,12 +34,12 @@ testIntegration {
 	dependsOn ":apps:service-builder:jdbc:jdbc-api:jar"
 
 	systemProperty 'jarFile', jar.archivePath
-	
+
 	project(':apps:service-builder:jdbc:jdbc-api').afterEvaluate { project ->
 		dependsOn project.jar
 		systemProperty 'jdbcApiJarFile', project.jar.archivePath
 	}
-	
+
 }
 
 stopTestableTomcat {

@@ -6,7 +6,7 @@
 	<!--<entity data-source="sampleDataSource" local-service="true" name="Foo" remote-service="false" session-factory="sampleSessionFactory" table="bar" tx-manager="sampleTransactionManager uuid="true"">-->
 	<entity name="Region" table="region" data-source="extDataSource" local-service="true"
 			remote-service="false" uuid="false">
-		<column name="regionId" db-name="id" primary="true" type="long" />
-		<column name="regionName" db-name="name" type="String" />
+		<column db-name="id" name="regionId" primary="true" type="long" />
+		<column db-name="name" name="regionName" type="String" />
 	</entity>
 </service-builder>

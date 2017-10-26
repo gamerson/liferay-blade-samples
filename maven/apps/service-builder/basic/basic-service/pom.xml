@@ -5,14 +5,14 @@
 >
 
 	<modelVersion>4.0.0</modelVersion>
-	<artifactId>foo-service</artifactId>
+	<artifactId>basic-service</artifactId>
 	<packaging>jar</packaging>
 
 	<parent>
 		<groupId>blade</groupId>
 		<artifactId>parent.bnd.bundle.plugin</artifactId>
 		<version>1.0.0</version>
-		<relativePath>../../../parent.bnd.bundle.plugin</relativePath>
+		<relativePath>../../../../parent.bnd.bundle.plugin</relativePath>
 	</parent>
 
 	<dependencies>
@@ -30,7 +30,7 @@
 		</dependency>
 		<dependency>
 			<groupId>blade</groupId>
-			<artifactId>foo-api</artifactId>
+			<artifactId>basic-api</artifactId>
 			<version>1.0.0</version>
 		</dependency>
 		<dependency>
@@ -48,14 +48,14 @@
 	</dependencies>
 
 	<build>
-		<finalName>com.liferay.blade.foo.service-${project.version}</finalName>
+		<finalName>com.liferay.blade.basic.service-${project.version}</finalName>
 		<plugins>
 			<plugin>
 				<groupId>com.liferay</groupId>
 				<artifactId>com.liferay.portal.tools.service.builder</artifactId>
 				<version>1.0.143</version>
 				<configuration>
-					<apiDirName>../foo-api/src/main/java</apiDirName>
+					<apiDirName>../basic-api/src/main/java</apiDirName>
 					<autoImportDefaultReferences>true</autoImportDefaultReferences>
 					<autoNamespaceTables>true</autoNamespaceTables>
 					<buildNumberIncrement>true</buildNumberIncrement>

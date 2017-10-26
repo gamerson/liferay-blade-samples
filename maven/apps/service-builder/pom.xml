@@ -13,9 +13,8 @@
 	</parent>
 
 	<modules>
-		<module>simple</module>
-		<!-- 
-		<module>jdbc-service-builder</module>
-		 -->
+		<module>basic</module>
+		<module>jdbc</module>
+		<module>jndi</module>
 	</modules>
 </project>

@@ -125,8 +125,7 @@ public class BladeSamplesTest {
 				printFileName = printFileName.substring(
 					0, printFileName.lastIndexOf('.'));
 
-				bundleID = BladeCLIUtil.installBundle(
-					file);
+				bundleID = BladeCLIUtil.installBundle(file);
 
 				bundleIDAllMap.put(bundleID, printFileName);
 
@@ -137,15 +136,13 @@ public class BladeSamplesTest {
 						Manifest manifest = jar.getManifest();
 
 						Attributes mainAttributes =
-								manifest.getMainAttributes();
+							manifest.getMainAttributes();
 
 						if (mainAttributes.getValue("Fragment-Host") == null) {
-							bundleIDStartMap.put(
-									bundleID, printFileName);
+							bundleIDStartMap.put(bundleID, printFileName);
 						}
 					}
 				}
-
 				else {
 					bundleIDStartMap.put(bundleID, printFileName);
 				}
