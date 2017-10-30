@@ -38,6 +38,9 @@
 								<exclude>**/*.scss</exclude>
 								<exclude>**/.sass-cache</exclude>
 							</excludes>
+							<includes>
+								<include>${project.build.directory}/css/**/*</include>
+							</includes>
 						</resource>
 					</webResources>
 				</configuration>
@@ -49,7 +52,7 @@
 				<executions>
 					<execution>
 						<id>default-build-css</id>
-						<phase>compile</phase>
+						<phase>generate-sources</phase>
 						<goals>
 							<goal>build</goal>
 						</goals>
@@ -57,6 +60,7 @@
 				</executions>
 				<configuration>
 					<docrootDirName>src/main/webapp</docrootDirName>
+					<outputDirName>${project.build.directory}/css</outputDirName>
 					<precision>9</precision>
 				</configuration>
 			</plugin>
