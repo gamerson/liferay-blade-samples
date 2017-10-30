@@ -159,74 +159,6 @@ public class BladeSamplesTest {
 	}
 
 	@Test
-	public void testContentTargetingReportGradleTemplates() throws Exception {
-		File projectPath = BladeCLIUtil.createProject(
-			_testDir, "content-targeting-report", "foo-bar");
-
-		BuildTask buildtask = GradleRunnerUtil.executeGradleRunner(
-			projectPath, "build");
-
-		GradleRunnerUtil.verifyGradleRunnerOutput(buildtask);
-
-		File buildOutput = new File(
-			projectPath + "/build/libs/foo.bar-1.0.0.jar");
-
-		Assert.assertTrue(buildOutput.exists());
-
-		String bundleID = BladeCLIUtil.installBundle(buildOutput);
-
-		BladeCLIUtil.startBundle(bundleID);
-
-		BladeCLIUtil.uninstallBundle(bundleID);
-	}
-
-	@Test
-	public void testContentTargetingRuleGradleTemplates() throws Exception {
-		File projectPath = BladeCLIUtil.createProject(
-			_testDir, "content-targeting-rule", "foo-bar");
-
-		BuildTask buildtask = GradleRunnerUtil.executeGradleRunner(
-			projectPath, "build");
-
-		GradleRunnerUtil.verifyGradleRunnerOutput(buildtask);
-
-		File buildOutput = new File(
-			projectPath + "/build/libs/foo.bar-1.0.0.jar");
-
-		Assert.assertTrue(buildOutput.exists());
-
-		String bundleID = BladeCLIUtil.installBundle(buildOutput);
-
-		BladeCLIUtil.startBundle(bundleID);
-
-		BladeCLIUtil.uninstallBundle(bundleID);
-	}
-
-	@Test
-	public void testContentTargetingTrackingActionGradleTemplates()
-		throws Exception {
-
-		File projectPath = BladeCLIUtil.createProject(
-			_testDir, "content-targeting-tracking-action", "foo-bar");
-
-		BuildTask buildtask = GradleRunnerUtil.executeGradleRunner(
-			projectPath, "build");
-
-		GradleRunnerUtil.verifyGradleRunnerOutput(buildtask);
-
-		File buildOutput = new File(
-			projectPath + "/build/libs/foo-bar-1.0.0.jar");
-
-		Assert.assertTrue(buildOutput.exists());
-
-		String bundleID = BladeCLIUtil.installBundle(buildOutput);
-
-		BladeCLIUtil.startBundle(bundleID);
-
-		BladeCLIUtil.uninstallBundle(bundleID);
-	}
-
-	@Test
 	public void testControlMenuEntryGradleTemplates() throws Exception {
 		File projectPath = BladeCLIUtil.createProject(
 			_testDir, "control-menu-entry", "helloworld");
@@ -302,7 +234,7 @@ public class BladeSamplesTest {
 
 		GradleRunnerUtil.verifyGradleRunnerOutput(buildtask);
 
-		File buildOutput = new File(projectPath + "/build/libs/foo.war");
+		File buildOutput = new File(projectPath + "/build/libs/foobar.war");
 
 		Assert.assertTrue(buildOutput.exists());
 
