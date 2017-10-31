@@ -690,49 +690,6 @@ public class BladeSamplesTest {
 		BladeCLIUtil.uninstallBundle(bundleID);
 	}
 
-	@Test
-	public void testWarHookGradleTemplates() throws Exception {
-		File projectPath = BladeCLIUtil.createProject(
-			_testDir, "war-hook", "WarHook");
-
-		BuildTask buildtask = GradleRunnerUtil.executeGradleRunner(
-			projectPath, "build");
-
-		GradleRunnerUtil.verifyGradleRunnerOutput(buildtask);
-
-		File buildOutput = new File(projectPath + "/build/libs/WarHook.war");
-
-		Assert.assertTrue(buildOutput.exists());
-
-		String bundleID = BladeCLIUtil.installBundle(buildOutput);
-
-		BladeCLIUtil.startBundle(bundleID);
-
-		BladeCLIUtil.uninstallBundle(bundleID);
-	}
-
-	@Test
-	public void testWarMVCPortletGradleTemplates() throws Exception {
-		File projectPath = BladeCLIUtil.createProject(
-			_testDir, "war-mvc-portlet", "WarMVCPortlet");
-
-		BuildTask buildtask = GradleRunnerUtil.executeGradleRunner(
-			projectPath, "build");
-
-		GradleRunnerUtil.verifyGradleRunnerOutput(buildtask);
-
-		File buildOutput = new File(
-			projectPath + "/build/libs/WarMVCPortlet.war");
-
-		Assert.assertTrue(buildOutput.exists());
-
-		String bundleID = BladeCLIUtil.installBundle(buildOutput);
-
-		BladeCLIUtil.startBundle(bundleID);
-
-		BladeCLIUtil.uninstallBundle(bundleID);
-	}
-
 	private File _testDir;
 
 }
