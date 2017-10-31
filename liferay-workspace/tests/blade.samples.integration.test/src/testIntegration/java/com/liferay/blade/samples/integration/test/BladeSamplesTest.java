@@ -125,8 +125,7 @@ public class BladeSamplesTest {
 				printFileName = printFileName.substring(
 					0, printFileName.lastIndexOf('.'));
 
-				bundleID = BladeCLIUtil.installBundle(
-					file);
+				bundleID = BladeCLIUtil.installBundle(file);
 
 				bundleIDAllMap.put(bundleID, printFileName);
 
@@ -137,15 +136,13 @@ public class BladeSamplesTest {
 						Manifest manifest = jar.getManifest();
 
 						Attributes mainAttributes =
-								manifest.getMainAttributes();
+							manifest.getMainAttributes();
 
 						if (mainAttributes.getValue("Fragment-Host") == null) {
-							bundleIDStartMap.put(
-									bundleID, printFileName);
+							bundleIDStartMap.put(bundleID, printFileName);
 						}
 					}
 				}
-
 				else {
 					bundleIDStartMap.put(bundleID, printFileName);
 				}
@@ -173,6 +170,71 @@ public class BladeSamplesTest {
 
 		File buildOutput = new File(
 			projectPath + "/build/libs/helloworld-1.0.0.jar");
+
+		Assert.assertTrue(buildOutput.exists());
+
+		String bundleID = BladeCLIUtil.installBundle(buildOutput);
+
+		BladeCLIUtil.startBundle(bundleID);
+
+		BladeCLIUtil.uninstallBundle(bundleID);
+	}
+
+	@Test
+	public void testFormFieldGradleTemplates() throws Exception {
+		File projectPath = BladeCLIUtil.createProject(
+			_testDir, "form-field", "foobar");
+
+		BuildTask buildtask = GradleRunnerUtil.executeGradleRunner(
+			projectPath, "build");
+
+		GradleRunnerUtil.verifyGradleRunnerOutput(buildtask);
+
+		File buildOutput = new File(
+			projectPath + "/build/libs/foobar-1.0.0.jar");
+
+		Assert.assertTrue(buildOutput.exists());
+
+		String bundleID = BladeCLIUtil.installBundle(buildOutput);
+
+		BladeCLIUtil.startBundle(bundleID);
+
+		BladeCLIUtil.uninstallBundle(bundleID);
+	}
+
+	@Test
+	public void testFreemarkerPortletGradleTemplates() throws Exception {
+		File projectPath = BladeCLIUtil.createProject(
+			_testDir, "freemarker-portlet", "foobar");
+
+		BuildTask buildtask = GradleRunnerUtil.executeGradleRunner(
+			projectPath, "build");
+
+		GradleRunnerUtil.verifyGradleRunnerOutput(buildtask);
+
+		File buildOutput = new File(
+			projectPath + "/build/libs/foobar-1.0.0.jar");
+
+		Assert.assertTrue(buildOutput.exists());
+
+		String bundleID = BladeCLIUtil.installBundle(buildOutput);
+
+		BladeCLIUtil.startBundle(bundleID);
+
+		BladeCLIUtil.uninstallBundle(bundleID);
+	}
+
+	@Test
+	public void testLayoutTemplateGradleTemplates() throws Exception {
+		File projectPath = BladeCLIUtil.createProject(
+			_testDir, "layout-template", "foobar");
+
+		BuildTask buildtask = GradleRunnerUtil.executeGradleRunner(
+			projectPath, "build");
+
+		GradleRunnerUtil.verifyGradleRunnerOutput(buildtask);
+
+		File buildOutput = new File(projectPath + "/build/libs/foobar.war");
 
 		Assert.assertTrue(buildOutput.exists());
 
@@ -228,6 +290,28 @@ public class BladeSamplesTest {
 	}
 
 	@Test
+	public void testPortletConfigurationIconGradleTemplates() throws Exception {
+		File projectPath = BladeCLIUtil.createProject(
+			_testDir, "portlet-configuration-icon", "blade.test");
+
+		BuildTask buildtask = GradleRunnerUtil.executeGradleRunner(
+			projectPath, "build");
+
+		GradleRunnerUtil.verifyGradleRunnerOutput(buildtask);
+
+		File buildOutput = new File(
+			projectPath + "/build/libs/blade.test-1.0.0.jar");
+
+		Assert.assertTrue(buildOutput.exists());
+
+		String bundleID = BladeCLIUtil.installBundle(buildOutput);
+
+		BladeCLIUtil.startBundle(bundleID);
+
+		BladeCLIUtil.uninstallBundle(bundleID);
+	}
+
+	@Test
 	public void testPortletGradleTemplates() throws Exception {
 		File projectPath = BladeCLIUtil.createProject(
 			_testDir, "portlet", "helloworld");
@@ -261,6 +345,52 @@ public class BladeSamplesTest {
 
 		File buildOutput = new File(
 			projectPath + "/build/libs/helloworld-1.0.0.jar");
+
+		Assert.assertTrue(buildOutput.exists());
+
+		String bundleID = BladeCLIUtil.installBundle(buildOutput);
+
+		BladeCLIUtil.startBundle(bundleID);
+
+		BladeCLIUtil.uninstallBundle(bundleID);
+	}
+
+	@Test
+	public void testPortletToolbarContributorGradleTemplates()
+		throws Exception {
+
+		File projectPath = BladeCLIUtil.createProject(
+			_testDir, "portlet-toolbar-contributor", "blade.test");
+
+		BuildTask buildtask = GradleRunnerUtil.executeGradleRunner(
+			projectPath, "build");
+
+		GradleRunnerUtil.verifyGradleRunnerOutput(buildtask);
+
+		File buildOutput = new File(
+			projectPath + "/build/libs/blade.test-1.0.0.jar");
+
+		Assert.assertTrue(buildOutput.exists());
+
+		String bundleID = BladeCLIUtil.installBundle(buildOutput);
+
+		BladeCLIUtil.startBundle(bundleID);
+
+		BladeCLIUtil.uninstallBundle(bundleID);
+	}
+
+	@Test
+	public void testRestGradleTemplates() throws Exception {
+		File projectPath = BladeCLIUtil.createProject(
+			_testDir, "rest", "my-rest");
+
+		BuildTask buildtask = GradleRunnerUtil.executeGradleRunner(
+			projectPath, "build");
+
+		GradleRunnerUtil.verifyGradleRunnerOutput(buildtask);
+
+		File buildOutput = new File(
+			projectPath + "/build/libs/my.rest-1.0.0.jar");
 
 		Assert.assertTrue(buildOutput.exists());
 
@@ -461,6 +591,95 @@ public class BladeSamplesTest {
 
 		File buildOutput = new File(
 			projectPath + "/build/libs/serviceoverride-1.0.0.jar");
+
+		Assert.assertTrue(buildOutput.exists());
+
+		String bundleID = BladeCLIUtil.installBundle(buildOutput);
+
+		BladeCLIUtil.startBundle(bundleID);
+
+		BladeCLIUtil.uninstallBundle(bundleID);
+	}
+
+	@Test
+	public void testSimulationPanelEntryGradleTemplates() throws Exception {
+		File projectPath = BladeCLIUtil.createProject(
+			_testDir, "simulation-panel-entry", "test.simulator");
+
+		BuildTask buildtask = GradleRunnerUtil.executeGradleRunner(
+			projectPath, "build");
+
+		GradleRunnerUtil.verifyGradleRunnerOutput(buildtask);
+
+		File buildOutput = new File(
+			projectPath + "/build/libs/test.simulator-1.0.0.jar");
+
+		Assert.assertTrue(buildOutput.exists());
+
+		String bundleID = BladeCLIUtil.installBundle(buildOutput);
+
+		BladeCLIUtil.startBundle(bundleID);
+
+		BladeCLIUtil.uninstallBundle(bundleID);
+	}
+
+	@Test
+	public void testSpringMVCPortletGradleTemplates() throws Exception {
+		File projectPath = BladeCLIUtil.createProject(
+			_testDir, "spring-mvc-portlet", "foo");
+
+		BuildTask buildtask = GradleRunnerUtil.executeGradleRunner(
+			projectPath, "build");
+
+		GradleRunnerUtil.verifyGradleRunnerOutput(buildtask);
+
+		File buildOutput = new File(projectPath + "/build/libs/foo.war");
+
+		Assert.assertTrue(buildOutput.exists());
+
+		String bundleID = BladeCLIUtil.installBundle(buildOutput);
+
+		BladeCLIUtil.startBundle(bundleID);
+
+		BladeCLIUtil.uninstallBundle(bundleID);
+	}
+
+	@Test
+	public void testTemplateContextContributorGradleTemplates()
+		throws Exception {
+
+		File projectPath = BladeCLIUtil.createProject(
+			_testDir, "template-context-contributor", "blade-test");
+
+		BuildTask buildtask = GradleRunnerUtil.executeGradleRunner(
+			projectPath, "build");
+
+		GradleRunnerUtil.verifyGradleRunnerOutput(buildtask);
+
+		File buildOutput = new File(
+			projectPath + "/build/libs/blade.test-1.0.0.jar");
+
+		Assert.assertTrue(buildOutput.exists());
+
+		String bundleID = BladeCLIUtil.installBundle(buildOutput);
+
+		BladeCLIUtil.startBundle(bundleID);
+
+		BladeCLIUtil.uninstallBundle(bundleID);
+	}
+
+	@Test
+	public void testThemeContributorGradleTemplates() throws Exception {
+		File projectPath = BladeCLIUtil.createProject(
+			_testDir, "theme-contributor", "my.contributor");
+
+		BuildTask buildtask = GradleRunnerUtil.executeGradleRunner(
+			projectPath, "build");
+
+		GradleRunnerUtil.verifyGradleRunnerOutput(buildtask);
+
+		File buildOutput = new File(
+			projectPath + "/build/libs/my.contributor-1.0.0.jar");
 
 		Assert.assertTrue(buildOutput.exists());
 
