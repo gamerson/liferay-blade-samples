@@ -49,7 +49,7 @@
 				<executions>
 					<execution>
 						<id>default-build-css</id>
-						<phase>compile</phase>
+						<phase>generate-sources</phase>
 						<goals>
 							<goal>build</goal>
 						</goals>
