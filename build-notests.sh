@@ -7,7 +7,7 @@ function buildAll() {
   ./gradlew checkSourceFormatting clean assemble
   cd "$repoDir"
   cd maven
-  mvn --fail-at-end clean package
+  ./mvnw --fail-at-end clean package
   cd "$repoDir"
   cd liferay-workspace
   ./gradlew clean assemble
