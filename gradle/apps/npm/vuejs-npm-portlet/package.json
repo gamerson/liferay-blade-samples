@@ -10,7 +10,7 @@
 		"liferay-npm-bundler": "1.2.2",
 		"liferay-npm-bundler-preset-vue": "1.2.2"
 	},
-	"main": "lib/index.es.js",
+	"main": "lib/index.js",
 	"name": "vuejs-npm-portlet",
 	"private": true,
 	"scripts": {
