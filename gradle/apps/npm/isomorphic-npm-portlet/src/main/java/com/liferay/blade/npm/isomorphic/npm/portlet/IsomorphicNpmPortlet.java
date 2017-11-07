@@ -18,14 +18,14 @@ package com.liferay.blade.npm.isomorphic.npm.portlet;
 
 import com.liferay.frontend.js.loader.modules.extender.npm.JSPackage;
 import com.liferay.frontend.js.loader.modules.extender.npm.NPMResolver;
-
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
+
+import java.io.IOException;
 
 import javax.portlet.Portlet;
 import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
-import java.io.IOException;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -46,18 +46,18 @@ import org.osgi.service.component.annotations.Reference;
 	service = Portlet.class
 )
 public class IsomorphicNpmPortlet extends MVCPortlet {
-	
+
 	@Override
 	public void doView(
 			RenderRequest renderRequest, RenderResponse renderResponse)
 		throws IOException, PortletException {
-			
-		JSPackage jsPackage	= _npmResolver.getJSPackage();
-			
+
+		JSPackage jsPackage = _npmResolver.getJSPackage();
+
 		renderRequest.setAttribute(
-			"bootstrapRequire", 
+			"bootstrapRequire",
 			jsPackage.getResolvedId() + " as bootstrapRequire");
-		
+
 		super.doView(renderRequest, renderResponse);
 	}
 
