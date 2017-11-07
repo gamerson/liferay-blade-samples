@@ -72,7 +72,8 @@ public class BladeJspWarPortletTest {
 		new JMXBundleDeployer().deploy(_fooApiJarBSN, fooApiJar);
 		new JMXBundleDeployer().deploy(_fooServiceJarBSN, fooServiceJar);
 
-		final File jspPortletWarFile = new File(System.getProperty("jspPortletWarFile"));
+		final File jspPortletWarFile = new File(
+			System.getProperty("jspPortletWarFile"));
 
 		String bundleID = BladeCLIUtil.installBundle(jspPortletWarFile);
 
@@ -250,7 +251,8 @@ public class BladeJspWarPortletTest {
 	@FindBy(xpath = "//table[contains(@data-searchcontainerid,'foosSearchContainer')]")
 	private WebElement _table;
 
-	private String _tableRow = "//table[contains(@data-searchcontainerid,'foosSearchContainer')]/tbody/tr";
+	private String _tableRow =
+		"//table[contains(@data-searchcontainerid,'foosSearchContainer')]/tbody/tr";
 
 	@Drone
 	private WebDriver _webDriver;
