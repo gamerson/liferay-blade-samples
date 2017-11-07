@@ -21,11 +21,11 @@
 <pre id="<portlet:namespace />-output">
 </pre>
 
-<aui:script require="simple-npm-portlet@1.0.0">
+<aui:script require="<%= bootstrapRequire %>">
 	window.out = document.getElementById('<portlet:namespace />-output');
 
 	out.innerHTML += 'Portlet main module loaded.\n';
 	out.innerHTML += "Invoking portlet's main module default export.\n";
 
-	simpleNpmPortlet100.default();
+	bootstrapRequire.default();
 </aui:script>

@@ -2,7 +2,7 @@
 
 import Component from 'metal-component';
 import Soy from 'metal-soy';
-import CloseHeader from './CloseHeader.es';
+import CloseHeader from './CloseHeader';
 
 import templates from './Modal.soy';
 

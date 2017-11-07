@@ -1,6 +1,6 @@
 'use strict';
 
-import Modal from './Modal.es';
+import Modal from './Modal';
 
 export default function(elementId) {
 	const btn = document.getElementById(elementId);

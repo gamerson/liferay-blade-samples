@@ -20,6 +20,6 @@
 
 <div id="angular-npm-portlet-root"></div>
 
-<aui:script require="angular-npm-portlet@1.0.0">
-	angularNpmPortlet100.default();
+<aui:script require="<%= bootstrapRequire %>">
+	bootstrapRequire.default();
 </aui:script>
