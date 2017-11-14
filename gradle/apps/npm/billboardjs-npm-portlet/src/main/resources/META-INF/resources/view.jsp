@@ -49,6 +49,6 @@
 	<svg height="600" id="<portlet:namespace />-D3Graph" width="960"></svg>
 </div>
 
-<aui:script require="billboardjs-npm-portlet@1.0.0">
-	billboardjsNpmPortlet100.default('<portlet:namespace />');
+<aui:script require="<%= bootstrapRequire %>">
+	bootstrapRequire.default('<portlet:namespace />');
 </aui:script>
