@@ -36,18 +36,17 @@ task (foobar) {
 
 testIntegration {
 
-	
 	testClassesDir = sourceSets.testIntegration.output.classesDir
 	outputs.upToDateWhen { false }
 
 	dependsOn jar, ":initBundle", startTestableTomcat
 
 	systemProperty 'jarFile', jar.archivePath
-	
+
 	dependsOn ":apps:service-builder:jndi:jndi-api:jar"
-    
-    systemProperty 'jndiApiJarFile', project(':apps:service-builder:jndi:jndi-api').jar.archivePath
-	
+
+	systemProperty 'jndiApiJarFile', project(':apps:service-builder:jndi:jndi-api').jar.archivePath
+
 }
 
 stopTestableTomcat {

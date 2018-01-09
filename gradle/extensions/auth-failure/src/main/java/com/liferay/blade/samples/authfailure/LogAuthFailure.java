@@ -17,8 +17,6 @@
 package com.liferay.blade.samples.authfailure;
 
 import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.security.auth.AuthException;
 import com.liferay.portal.kernel.security.auth.AuthFailure;
@@ -27,6 +25,9 @@ import com.liferay.portal.kernel.service.UserLocalServiceUtil;
 import java.util.Map;
 
 import org.osgi.service.component.annotations.Component;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Liferay
@@ -49,14 +50,14 @@ public class LogAuthFailure implements AuthFailure {
 
 			int failures = user.getFailedLoginAttempts();
 
-			if (_log.isInfoEnabled()) {
-				_log.info(
+			if (_logger.isInfoEnabled()) {
+				_logger.info(
 					"onFailureByEmailAddress: " + emailAddress +
 						" has failed to login " + failures + " times");
 			}
 		}
 		catch (PortalException pe) {
-			_log.error(pe);
+			_logger.error(pe.getMessage(), pe);
 		}
 	}
 
@@ -72,14 +73,14 @@ public class LogAuthFailure implements AuthFailure {
 
 			int failures = user.getFailedLoginAttempts();
 
-			if (_log.isInfoEnabled()) {
-				_log.info(
+			if (_logger.isInfoEnabled()) {
+				_logger.info(
 					"onFailureByScreenName: " + screenName +
 						" has failed to login " + failures + " times");
 			}
 		}
 		catch (PortalException pe) {
-			_log.error(pe);
+			_logger.error(pe.getMessage(), pe);
 		}
 	}
 
@@ -94,17 +95,17 @@ public class LogAuthFailure implements AuthFailure {
 
 			int failures = user.getFailedLoginAttempts();
 
-			if (_log.isInfoEnabled()) {
-				_log.info(
+			if (_logger.isInfoEnabled()) {
+				_logger.info(
 					"onFailureByUserId: userId " + userId +
 						" has failed to login " + failures + " times");
 			}
 		}
 		catch (PortalException pe) {
-			_log.error(pe);
+			_logger.error(pe.getMessage(), pe);
 		}
 	}
 
-	private static final Log _log = LogFactoryUtil.getLog(LogAuthFailure.class);
+	private Logger _logger = LoggerFactory.getLogger(getClass().getName());
 
 }

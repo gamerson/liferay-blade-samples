@@ -16,8 +16,6 @@
 
 package com.liferay.blade.samples.indexerpostprocessor;
 
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.search.BooleanQuery;
 import com.liferay.portal.kernel.search.Document;
 import com.liferay.portal.kernel.search.IndexerPostProcessor;
@@ -28,6 +26,9 @@ import com.liferay.portal.kernel.search.filter.BooleanFilter;
 import java.util.Locale;
 
 import org.osgi.service.component.annotations.Component;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Liferay
@@ -55,8 +56,8 @@ public class BlogsIndexerPostProcessor implements IndexerPostProcessor {
 			BooleanFilter booleanFilter, SearchContext searchContext)
 		throws Exception {
 
-		if (_log.isInfoEnabled()) {
-			_log.info("postProcessContextBooleanFilter");
+		if (_logger.isInfoEnabled()) {
+			_logger.info("postProcessContextBooleanFilter");
 		}
 	}
 
@@ -65,8 +66,8 @@ public class BlogsIndexerPostProcessor implements IndexerPostProcessor {
 			BooleanQuery contextQuery, SearchContext searchContext)
 		throws Exception {
 
-		if (_log.isInfoEnabled()) {
-			_log.info("postProcessContextQuery");
+		if (_logger.isInfoEnabled()) {
+			_logger.info("postProcessContextQuery");
 		}
 	}
 
@@ -74,8 +75,8 @@ public class BlogsIndexerPostProcessor implements IndexerPostProcessor {
 	public void postProcessDocument(Document document, Object obj)
 		throws Exception {
 
-		if (_log.isInfoEnabled()) {
-			_log.info("postProcessDocument");
+		if (_logger.isInfoEnabled()) {
+			_logger.info("postProcessDocument");
 		}
 	}
 
@@ -84,8 +85,8 @@ public class BlogsIndexerPostProcessor implements IndexerPostProcessor {
 			BooleanQuery fullQuery, SearchContext searchContext)
 		throws Exception {
 
-		if (_log.isInfoEnabled()) {
-			_log.info("postProcessFullQuery");
+		if (_logger.isInfoEnabled()) {
+			_logger.info("postProcessFullQuery");
 		}
 	}
 
@@ -95,8 +96,8 @@ public class BlogsIndexerPostProcessor implements IndexerPostProcessor {
 			SearchContext searchContext)
 		throws Exception {
 
-		if (_log.isInfoEnabled()) {
-			_log.info("postProcessSearchQuery");
+		if (_logger.isInfoEnabled()) {
+			_logger.info("postProcessSearchQuery");
 		}
 	}
 
@@ -105,8 +106,8 @@ public class BlogsIndexerPostProcessor implements IndexerPostProcessor {
 			BooleanQuery searchQuery, SearchContext searchContext)
 		throws Exception {
 
-		if (_log.isInfoEnabled()) {
-			_log.info("postProcessSearchQuery");
+		if (_logger.isInfoEnabled()) {
+			_logger.info("postProcessSearchQuery");
 		}
 	}
 
@@ -114,12 +115,11 @@ public class BlogsIndexerPostProcessor implements IndexerPostProcessor {
 	public void postProcessSummary(
 		Summary summary, Document document, Locale locale, String snippet) {
 
-		if (_log.isInfoEnabled()) {
-			_log.info("postProcessSummary");
+		if (_logger.isInfoEnabled()) {
+			_logger.info("postProcessSummary");
 		}
 	}
 
-	private static final Log _log = LogFactoryUtil.getLog(
-		BlogsIndexerPostProcessor.class);
+	private Logger _logger = LoggerFactory.getLogger(getClass().getName());
 
 }

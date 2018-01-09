@@ -20,8 +20,6 @@ import com.liferay.blade.samples.servicebuilder.model.Foo;
 import com.liferay.blade.samples.servicebuilder.service.FooLocalService;
 import com.liferay.blade.samples.servicebuilder.service.FooLocalServiceUtil;
 import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
@@ -37,6 +35,9 @@ import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * @author Liferay
  */
@@ -46,8 +47,8 @@ public class JSPWARPortlet extends MVCPortlet {
 			ActionRequest actionRequest, ActionResponse actionResponse)
 		throws Exception {
 
-		if (_log.isInfoEnabled()) {
-			_log.info("Deleting a new foo...");
+		if (_logger.isInfoEnabled()) {
+			_logger.info("Deleting a new foo...");
 		}
 
 		long fooId = ParamUtil.getLong(actionRequest, "fooId");
@@ -96,8 +97,8 @@ public class JSPWARPortlet extends MVCPortlet {
 			PortalException.class);
 
 		if (fooId <= 0) {
-			if (_log.isInfoEnabled()) {
-				_log.info("Adding a new foo...");
+			if (_logger.isInfoEnabled()) {
+				_logger.info("Adding a new foo...");
 			}
 
 			Foo foo = getFooLocalService().createFoo(0);
@@ -111,8 +112,8 @@ public class JSPWARPortlet extends MVCPortlet {
 			getFooLocalService().addFooWithoutId(foo);
 		}
 		else {
-			if (_log.isInfoEnabled()) {
-				_log.info("Updating a new foo...");
+			if (_logger.isInfoEnabled()) {
+				_logger.info("Updating a new foo...");
 			}
 
 			Foo foo = getFooLocalService().fetchFoo(fooId);
@@ -127,6 +128,6 @@ public class JSPWARPortlet extends MVCPortlet {
 		}
 	}
 
-	private static final Log _log = LogFactoryUtil.getLog(JSPWARPortlet.class);
+	private Logger _logger = LoggerFactory.getLogger(getClass().getName());
 
 }

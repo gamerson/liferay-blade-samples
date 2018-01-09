@@ -16,8 +16,6 @@
 
 package com.liferay.blade.samples.portlet.actioncommand;
 
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
 import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.util.ParamUtil;
@@ -28,6 +26,9 @@ import javax.portlet.ActionResponse;
 import javax.portlet.PortletException;
 
 import org.osgi.service.component.annotations.Component;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Liferay
@@ -55,8 +56,8 @@ public class GreeterActionCommand implements MVCActionCommand {
 	private void _handleActionCommand(ActionRequest actionRequest) {
 		String name = ParamUtil.get(actionRequest, "name", StringPool.BLANK);
 
-		if (_log.isInfoEnabled()) {
-			_log.info("Hello " + name);
+		if (_logger.isInfoEnabled()) {
+			_logger.info("Hello " + name);
 		}
 
 		String greetingMessage = "Hello " + name + "! Welcome to OSGi";
@@ -66,7 +67,6 @@ public class GreeterActionCommand implements MVCActionCommand {
 		SessionMessages.add(actionRequest, "greetingMessage", greetingMessage);
 	}
 
-	private static final Log _log = LogFactoryUtil.getLog(
-		GreeterActionCommand.class);
+	private Logger _logger = LoggerFactory.getLogger(getClass().getName());
 
 }

@@ -16,8 +16,6 @@
 
 package com.liferay.blade.samples.authenticator.shiro;
 
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.security.auth.AuthException;
 import com.liferay.portal.kernel.security.auth.Authenticator;
 
@@ -33,6 +31,9 @@ import org.apache.shiro.util.Factory;
 
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Liferay
@@ -50,8 +51,8 @@ public class ShiroAuthenticatorPre implements Authenticator {
 
 		SecurityUtils.setSecurityManager(factory.getInstance());
 
-		if (_log.isInfoEnabled()) {
-			_log.info("activate");
+		if (_logger.isInfoEnabled()) {
+			_logger.info("activate");
 		}
 	}
 
@@ -61,8 +62,8 @@ public class ShiroAuthenticatorPre implements Authenticator {
 			Map<String, String[]> headerMap, Map<String, String[]> parameterMap)
 		throws AuthException {
 
-		if (_log.isInfoEnabled()) {
-			_log.info("authenticateByEmailAddress");
+		if (_logger.isInfoEnabled()) {
+			_logger.info("authenticateByEmailAddress");
 		}
 
 		UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(
@@ -76,8 +77,8 @@ public class ShiroAuthenticatorPre implements Authenticator {
 			boolean authenticated = currentUser.isAuthenticated();
 
 			if (authenticated) {
-				if (_log.isInfoEnabled()) {
-					_log.info("authenticated");
+				if (_logger.isInfoEnabled()) {
+					_logger.info("authenticated");
 				}
 
 				return SKIP_LIFERAY_CHECK;
@@ -87,7 +88,7 @@ public class ShiroAuthenticatorPre implements Authenticator {
 			}
 		}
 		catch (AuthenticationException ae) {
-			_log.error(ae.getMessage(), ae);
+			_logger.error(ae.getMessage(), ae);
 			throw new AuthException(ae.getMessage(), ae);
 		}
 	}
@@ -98,8 +99,8 @@ public class ShiroAuthenticatorPre implements Authenticator {
 			Map<String, String[]> headerMap, Map<String, String[]> parameterMap)
 		throws AuthException {
 
-		if (_log.isInfoEnabled()) {
-			_log.info("authenticateByScreenName  - not implemented ");
+		if (_logger.isInfoEnabled()) {
+			_logger.info("authenticateByScreenName  - not implemented ");
 		}
 
 		return SUCCESS;
@@ -111,14 +112,13 @@ public class ShiroAuthenticatorPre implements Authenticator {
 			Map<String, String[]> headerMap, Map<String, String[]> parameterMap)
 		throws AuthException {
 
-		if (_log.isInfoEnabled()) {
-			_log.info("authenticateByScreenName  - not implemented ");
+		if (_logger.isInfoEnabled()) {
+			_logger.info("authenticateByScreenName  - not implemented ");
 		}
 
 		return SUCCESS;
 	}
 
-	private static final Log _log = LogFactoryUtil.getLog(
-		ShiroAuthenticatorPre.class);
+	private Logger _logger = LoggerFactory.getLogger(getClass().getName());
 
 }

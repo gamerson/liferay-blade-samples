@@ -16,8 +16,6 @@
 
 package com.liferay.blade.samples.strutsportletaction;
 
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.struts.BaseStrutsPortletAction;
@@ -36,6 +34,9 @@ import javax.portlet.ResourceResponse;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * @author Liferay
  */
@@ -52,8 +53,8 @@ public class BladePortletAction extends BaseStrutsPortletAction {
 			ActionResponse actionResponse)
 		throws Exception {
 
-		if (_log.isDebugEnabled()) {
-			_log.debug("BladePortletAction - procesAction");
+		if (_logger.isDebugEnabled()) {
+			_logger.debug("BladePortletAction - procesAction");
 		}
 
 		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
@@ -61,12 +62,12 @@ public class BladePortletAction extends BaseStrutsPortletAction {
 
 		User loggedinUser = themeDisplay.getUser();
 
-		if ((loggedinUser != null) && _log.isInfoEnabled()) {
-			_log.info(
+		if ((loggedinUser != null) && _logger.isInfoEnabled()) {
+			_logger.info(
 				"Logging in with user:[" + loggedinUser.getFirstName() + " " +
 					loggedinUser.getLastName() + "]");
 
-			_log.info(
+			_logger.info(
 				"Logged in user: Current Greetings[" +
 					loggedinUser.getGreeting() + "]");
 		}
@@ -83,8 +84,8 @@ public class BladePortletAction extends BaseStrutsPortletAction {
 			RenderResponse renderResponse)
 		throws Exception {
 
-		if (_log.isDebugEnabled()) {
-			_log.debug("BladePortletAction - render");
+		if (_logger.isDebugEnabled()) {
+			_logger.debug("BladePortletAction - render");
 		}
 
 		ThemeDisplay themeDisplay = (ThemeDisplay)renderRequest.getAttribute(
@@ -113,8 +114,8 @@ public class BladePortletAction extends BaseStrutsPortletAction {
 			ResourceResponse resourceResponse)
 		throws Exception {
 
-		if (_log.isDebugEnabled()) {
-			_log.debug("BladePortletAction - serveResource");
+		if (_logger.isDebugEnabled()) {
+			_logger.debug("BladePortletAction - serveResource");
 		}
 
 		originalStrutsPortletAction.serveResource(
@@ -122,8 +123,7 @@ public class BladePortletAction extends BaseStrutsPortletAction {
 			resourceResponse);
 	}
 
-	private static final Log _log = LogFactoryUtil.getLog(
-		BladePortletAction.class);
+	private Logger _logger = LoggerFactory.getLogger(getClass().getName());
 
 	@Reference(unbind = "-")
 	private volatile UserLocalService _userLocalService;

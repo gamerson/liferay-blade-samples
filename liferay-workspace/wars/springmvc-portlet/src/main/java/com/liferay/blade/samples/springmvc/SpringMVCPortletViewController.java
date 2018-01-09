@@ -19,8 +19,6 @@ package com.liferay.blade.samples.springmvc;
 import com.liferay.blade.samples.servicebuilder.model.Foo;
 import com.liferay.blade.samples.servicebuilder.service.FooLocalServiceUtil;
 import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
 
@@ -31,6 +29,9 @@ import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -70,8 +71,8 @@ public class SpringMVCPortletViewController {
 	public void deleteFoo(ActionRequest actionRequest, ActionResponse response)
 		throws Exception {
 
-		if (_log.isInfoEnabled()) {
-			_log.info("Deleting a new foo...");
+		if (_logger.isInfoEnabled()) {
+			_logger.info("Deleting a new foo...");
 		}
 
 		long fooId = ParamUtil.getLong(actionRequest, "fooId");
@@ -136,8 +137,8 @@ public class SpringMVCPortletViewController {
 		// If the Foo ID is less than or equal to zero, add a new Foo.
 
 		if (fooId <= 0) {
-			if (_log.isInfoEnabled()) {
-				_log.info("Adding a new foo...");
+			if (_logger.isInfoEnabled()) {
+				_logger.info("Adding a new foo...");
 			}
 
 			// Create the Foo.
@@ -157,8 +158,8 @@ public class SpringMVCPortletViewController {
 			FooLocalServiceUtil.addFooWithoutId(foo);
 		}
 		else {
-			if (_log.isInfoEnabled()) {
-				_log.info("Updating a new foo...");
+			if (_logger.isInfoEnabled()) {
+				_logger.info("Updating a new foo...");
 			}
 
 			// Retrieve the current Foo during the update.
@@ -204,7 +205,6 @@ public class SpringMVCPortletViewController {
 		return "view";
 	}
 
-	private static final Log _log = LogFactoryUtil.getLog(
-		SpringMVCPortletViewController.class);
+	private Logger _logger = LoggerFactory.getLogger(getClass().getName());
 
 }

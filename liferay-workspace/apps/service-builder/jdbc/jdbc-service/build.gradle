@@ -35,9 +35,8 @@ testIntegration {
 	systemProperty 'jarFile', jar.archivePath
 
 	dependsOn ":apps:service-builder:jdbc:jdbc-api:jar"
-    
-    systemProperty 'jdbcApiJarFile', project(':apps:service-builder:jdbc:jdbc-api').jar.archivePath
 
+	systemProperty 'jdbcApiJarFile', project(':apps:service-builder:jdbc:jdbc-api').jar.archivePath
 
 }
 

@@ -9,3 +9,9 @@ Although this project is built and deployed as a portlet war, it still relies on
 NOTE: The javax.portlet.name value comes from the &lt;portlet-name /&gt; tag value from the liferay-portlet.xml file, except all punctuation will be removed.  For example, "blade-liferay-mvc-sample-portlet" would become "bladeliferaymvcsampleportlet".
 
 The web context path comes from the Web-ContextPath key value from the liferay-plugin-package.properties file.
+
+For more details on how to use Module Logging, see the following
+[reference article](https://dev.liferay.com/develop/tutorials/-/knowledge_base/7-0/adjusting-module-logging)
+on Liferay's Developer Network.
+
+HINT: If you're using Tomcat in a Liferay Workspace, you can deploy portal-log4j-ext.xml in [Liferay's sources: portal-impl/classes/META-INF/](https://github.com/liferay/liferay-blade-samples/tree/master/liferay-workspace/configs/common/tomcat-8.0.32/webapps/ROOT/WEB-INF/classes/META-INF/)

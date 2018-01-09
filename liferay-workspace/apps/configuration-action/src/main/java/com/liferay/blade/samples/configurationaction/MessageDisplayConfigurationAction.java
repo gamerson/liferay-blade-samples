@@ -18,8 +18,6 @@ package com.liferay.blade.samples.configurationaction;
 
 import com.liferay.blade.samples.configurationaction.constants.BladeMessagePortletKeys;
 import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.ConfigurationAction;
 import com.liferay.portal.kernel.portlet.DefaultConfigurationAction;
 import com.liferay.portal.kernel.util.ParamUtil;
@@ -37,6 +35,9 @@ import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ConfigurationPolicy;
 import org.osgi.service.component.annotations.Modified;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Liferay
@@ -58,8 +59,8 @@ public class MessageDisplayConfigurationAction
 			HttpServletResponse httpServletResponse)
 		throws Exception {
 
-		if (_log.isDebugEnabled()) {
-			_log.debug("Blade Message Portlet configuration include");
+		if (_logger.isDebugEnabled()) {
+			_logger.debug("Blade Message Portlet configuration include");
 		}
 
 		httpServletRequest.setAttribute(
@@ -75,19 +76,20 @@ public class MessageDisplayConfigurationAction
 			ActionResponse actionResponse)
 		throws Exception {
 
-		if (_log.isDebugEnabled()) {
-			_log.debug("Blade Message Portlet configuration action");
+		if (_logger.isDebugEnabled()) {
+			_logger.debug("Blade Message Portlet configuration action");
 		}
 
 		String fontColor = ParamUtil.getString(actionRequest, "fontColor");
 		String fontFamily = ParamUtil.getString(actionRequest, "fontFamily");
 		String fontSize = ParamUtil.getString(actionRequest, "fontSize");
 
-		if (_log.isDebugEnabled()) {
-			_log.debug(
+		if (_logger.isDebugEnabled()) {
+			_logger.debug(
 				"Message Display Configuration: Font Family:" + fontFamily);
-			_log.debug("Message Display Configuration: Font Size:" + fontSize);
-			_log.debug(
+			_logger.debug(
+				"Message Display Configuration: Font Size:" + fontSize);
+			_logger.debug(
 				"Message Display Configuration: Font Color:" + fontColor);
 		}
 
@@ -105,9 +107,7 @@ public class MessageDisplayConfigurationAction
 			MessageDisplayConfiguration.class, properties);
 	}
 
-	private static final Log _log = LogFactoryUtil.getLog(
-		MessageDisplayConfigurationAction.class);
-
+	private Logger _logger = LoggerFactory.getLogger(getClass().getName());
 	private volatile MessageDisplayConfiguration _messageDisplayConfiguration;
 
 }

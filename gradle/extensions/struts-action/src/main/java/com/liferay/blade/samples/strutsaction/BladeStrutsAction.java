@@ -16,8 +16,6 @@
 
 package com.liferay.blade.samples.strutsaction;
 
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.struts.BaseStrutsAction;
 import com.liferay.portal.kernel.struts.StrutsAction;
 
@@ -28,6 +26,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Liferay
@@ -42,8 +43,8 @@ public class BladeStrutsAction extends BaseStrutsAction {
 			HttpServletRequest request, HttpServletResponse response)
 		throws Exception {
 
-		if (_log.isDebugEnabled()) {
-			_log.debug("Processing path /c/portal/blade");
+		if (_logger.isDebugEnabled()) {
+			_logger.debug("Processing path /c/portal/blade");
 		}
 
 		RequestDispatcher requestDispatcher =
@@ -54,8 +55,7 @@ public class BladeStrutsAction extends BaseStrutsAction {
 		return null;
 	}
 
-	private static final Log _log = LogFactoryUtil.getLog(
-		BladeStrutsAction.class);
+	private Logger _logger = LoggerFactory.getLogger(getClass().getName());
 
 	@Reference(target = "(osgi.web.symbolicname=blade.strutsaction)")
 	private volatile ServletContext _servletContext;
