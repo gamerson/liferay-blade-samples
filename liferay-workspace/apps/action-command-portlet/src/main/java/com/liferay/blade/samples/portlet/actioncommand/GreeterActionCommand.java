@@ -26,27 +26,19 @@ import javax.portlet.ActionResponse;
 import javax.portlet.PortletException;
 
 import org.osgi.service.component.annotations.Component;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.log.LogService;
 
 /**
  * @author Liferay
  */
-@Component(
-	immediate = true,
-	property = {
+@Component(immediate = true, property = {
 		"javax.portlet.name=com_liferay_blade_samples_portlet_actioncommand_GreeterPortlet",
-		"mvc.command.name=greet"
-	},
-	service = MVCActionCommand.class
-)
+		"mvc.command.name=greet" }, service = MVCActionCommand.class)
 public class GreeterActionCommand implements MVCActionCommand {
 
 	@Override
-	public boolean processAction(
-			ActionRequest actionRequest, ActionResponse actionResponse)
-		throws PortletException {
+	public boolean processAction(ActionRequest actionRequest, ActionResponse actionResponse) throws PortletException {
 
 		_handleActionCommand(actionRequest);
 
@@ -56,9 +48,7 @@ public class GreeterActionCommand implements MVCActionCommand {
 	private void _handleActionCommand(ActionRequest actionRequest) {
 		String name = ParamUtil.get(actionRequest, "name", StringPool.BLANK);
 
-		if (_logger.isInfoEnabled()) {
-			_logger.info("Hello " + name);
-		}
+		_log.log(LogService.LOG_INFO, "Hello " + name);
 
 		String greetingMessage = "Hello " + name + "! Welcome to OSGi";
 
@@ -67,6 +57,7 @@ public class GreeterActionCommand implements MVCActionCommand {
 		SessionMessages.add(actionRequest, "greetingMessage", greetingMessage);
 	}
 
-	private Logger _logger = LoggerFactory.getLogger(getClass().getName());
+	@Reference
+	private static LogService _log;
 
 }

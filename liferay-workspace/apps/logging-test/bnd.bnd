@@ -1,4 +1,0 @@
-Bundle-Name: logging-test
-Bundle-SymbolicName: com.liferay.logging.test
-Bundle-Version: 1.0.0
-Export-Package: com.liferay.logging.test.constants

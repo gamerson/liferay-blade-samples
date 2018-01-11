@@ -31,9 +31,8 @@ import org.apache.shiro.util.Factory;
 
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.log.LogService;
 
 /**
  * @author Liferay
@@ -51,9 +50,7 @@ public class ShiroAuthenticatorPre implements Authenticator {
 
 		SecurityUtils.setSecurityManager(factory.getInstance());
 
-		if (_logger.isInfoEnabled()) {
-			_logger.info("activate");
-		}
+		_log.log(LogService.LOG_INFO, "activate");
 	}
 
 	@Override
@@ -62,9 +59,7 @@ public class ShiroAuthenticatorPre implements Authenticator {
 			Map<String, String[]> headerMap, Map<String, String[]> parameterMap)
 		throws AuthException {
 
-		if (_logger.isInfoEnabled()) {
-			_logger.info("authenticateByEmailAddress");
-		}
+		_log.log(LogService.LOG_INFO, "authenticateByEmailAddress");
 
 		UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(
 			emailAddress, password);
@@ -77,9 +72,7 @@ public class ShiroAuthenticatorPre implements Authenticator {
 			boolean authenticated = currentUser.isAuthenticated();
 
 			if (authenticated) {
-				if (_logger.isInfoEnabled()) {
-					_logger.info("authenticated");
-				}
+				_log.log(LogService.LOG_INFO, "authenticated");
 
 				return SKIP_LIFERAY_CHECK;
 			}
@@ -88,7 +81,7 @@ public class ShiroAuthenticatorPre implements Authenticator {
 			}
 		}
 		catch (AuthenticationException ae) {
-			_logger.error(ae.getMessage(), ae);
+			_log.log(LogService.LOG_ERROR, ae.getMessage(), ae);
 			throw new AuthException(ae.getMessage(), ae);
 		}
 	}
@@ -99,9 +92,9 @@ public class ShiroAuthenticatorPre implements Authenticator {
 			Map<String, String[]> headerMap, Map<String, String[]> parameterMap)
 		throws AuthException {
 
-		if (_logger.isInfoEnabled()) {
-			_logger.info("authenticateByScreenName  - not implemented ");
-		}
+		_log.log(
+			LogService.LOG_INFO,
+			"authenticateByScreenName  - not implemented ");
 
 		return SUCCESS;
 	}
@@ -112,13 +105,14 @@ public class ShiroAuthenticatorPre implements Authenticator {
 			Map<String, String[]> headerMap, Map<String, String[]> parameterMap)
 		throws AuthException {
 
-		if (_logger.isInfoEnabled()) {
-			_logger.info("authenticateByScreenName  - not implemented ");
-		}
+		_log.log(
+			LogService.LOG_INFO,
+			"authenticateByScreenName  - not implemented ");
 
 		return SUCCESS;
 	}
 
-	private Logger _logger = LoggerFactory.getLogger(getClass().getName());
+	@Reference
+	private static LogService _log;
 
 }

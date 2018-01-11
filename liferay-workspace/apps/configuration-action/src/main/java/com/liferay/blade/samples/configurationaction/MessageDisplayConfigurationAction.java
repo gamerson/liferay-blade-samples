@@ -35,9 +35,8 @@ import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ConfigurationPolicy;
 import org.osgi.service.component.annotations.Modified;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.log.LogService;
 
 /**
  * @author Liferay
@@ -59,9 +58,9 @@ public class MessageDisplayConfigurationAction
 			HttpServletResponse httpServletResponse)
 		throws Exception {
 
-		if (_logger.isDebugEnabled()) {
-			_logger.debug("Blade Message Portlet configuration include");
-		}
+		_log.log(
+			LogService.LOG_INFO,
+			"Blade Message Portlet configuration include");
 
 		httpServletRequest.setAttribute(
 			MessageDisplayConfiguration.class.getName(),
@@ -76,22 +75,22 @@ public class MessageDisplayConfigurationAction
 			ActionResponse actionResponse)
 		throws Exception {
 
-		if (_logger.isDebugEnabled()) {
-			_logger.debug("Blade Message Portlet configuration action");
-		}
+		_log.log(
+			LogService.LOG_INFO, "Blade Message Portlet configuration action");
 
 		String fontColor = ParamUtil.getString(actionRequest, "fontColor");
 		String fontFamily = ParamUtil.getString(actionRequest, "fontFamily");
 		String fontSize = ParamUtil.getString(actionRequest, "fontSize");
 
-		if (_logger.isDebugEnabled()) {
-			_logger.debug(
-				"Message Display Configuration: Font Family:" + fontFamily);
-			_logger.debug(
-				"Message Display Configuration: Font Size:" + fontSize);
-			_logger.debug(
-				"Message Display Configuration: Font Color:" + fontColor);
-		}
+		_log.log(
+			LogService.LOG_INFO,
+			"Message Display Configuration: Font Family: {}" + fontFamily);
+		_log.log(
+			LogService.LOG_INFO,
+			"Message Display Configuration: Font Size: {}" + fontSize);
+		_log.log(
+			LogService.LOG_INFO,
+			"Message Display Configuration: Font Color: {}" + fontColor);
 
 		setPreference(actionRequest, "fontColor", fontColor);
 		setPreference(actionRequest, "fontFamily", fontFamily);
@@ -107,7 +106,9 @@ public class MessageDisplayConfigurationAction
 			MessageDisplayConfiguration.class, properties);
 	}
 
-	private Logger _logger = LoggerFactory.getLogger(getClass().getName());
+	@Reference
+	private static LogService _log;
+
 	private volatile MessageDisplayConfiguration _messageDisplayConfiguration;
 
 }
