@@ -16,6 +16,12 @@
 
 package com.liferay.blade.samples.springmvc;
 
+import com.liferay.blade.samples.servicebuilder.model.Foo;
+import com.liferay.blade.samples.servicebuilder.service.FooLocalServiceUtil;
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.PortalUtil;
+
 import java.util.Calendar;
 import java.util.Date;
 
@@ -26,16 +32,11 @@ import javax.portlet.RenderResponse;
 
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.log.LogService;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.portlet.bind.annotation.ActionMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
-
-import com.liferay.blade.samples.servicebuilder.model.Foo;
-import com.liferay.blade.samples.servicebuilder.service.FooLocalServiceUtil;
-import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.util.ParamUtil;
-import com.liferay.portal.kernel.util.PortalUtil;
 
 /**
  * Provides the Spring MVC portlet view controller class.

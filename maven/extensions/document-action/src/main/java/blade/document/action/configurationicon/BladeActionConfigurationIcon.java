@@ -39,9 +39,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.osgi.service.log.LogService;
 
 /**
  * Adds the new context menu option to the Document Detail screen options (top
@@ -91,7 +89,7 @@ public class BladeActionConfigurationIcon extends BasePortletConfigurationIcon {
 				fileEntry.getLatestFileVersion().getStatus());
 		}
 		catch (PortalException pe) {
-			_logger.error(pe.getMessage(), pe);
+			_log.log(LogService.LOG_ERROR, pe.getMessage(), pe);
 		}
 
 		portletURL.setParameter("fileName", fileName);
@@ -105,7 +103,7 @@ public class BladeActionConfigurationIcon extends BasePortletConfigurationIcon {
 			portletURL.setWindowState(LiferayWindowState.POP_UP);
 		}
 		catch (WindowStateException wse) {
-			_logger.error(wse.getMessage(), wse);
+			_log.log(LogService.LOG_ERROR, wse.getMessage(), wse);
 		}
 
 		StringBuilder stringBuilder = new StringBuilder();
@@ -148,16 +146,16 @@ public class BladeActionConfigurationIcon extends BasePortletConfigurationIcon {
 			return fileEntry;
 		}
 		catch (PortalException pe) {
-			_logger.error(pe.getMessage(), pe);
+			_log.log(LogService.LOG_ERROR, pe.getMessage(), pe);
 
 			return null;
 		}
 	}
 
+	private static LogService _log;
+
 	@Reference
 	private DLAppService _dlAppService;
-
-	private Logger _logger = LoggerFactory.getLogger(getClass().getName());
 
 	@Reference
 	private Portal _portal;

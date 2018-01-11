@@ -25,9 +25,8 @@ import com.liferay.portal.kernel.service.UserLocalServiceUtil;
 import java.util.Map;
 
 import org.osgi.service.component.annotations.Component;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.log.LogService;
 
 /**
  * @author Liferay
@@ -50,14 +49,13 @@ public class LogMaxFailures implements AuthFailure {
 
 			boolean lockout = user.isLockout();
 
-			if (_logger.isInfoEnabled()) {
-				_logger.info(
-					"onFailureByEmailAddress: " + emailAddress + " is " +
-						(lockout ? "" : "not") + " locked out.");
-			}
+			_log.log(
+				LogService.LOG_INFO,
+				"onFailureByEmailAddress: " + emailAddress + " is " +
+					(lockout ? "" : "not") + " locked out.");
 		}
 		catch (PortalException pe) {
-			_logger.error(pe.getMessage(), pe);
+			_log.log(LogService.LOG_ERROR, pe.getMessage(), pe);
 		}
 	}
 
@@ -73,12 +71,13 @@ public class LogMaxFailures implements AuthFailure {
 
 			boolean lockout = user.isLockout();
 
-			_logger.info(
+			_log.log(
+				LogService.LOG_INFO,
 				"onFailureByScreenName: " + screenName + " is " +
 					(lockout ? "" : "not") + " locked out.");
 		}
 		catch (PortalException pe) {
-			_logger.error(pe.getMessage(), pe);
+			_log.log(LogService.LOG_ERROR, pe.getMessage(), pe);
 		}
 	}
 
@@ -93,15 +92,17 @@ public class LogMaxFailures implements AuthFailure {
 
 			boolean lockout = user.isLockout();
 
-			_logger.info(
+			_log.log(
+				LogService.LOG_INFO,
 				"onFailureById: userId " + userId + " is " +
 					(lockout ? "" : "not") + " locked out.");
 		}
 		catch (PortalException pe) {
-			_logger.error(pe.getMessage(), pe);
+			_log.log(LogService.LOG_ERROR, pe.getMessage(), pe);
 		}
 	}
 
-	private Logger _logger = LoggerFactory.getLogger(getClass().getName());
+	@Reference
+	private static LogService _log;
 
 }

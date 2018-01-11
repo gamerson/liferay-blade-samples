@@ -35,8 +35,8 @@ import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.log.LogService;
 
 /**
  * @author Liferay
@@ -47,9 +47,7 @@ public class JSPWARPortlet extends MVCPortlet {
 			ActionRequest actionRequest, ActionResponse actionResponse)
 		throws Exception {
 
-		if (_logger.isInfoEnabled()) {
-			_logger.info("Deleting a new foo...");
-		}
+		_log.log(LogService.LOG_INFO, "Deleting a new foo...");
 
 		long fooId = ParamUtil.getLong(actionRequest, "fooId");
 
@@ -97,9 +95,7 @@ public class JSPWARPortlet extends MVCPortlet {
 			PortalException.class);
 
 		if (fooId <= 0) {
-			if (_logger.isInfoEnabled()) {
-				_logger.info("Adding a new foo...");
-			}
+			_log.log(LogService.LOG_INFO, "Adding a new foo...");
 
 			Foo foo = getFooLocalService().createFoo(0);
 
@@ -112,9 +108,7 @@ public class JSPWARPortlet extends MVCPortlet {
 			getFooLocalService().addFooWithoutId(foo);
 		}
 		else {
-			if (_logger.isInfoEnabled()) {
-				_logger.info("Updating a new foo...");
-			}
+			_log.log(LogService.LOG_INFO, "Updating a new foo...");
 
 			Foo foo = getFooLocalService().fetchFoo(fooId);
 
@@ -128,6 +122,7 @@ public class JSPWARPortlet extends MVCPortlet {
 		}
 	}
 
-	private Logger _logger = LoggerFactory.getLogger(getClass().getName());
+	@Reference
+	private static LogService _log;
 
 }

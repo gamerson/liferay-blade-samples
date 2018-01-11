@@ -47,8 +47,8 @@ import javax.portlet.WindowStateException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.log.LogService;
 
 /**
  * Provides the Custom Display Context, which provides access to the Documents
@@ -133,7 +133,7 @@ public class BladeActionDisplayContext
 			portletURL.setWindowState(LiferayWindowState.POP_UP);
 		}
 		catch (WindowStateException wse) {
-			_logger.error(wse.getMessage(), wse);
+			_log.log(LogService.LOG_ERROR, wse.getMessage(), wse);
 		}
 
 		StringBuilder stringBuilder = new StringBuilder();
@@ -169,7 +169,9 @@ public class BladeActionDisplayContext
 		return typedSettings.getBooleanValue("showActions");
 	}
 
-	private Logger _logger = LoggerFactory.getLogger(getClass().getName());
+	@Reference
+	private static LogService _log;
+
 	private ThemeDisplay _themeDisplay;
 
 }

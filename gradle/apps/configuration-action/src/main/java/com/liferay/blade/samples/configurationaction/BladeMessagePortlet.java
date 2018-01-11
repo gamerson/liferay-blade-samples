@@ -32,9 +32,8 @@ import javax.portlet.RenderResponse;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Modified;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.log.LogService;
 
 /**
  * @author Liferay
@@ -62,9 +61,7 @@ public class BladeMessagePortlet extends MVCPortlet {
 			RenderRequest renderRequest, RenderResponse renderResponse)
 		throws IOException, PortletException {
 
-		if (_logger.isDebugEnabled()) {
-			_logger.debug("Blade Message Portlet render");
-		}
+		_log.log(LogService.LOG_INFO, "Blade Message Portlet render");
 
 		renderRequest.setAttribute(
 			MessageDisplayConfiguration.class.getName(),
@@ -80,7 +77,9 @@ public class BladeMessagePortlet extends MVCPortlet {
 			MessageDisplayConfiguration.class, properties);
 	}
 
-	private Logger _logger = LoggerFactory.getLogger(getClass().getName());
+	@Reference
+	private static LogService _log;
+
 	private volatile MessageDisplayConfiguration _messageDisplayConfiguration;
 
 }

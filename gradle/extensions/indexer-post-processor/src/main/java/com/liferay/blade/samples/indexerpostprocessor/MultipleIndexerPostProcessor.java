@@ -26,9 +26,8 @@ import com.liferay.portal.kernel.search.filter.BooleanFilter;
 import java.util.Locale;
 
 import org.osgi.service.component.annotations.Component;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.log.LogService;
 
 /**
  * @author Liferay
@@ -48,9 +47,7 @@ public class MultipleIndexerPostProcessor implements IndexerPostProcessor {
 			BooleanFilter booleanFilter, SearchContext searchContext)
 		throws Exception {
 
-		if (_logger.isInfoEnabled()) {
-			_logger.info("postProcessContextBooleanFilter");
-		}
+		_log.log(LogService.LOG_INFO, "postProcessContextBooleanFilter");
 	}
 
 	@Override
@@ -58,18 +55,14 @@ public class MultipleIndexerPostProcessor implements IndexerPostProcessor {
 			BooleanQuery contextQuery, SearchContext searchContext)
 		throws Exception {
 
-		if (_logger.isInfoEnabled()) {
-			_logger.info("postProcessContextQuery");
-		}
+		_log.log(LogService.LOG_INFO, "postProcessContextQuery");
 	}
 
 	@Override
 	public void postProcessDocument(Document document, Object obj)
 		throws Exception {
 
-		if (_logger.isInfoEnabled()) {
-			_logger.info("postProcessDocument");
-		}
+		_log.log(LogService.LOG_INFO, "postProcessDocument");
 	}
 
 	@Override
@@ -77,9 +70,7 @@ public class MultipleIndexerPostProcessor implements IndexerPostProcessor {
 			BooleanQuery fullQuery, SearchContext searchContext)
 		throws Exception {
 
-		if (_logger.isInfoEnabled()) {
-			_logger.info("postProcessFullQuery");
-		}
+		_log.log(LogService.LOG_INFO, "postProcessFullQuery");
 	}
 
 	@Override
@@ -88,9 +79,7 @@ public class MultipleIndexerPostProcessor implements IndexerPostProcessor {
 			SearchContext searchContext)
 		throws Exception {
 
-		if (_logger.isInfoEnabled()) {
-			_logger.info("postProcessSearchQuery");
-		}
+		_log.log(LogService.LOG_INFO, "postProcessSearchQuery");
 	}
 
 	@Override
@@ -98,20 +87,17 @@ public class MultipleIndexerPostProcessor implements IndexerPostProcessor {
 			BooleanQuery searchQuery, SearchContext searchContext)
 		throws Exception {
 
-		if (_logger.isInfoEnabled()) {
-			_logger.info("postProcessSearchQuery");
-		}
+		_log.log(LogService.LOG_INFO, "postProcessSearchQuery");
 	}
 
 	@Override
 	public void postProcessSummary(
 		Summary summary, Document document, Locale locale, String snippet) {
 
-		if (_logger.isInfoEnabled()) {
-			_logger.info("postProcessSummary");
-		}
+		_log.log(LogService.LOG_INFO, "postProcessSummary");
 	}
 
-	private Logger _logger = LoggerFactory.getLogger(getClass().getName());
+	@Reference
+	private static LogService _log;
 
 }

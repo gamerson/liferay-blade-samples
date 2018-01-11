@@ -59,8 +59,7 @@ public class MessageDisplayConfigurationAction
 		throws Exception {
 
 		_log.log(
-			LogService.LOG_INFO,
-			"Blade Message Portlet configuration include");
+			LogService.LOG_INFO, "Blade Message Portlet configuration include");
 
 		httpServletRequest.setAttribute(
 			MessageDisplayConfiguration.class.getName(),

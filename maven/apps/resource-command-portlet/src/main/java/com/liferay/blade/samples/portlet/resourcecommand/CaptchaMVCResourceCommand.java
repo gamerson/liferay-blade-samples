@@ -24,9 +24,8 @@ import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 
 import org.osgi.service.component.annotations.Component;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.log.LogService;
 
 /**
  * @author Liferay
@@ -46,9 +45,7 @@ public class CaptchaMVCResourceCommand implements MVCResourceCommand {
 			ResourceRequest resourceRequest, ResourceResponse resourceResponse)
 		throws PortletException {
 
-		if (_logger.isInfoEnabled()) {
-			_logger.info("get captcha resource ");
-		}
+		_log.log(LogService.LOG_INFO, "get captcha resource ");
 
 		try {
 			CaptchaUtil.serveImage(resourceRequest, resourceResponse);
@@ -56,12 +53,13 @@ public class CaptchaMVCResourceCommand implements MVCResourceCommand {
 			return false;
 		}
 		catch (Exception e) {
-			_logger.error(e.getMessage(), e);
+			_log.log(LogService.LOG_ERROR, e.getMessage(), e);
 
 			return true;
 		}
 	}
 
-	private Logger _logger = LoggerFactory.getLogger(getClass().getName());
+	@Reference
+	private static LogService _log;
 
 }

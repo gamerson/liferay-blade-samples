@@ -32,13 +32,20 @@ import org.osgi.service.log.LogService;
 /**
  * @author Liferay
  */
-@Component(immediate = true, property = {
+@Component(
+	immediate = true,
+	property = {
 		"javax.portlet.name=com_liferay_blade_samples_portlet_actioncommand_GreeterPortlet",
-		"mvc.command.name=greet" }, service = MVCActionCommand.class)
+		"mvc.command.name=greet"
+	},
+	service = MVCActionCommand.class
+)
 public class GreeterActionCommand implements MVCActionCommand {
 
 	@Override
-	public boolean processAction(ActionRequest actionRequest, ActionResponse actionResponse) throws PortletException {
+	public boolean processAction(
+			ActionRequest actionRequest, ActionResponse actionResponse)
+		throws PortletException {
 
 		_handleActionCommand(actionRequest);
 

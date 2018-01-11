@@ -25,9 +25,8 @@ import com.liferay.portal.kernel.service.UserLocalServiceUtil;
 import java.util.Map;
 
 import org.osgi.service.component.annotations.Component;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.log.LogService;
 
 /**
  * @author Liferay
@@ -50,14 +49,13 @@ public class LogAuthFailure implements AuthFailure {
 
 			int failures = user.getFailedLoginAttempts();
 
-			if (_logger.isInfoEnabled()) {
-				_logger.info(
-					"onFailureByEmailAddress: " + emailAddress +
-						" has failed to login " + failures + " times");
-			}
+			_log.log(
+				LogService.LOG_INFO,
+				"onFailureByEmailAddress: " + emailAddress +
+					" has failed to login " + failures + " times");
 		}
 		catch (PortalException pe) {
-			_logger.error(pe.getMessage(), pe);
+			_log.log(LogService.LOG_ERROR, pe.getMessage(), pe);
 		}
 	}
 
@@ -73,14 +71,13 @@ public class LogAuthFailure implements AuthFailure {
 
 			int failures = user.getFailedLoginAttempts();
 
-			if (_logger.isInfoEnabled()) {
-				_logger.info(
-					"onFailureByScreenName: " + screenName +
-						" has failed to login " + failures + " times");
-			}
+			_log.log(
+				LogService.LOG_INFO,
+				"onFailureByScreenName: " + screenName +
+					" has failed to login " + failures + " times");
 		}
 		catch (PortalException pe) {
-			_logger.error(pe.getMessage(), pe);
+			_log.log(LogService.LOG_ERROR, pe.getMessage(), pe);
 		}
 	}
 
@@ -95,17 +92,17 @@ public class LogAuthFailure implements AuthFailure {
 
 			int failures = user.getFailedLoginAttempts();
 
-			if (_logger.isInfoEnabled()) {
-				_logger.info(
-					"onFailureByUserId: userId " + userId +
-						" has failed to login " + failures + " times");
-			}
+			_log.log(
+				LogService.LOG_INFO,
+				"onFailureByUserId: userId " + userId +
+					" has failed to login " + failures + " times");
 		}
 		catch (PortalException pe) {
-			_logger.error(pe.getMessage(), pe);
+			_log.log(LogService.LOG_ERROR, pe.getMessage(), pe);
 		}
 	}
 
-	private Logger _logger = LoggerFactory.getLogger(getClass().getName());
+	@Reference
+	private static LogService _log;
 
 }
