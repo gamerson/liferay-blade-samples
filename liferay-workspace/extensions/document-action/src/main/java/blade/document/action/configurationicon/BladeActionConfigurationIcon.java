@@ -18,8 +18,6 @@ package blade.document.action.configurationicon;
 
 import com.liferay.document.library.kernel.service.DLAppService;
 import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.LiferayWindowState;
 import com.liferay.portal.kernel.portlet.PortletURLFactoryUtil;
 import com.liferay.portal.kernel.portlet.configuration.icon.BasePortletConfigurationIcon;
@@ -41,6 +39,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.log.LogService;
 
 /**
  * Adds the new context menu option to the Document Detail screen options (top
@@ -90,7 +89,7 @@ public class BladeActionConfigurationIcon extends BasePortletConfigurationIcon {
 				fileEntry.getLatestFileVersion().getStatus());
 		}
 		catch (PortalException pe) {
-			_log.error(pe);
+			_log.log(LogService.LOG_ERROR, pe.getMessage(), pe);
 		}
 
 		portletURL.setParameter("fileName", fileName);
@@ -104,7 +103,7 @@ public class BladeActionConfigurationIcon extends BasePortletConfigurationIcon {
 			portletURL.setWindowState(LiferayWindowState.POP_UP);
 		}
 		catch (WindowStateException wse) {
-			_log.error(wse);
+			_log.log(LogService.LOG_ERROR, wse.getMessage(), wse);
 		}
 
 		StringBuilder stringBuilder = new StringBuilder();
@@ -147,17 +146,16 @@ public class BladeActionConfigurationIcon extends BasePortletConfigurationIcon {
 			return fileEntry;
 		}
 		catch (PortalException pe) {
-			_log.error(pe);
+			_log.log(LogService.LOG_ERROR, pe.getMessage(), pe);
 
 			return null;
 		}
 	}
 
-	private static final Log _log = LogFactoryUtil.getLog(
-		BladeActionConfigurationIcon.class);
-
 	@Reference
 	private DLAppService _dlAppService;
+
+	private LogService _log;
 
 	@Reference
 	private Portal _portal;
