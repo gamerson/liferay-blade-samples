@@ -65,6 +65,6 @@ public class GreeterActionCommand implements MVCActionCommand {
 	}
 
 	@Reference
-	private static LogService _log;
+	private LogService _log;
 
 }

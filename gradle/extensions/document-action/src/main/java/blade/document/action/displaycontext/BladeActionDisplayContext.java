@@ -170,7 +170,7 @@ public class BladeActionDisplayContext
 	}
 
 	@Reference
-	private static LogService _log;
+	private LogService _log;
 
 	private ThemeDisplay _themeDisplay;
 

@@ -78,7 +78,7 @@ public class BladeMessagePortlet extends MVCPortlet {
 	}
 
 	@Reference
-	private static LogService _log;
+	private LogService _log;
 
 	private volatile MessageDisplayConfiguration _messageDisplayConfiguration;
 

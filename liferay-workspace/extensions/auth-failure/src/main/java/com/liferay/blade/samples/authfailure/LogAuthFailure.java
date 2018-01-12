@@ -103,6 +103,6 @@ public class LogAuthFailure implements AuthFailure {
 	}
 
 	@Reference
-	private static LogService _log;
+	private LogService _log;
 
 }

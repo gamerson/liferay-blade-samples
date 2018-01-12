@@ -152,7 +152,7 @@ public class BladeActionConfigurationIcon extends BasePortletConfigurationIcon {
 		}
 	}
 
-	private static LogService _log;
+	private LogService _log;
 
 	@Reference
 	private DLAppService _dlAppService;

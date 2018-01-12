@@ -99,6 +99,6 @@ public class MultipleEntityIndexerPostProcessor
 	}
 
 	@Reference
-	private static LogService _log;
+	private LogService _log;
 
 }

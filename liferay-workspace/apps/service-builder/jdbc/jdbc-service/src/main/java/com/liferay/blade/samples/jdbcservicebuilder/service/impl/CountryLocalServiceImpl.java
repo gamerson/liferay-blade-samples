@@ -84,6 +84,6 @@ public class CountryLocalServiceImpl extends CountryLocalServiceBaseImpl {
 	}
 
 	@Reference
-	private static LogService _log;
+	private LogService _log;
 
 }

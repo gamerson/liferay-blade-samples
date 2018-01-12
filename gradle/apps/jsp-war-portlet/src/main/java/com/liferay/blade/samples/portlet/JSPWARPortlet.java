@@ -123,6 +123,6 @@ public class JSPWARPortlet extends MVCPortlet {
 	}
 
 	@Reference
-	private static LogService _log;
+	private LogService _log;
 
 }

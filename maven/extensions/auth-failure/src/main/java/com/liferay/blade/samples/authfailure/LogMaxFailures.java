@@ -103,6 +103,6 @@ public class LogMaxFailures implements AuthFailure {
 	}
 
 	@Reference
-	private static LogService _log;
+	private LogService _log;
 
 }

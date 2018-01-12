@@ -118,7 +118,7 @@ public class BladePortletAction extends BaseStrutsPortletAction {
 	}
 
 	@Reference
-	private static LogService _log;
+	private LogService _log;
 
 	@Reference(unbind = "-")
 	private volatile UserLocalService _userLocalService;

@@ -98,6 +98,6 @@ public class UserEntityIndexerPostProcessor implements IndexerPostProcessor {
 	}
 
 	@Reference
-	private static LogService _log;
+	private LogService _log;
 
 }

@@ -113,6 +113,6 @@ public class ShiroAuthenticatorPre implements Authenticator {
 	}
 
 	@Reference
-	private static LogService _log;
+	private LogService _log;
 
 }
