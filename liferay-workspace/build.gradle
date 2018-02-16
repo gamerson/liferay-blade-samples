@@ -10,7 +10,7 @@ buildscript {
 	}
 }
 
-subprojects { subproject ->
+subprojects {
 	buildscript {
 		repositories {
 			maven {
@@ -29,7 +29,7 @@ subprojects { subproject ->
 		}
 	}
 
-	subproject.plugins.withId("com.liferay.plugin") {
+	plugins.withId("com.liferay.plugin") {
 		liferay {
 			appServers {
 				tomcat {
@@ -50,9 +50,9 @@ configurations {
 }
 
 dependencies {
-	aries 'org.apache.aries.jmx:org.apache.aries.jmx.api:1.1.5'
-	aries 'org.apache.aries.jmx:org.apache.aries.jmx.core:1.1.7'
-	aries 'org.apache.aries:org.apache.aries.util:1.1.3'
+	aries group: "org.apache.aries", name: "org.apache.aries.util", version: "1.1.3"
+	aries group: "org.apache.aries.jmx", name: "org.apache.aries.jmx.api", version: "1.1.5"
+	aries group: "org.apache.aries.jmx", name: "org.apache.aries.jmx.core:1.1.7"
 }
 
 repositories {
@@ -67,9 +67,9 @@ task deployAries(type: Copy) {
 }
 
 task removeTestUtils(type: Delete) {
-    delete fileTree('bundles/osgi/test') {
-        include '**/com.liferay*'
+    delete fileTree("bundles/osgi/test") {
+        include "**/com.liferay*"
     }
 }
 
-initBundle.finalizedBy deployAries,removeTestUtils
+initBundle.finalizedBy deployAries, removeTestUtils
