@@ -69,7 +69,7 @@ task testFunctional(type: Test) {
 		systemProperty 'springmvcPortletWarFile', project.war.archivePath
 	}
 
-	systemProperty 'bladeURL', System.getProperty('bladeURL', "https://releases.liferay.com/tools/blade-cli/latest/blade.jar")
+	systemProperty 'bladeURL', System.getProperty('bladeURL', "http://release-1/1/userContent/liferay-blade-cli/3.0.0.201803301449/blade.jar")
 	systemProperty 'jarFile', jar.archivePath
 
 	doLast {
