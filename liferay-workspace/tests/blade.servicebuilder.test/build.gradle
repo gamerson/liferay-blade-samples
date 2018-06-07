@@ -15,11 +15,11 @@ configurations {
 }
 
 configurations.all {
-    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
-        if (details.requested.group == 'org.seleniumhq.selenium') {
-            details.useVersion '3.8.1'
-        }
-    }
+	resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+		if (details.requested.group == 'org.seleniumhq.selenium' && details.requested.name == 'selenium-chrome-driver') {
+			details.useVersion '3.8.1'
+		}
+	}
 }
 
 dependencies {
