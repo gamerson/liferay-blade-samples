@@ -19,13 +19,12 @@ package com.liferay.blade.samples.servicebuilder.test;
 import aQute.remote.util.JMXBundleDeployer;
 
 import com.liferay.arquillian.portal.annotation.PortalURL;
+import com.liferay.blade.sample.test.functional.utils.BladeSampleFunctionalActionUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 
 import java.io.File;
 
 import java.net.URL;
-
-import java.util.concurrent.TimeUnit;
 
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.RunAsClient;
@@ -39,14 +38,9 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import org.openqa.selenium.Alert;
-import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 /**
  * @author Liferay
@@ -74,32 +68,20 @@ public class BladeServiceBuilderTest {
 		return ShrinkWrap.createFromZipFile(JavaArchive.class, fooWebJar);
 	}
 
-	public void customClick(WebDriver webDriver, WebElement webElement) {
-		Actions action = new Actions(webDriver);
-
-		action.moveToElement(webElement).build().perform();
-
-		WebDriverWait wait = new WebDriverWait(webDriver, 5);
-
-		WebElement element = wait.until(
-			ExpectedConditions.visibilityOf(webElement));
-
-		element.click();
-	}
-
 	@Test
 	public void testSBBasic() throws InterruptedException, PortalException {
 		_webDriver.get(_portletURL.toExternalForm());
 
 		String url = _webDriver.getCurrentUrl();
 
-		_webDriver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+		BladeSampleFunctionalActionUtil.implicitWait(_webDriver);
 
 		String windowHandler = _webDriver.getWindowHandle();
 
-		customClick(_webDriver, _addButton);
+		BladeSampleFunctionalActionUtil.mouseOverClick(_webDriver, _addButton);
 
-		Assert.assertTrue("Field1 is not visible", isVisible(_field1Form));
+		Assert.assertTrue(
+			BladeSampleFunctionalActionUtil.isVisible(_webDriver, _field1Form));
 
 		_field1Form.sendKeys("aSBDeletableEntry");
 
@@ -107,7 +89,7 @@ public class BladeServiceBuilderTest {
 
 		_field5Form.sendKeys("aSBDeletableEntryfield5");
 
-		customClick(_webDriver, _saveButton);
+		BladeSampleFunctionalActionUtil.mouseOverClick(_webDriver, _saveButton);
 
 		Thread.sleep(1000);
 
@@ -118,48 +100,51 @@ public class BladeServiceBuilderTest {
 			_table.getText().contains("aSBDeletableEntry"));
 
 		Assert.assertTrue(
-			"Liferay Icon menu is not visible", isClickable(_lfrIconMenu));
+			"Liferay Icon menu is not visible",
+			BladeSampleFunctionalActionUtil.isClickable(_webDriver, _lfrIconMenu));
 
-		customClick(_webDriver, _lfrIconMenu);
-
-		Assert.assertTrue(
-			"Liferay Menu Edit is not visible", isClickable(_lfrMenuEdit));
-
-		customClick(_webDriver, _lfrMenuEdit);
+		BladeSampleFunctionalActionUtil.mouseOverClick(_webDriver, _lfrIconMenu);
 
 		Assert.assertTrue(
-			"Field 1 form is not visible", isVisible(_field1Form));
+			"Liferay Menu Edit is not visible",
+			BladeSampleFunctionalActionUtil.isClickable(_webDriver, _lfrMenuEdit));
+
+		BladeSampleFunctionalActionUtil.mouseOverClick(_webDriver, _lfrMenuEdit);
+
+		Assert.assertTrue(
+			BladeSampleFunctionalActionUtil.isVisible(_webDriver, _field1Form));
 
 		_field1Form.clear();
 
 		_field1Form.sendKeys("field1 with Updated Name");
 
-		customClick(_webDriver, _saveButton);
+		Thread.sleep(1000);
+
+		BladeSampleFunctionalActionUtil.mouseOverClick(_webDriver, _saveButton);
 
 		Thread.sleep(1000);
 
 		_webDriver.navigate().to(url);
 
 		Assert.assertTrue(
-			"Service Builder Table is not visible", isVisible(_table));
-
-		Assert.assertTrue(
 			"Service Builder Table does not contain Updated Name",
 			_table.getText().contains("field1 with Updated Name"));
 
 		Assert.assertTrue(
-				"Liferay Icon menu is not visible", isClickable(_lfrIconMenu));
+			"Liferay Icon menu is not visible",
+			BladeSampleFunctionalActionUtil.isClickable(_webDriver, _lfrIconMenu));
 
-		customClick(_webDriver, _lfrIconMenu);
-
-		Assert.assertTrue(
-			"Liferay Menu Delete is not visible", isClickable(_lfrMenuDelete));
-
-		customClick(_webDriver, _lfrMenuDelete);
+		BladeSampleFunctionalActionUtil.mouseOverClick(_webDriver, _lfrIconMenu);
 
 		Assert.assertTrue(
-				"Alert is not present!",
-				isAlertPresent());
+			"Liferay Menu Delete is not visible",
+			BladeSampleFunctionalActionUtil.isClickable(_webDriver, _lfrMenuDelete));
+
+		BladeSampleFunctionalActionUtil.mouseOverClick(_webDriver, _lfrMenuDelete);
+
+		Assert.assertTrue(
+			"Alert is not present!",
+			BladeSampleFunctionalActionUtil.isAlertPresent(_webDriver));
 
 		_webDriver.switchTo().window(windowHandler);
 
@@ -171,65 +156,16 @@ public class BladeServiceBuilderTest {
 			_table.getText(), !_table.getText().contains("aSBDeletableEntry"));
 	}
 
-	protected boolean isAlertPresent() {
-		try{
-			WebDriverWait webDriverWait = new WebDriverWait(_webDriver, 15);
-
-			Alert alert = webDriverWait.until(
-				ExpectedConditions.alertIsPresent());
-
-			if(alert != null) {
-				_webDriver.switchTo().alert().accept();
-
-				return true;
-			}
-
-			else{
-				throw new NoAlertPresentException();
-			}
-		}
-		catch (NoAlertPresentException e) {
-			return false;
-		}
-	}
-
-	protected boolean isClickable(WebElement webelement) {
-		WebDriverWait webDriverWait = new WebDriverWait(_webDriver, 15);
-
-		try {
-			webDriverWait.until(
-				ExpectedConditions.elementToBeClickable(webelement));
-
-			return true;
-		}
-		catch (org.openqa.selenium.TimeoutException te) {
-			return false;
-		}
-	}
-
-	protected boolean isVisible(WebElement webelement) {
-		WebDriverWait webDriverWait = new WebDriverWait(_webDriver, 30);
-
-		try {
-			webDriverWait.until(ExpectedConditions.visibilityOf(webelement));
-
-			return true;
-		}
-		catch (org.openqa.selenium.TimeoutException te) {
-			return false;
-		}
-	}
-
 	private static String _fooApiJarBSN = "blade.servicebuilder.api";
 	private static String _fooServiceJarBSN = "blade.servicebuilder.svc";
 
 	@FindBy(xpath = "//span[@class='lfr-btn-label']")
 	private WebElement _addButton;
 
-	@FindBy(css = "input[id$='field1']")
+	@FindBy(xpath = "//input[contains(@id,'field1')]")
 	private WebElement _field1Form;
 
-	@FindBy(css = "input[id$='field5']")
+	@FindBy(xpath = "//input[contains(@id,'field5')]")
 	private WebElement _field5Form;
 
 	@FindBy(xpath = "//div[contains(@id,'_com_liferay_blade_samples_servicebuilder_web')]/table//..//tr/td[6]")
@@ -247,7 +183,7 @@ public class BladeServiceBuilderTest {
 	@PortalURL("com_liferay_blade_samples_servicebuilder_web")
 	private URL _portletURL;
 
-	@FindBy(css = "button[type=submit]")
+	@FindBy(xpath = "//button[@type='submit']")
 	private WebElement _saveButton;
 
 	@FindBy(xpath = "//div[contains(@id,'_com_liferay_blade_samples_servicebuilder_web')]/table//..//tr[2]/td[6]")
