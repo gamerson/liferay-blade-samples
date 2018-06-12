@@ -97,6 +97,8 @@ public class BladeSpringMVCPortletTest {
 
 		_field5Form.sendKeys("aSpringDeletableEntryfield5");
 
+		Thread.sleep(1000);
+
 		BladeSampleFunctionalActionUtil.mouseOverClick(_webDriver, _saveButton);
 
 		Thread.sleep(1000);

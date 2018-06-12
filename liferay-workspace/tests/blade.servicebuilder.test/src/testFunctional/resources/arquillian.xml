@@ -6,7 +6,8 @@
 >
 
 	<extension qualifier="webdriver">
-		<property name="browser">firefox</property>
+		<property name="browser">chrome</property>
+		<property name="chromeDriverVersion">2.37</property>
 	</extension>
 
 	<extension qualifier="graphene">

@@ -89,6 +89,8 @@ public class BladeServiceBuilderTest {
 
 		_field5Form.sendKeys("aSBDeletableEntryfield5");
 
+		Thread.sleep(1000);
+
 		BladeSampleFunctionalActionUtil.mouseOverClick(_webDriver, _saveButton);
 
 		Thread.sleep(1000);
