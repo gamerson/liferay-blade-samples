@@ -173,6 +173,10 @@ public class BladeSampleFunctionalActionUtil {
 	public static void mouseOverClick(
 		WebDriver webDriver, WebElement webElement) {
 
+		WebDriverWait webDriverWait = new WebDriverWait(webDriver, 30);
+
+		webDriverWait.until(ExpectedConditions.visibilityOf(webElement));
+
 		Actions action = new Actions(webDriver);
 
 		Actions actionMoveTo = action.moveToElement(webElement);

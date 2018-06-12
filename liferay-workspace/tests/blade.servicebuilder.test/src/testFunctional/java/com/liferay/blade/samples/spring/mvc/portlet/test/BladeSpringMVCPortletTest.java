@@ -97,16 +97,17 @@ public class BladeSpringMVCPortletTest {
 
 		_field5Form.sendKeys("aSpringDeletableEntryfield5");
 
-		Thread.sleep(1000);
-
 		BladeSampleFunctionalActionUtil.mouseOverClick(_webDriver, _saveButton);
 
 		Thread.sleep(1000);
 
 		_webDriver.navigate().to(url);
 
+		_webDriver.navigate().refresh();
+
 		Assert.assertTrue(
-			"Spring Service Builder Table does not contain aSpringDeletableEntry",
+			"Spring Service Builder Table does not contain aSpringDeletableEntry" +
+				_table.getText(),
 			_table.getText().contains("aSpringDeletableEntry"));
 
 		Assert.assertTrue(
@@ -128,13 +129,13 @@ public class BladeSpringMVCPortletTest {
 
 		_field1Form.sendKeys("Spring Updated Name");
 
-		Thread.sleep(1000);
-
 		BladeSampleFunctionalActionUtil.mouseOverClick(_webDriver, _saveButton);
 
 		Thread.sleep(1000);
 
 		_webDriver.navigate().to(url);
+
+		_webDriver.navigate().refresh();
 
 		Assert.assertTrue(
 			"Service Builder Table does not contain Spring Updated Name" +
@@ -161,6 +162,8 @@ public class BladeSpringMVCPortletTest {
 		Thread.sleep(1000);
 
 		_webDriver.navigate().to(url);
+
+		_webDriver.navigate().refresh();
 
 		Assert.assertTrue(
 			_table.getText(),

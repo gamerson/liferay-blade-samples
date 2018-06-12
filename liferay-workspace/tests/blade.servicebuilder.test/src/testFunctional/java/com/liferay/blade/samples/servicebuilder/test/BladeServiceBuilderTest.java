@@ -89,16 +89,17 @@ public class BladeServiceBuilderTest {
 
 		_field5Form.sendKeys("aSBDeletableEntryfield5");
 
-		Thread.sleep(1000);
-
 		BladeSampleFunctionalActionUtil.mouseOverClick(_webDriver, _saveButton);
 
-		Thread.sleep(1000);
+		Thread.sleep(5000);
 
 		_webDriver.navigate().to(url);
 
+		_webDriver.navigate().refresh();
+
 		Assert.assertTrue(
-			"Service Builder Table does not contain aSBDeletableEntry",
+			"Service Builder Table does not contain aSBDeletableEntry" +
+				_table.getText(),
 			_table.getText().contains("aSBDeletableEntry"));
 
 		Assert.assertTrue(
@@ -120,16 +121,17 @@ public class BladeServiceBuilderTest {
 
 		_field1Form.sendKeys("field1 with Updated Name");
 
-		Thread.sleep(1000);
-
 		BladeSampleFunctionalActionUtil.mouseOverClick(_webDriver, _saveButton);
 
-		Thread.sleep(1000);
+		Thread.sleep(5000);
 
 		_webDriver.navigate().to(url);
 
+		_webDriver.navigate().refresh();
+
 		Assert.assertTrue(
-			"Service Builder Table does not contain Updated Name",
+			"Service Builder Table does not contain Updated Name" +
+				_table.getText(),
 			_table.getText().contains("field1 with Updated Name"));
 
 		Assert.assertTrue(
@@ -150,9 +152,11 @@ public class BladeServiceBuilderTest {
 
 		_webDriver.switchTo().window(windowHandler);
 
-		Thread.sleep(1000);
+		Thread.sleep(5000);
 
 		_webDriver.navigate().to(url);
+
+		_webDriver.navigate().refresh();
 
 		Assert.assertTrue(
 			_table.getText(), !_table.getText().contains("aSBDeletableEntry"));
