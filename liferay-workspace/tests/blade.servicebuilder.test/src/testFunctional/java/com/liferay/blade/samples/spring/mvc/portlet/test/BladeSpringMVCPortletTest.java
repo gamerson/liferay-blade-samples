@@ -99,7 +99,7 @@ public class BladeSpringMVCPortletTest {
 
 		BladeSampleFunctionalActionUtil.mouseOverClick(_webDriver, _saveButton);
 
-		Thread.sleep(1000);
+		Thread.sleep(5000);
 
 		_webDriver.navigate().to(url);
 
@@ -112,13 +112,13 @@ public class BladeSpringMVCPortletTest {
 
 		Assert.assertTrue(
 			"Liferay Icon menu is not visible",
-			BladeSampleFunctionalActionUtil.isClickable(_webDriver, _lfrIconMenu));
+			BladeSampleFunctionalActionUtil.isVisible(_webDriver, _lfrIconMenu));
 
 		BladeSampleFunctionalActionUtil.mouseOverClick(_webDriver, _lfrIconMenu);
 
 		Assert.assertTrue(
 			"Liferay Menu Edit is not visible",
-			BladeSampleFunctionalActionUtil.isClickable(_webDriver, _lfrMenuEdit));
+			BladeSampleFunctionalActionUtil.isVisible(_webDriver, _lfrMenuEdit));
 
 		BladeSampleFunctionalActionUtil.mouseOverClick(_webDriver, _lfrMenuEdit);
 
@@ -143,13 +143,13 @@ public class BladeSpringMVCPortletTest {
 
 		Assert.assertTrue(
 			"Liferay Icon menu is not visible",
-			BladeSampleFunctionalActionUtil.isClickable(_webDriver, _lfrIconMenu));
+			BladeSampleFunctionalActionUtil.isVisible(_webDriver, _lfrIconMenu));
 
 		BladeSampleFunctionalActionUtil.mouseOverClick(_webDriver, _lfrIconMenu);
 
 		Assert.assertTrue(
 			"Liferay Menu Delete is not visible",
-			BladeSampleFunctionalActionUtil.isClickable(_webDriver, _lfrMenuDelete));
+			BladeSampleFunctionalActionUtil.isVisible(_webDriver, _lfrMenuDelete));
 
 		BladeSampleFunctionalActionUtil.mouseOverClick(_webDriver, _lfrMenuDelete);
 
