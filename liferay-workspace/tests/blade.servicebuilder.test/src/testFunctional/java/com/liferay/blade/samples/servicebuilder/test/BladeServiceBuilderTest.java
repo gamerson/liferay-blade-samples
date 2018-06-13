@@ -53,6 +53,7 @@ public class BladeServiceBuilderTest {
 	public static void cleanUpDependencies() throws Exception {
 		new JMXBundleDeployer().uninstall(_fooApiJarBSN);
 		new JMXBundleDeployer().uninstall(_fooServiceJarBSN);
+		new JMXBundleDeployer().uninstall(_testJarBSN);
 	}
 
 	@Deployment
@@ -61,9 +62,11 @@ public class BladeServiceBuilderTest {
 		final File fooServiceJar = new File(
 			System.getProperty("fooServiceJarFile"));
 		final File fooWebJar = new File(System.getProperty("fooWebJarFile"));
+		final File jarFile = new File(System.getProperty("jarFile"));
 
 		new JMXBundleDeployer().deploy(_fooApiJarBSN, fooApiJar);
 		new JMXBundleDeployer().deploy(_fooServiceJarBSN, fooServiceJar);
+		new JMXBundleDeployer().deploy(_testJarBSN, jarFile);
 
 		return ShrinkWrap.createFromZipFile(JavaArchive.class, fooWebJar);
 	}
@@ -78,61 +81,10 @@ public class BladeServiceBuilderTest {
 
 		String windowHandler = _webDriver.getWindowHandle();
 
-		BladeSampleFunctionalActionUtil.mouseOverClick(_webDriver, _addButton);
-
 		Assert.assertTrue(
-			BladeSampleFunctionalActionUtil.isVisible(_webDriver, _field1Form));
-
-		_field1Form.sendKeys("aSBDeletableEntry");
-
-		_field5Form.clear();
-
-		_field5Form.sendKeys("aSBDeletableEntryfield5");
-
-		BladeSampleFunctionalActionUtil.mouseOverClick(_webDriver, _saveButton);
-
-		Thread.sleep(5000);
-
-		_webDriver.navigate().to(url);
-
-		_webDriver.navigate().refresh();
-
-		Assert.assertTrue(
-			"Service Builder Table does not contain aSBDeletableEntry" +
+			"Service Builder Table does not contain aDeletableEntry" +
 				_table.getText(),
-			_table.getText().contains("aSBDeletableEntry"));
-
-		Assert.assertTrue(
-			"Liferay Icon menu is not visible",
-			BladeSampleFunctionalActionUtil.isVisible(_webDriver, _lfrIconMenu));
-
-		BladeSampleFunctionalActionUtil.mouseOverClick(_webDriver, _lfrIconMenu);
-
-		Assert.assertTrue(
-			"Liferay Menu Edit is not visible",
-			BladeSampleFunctionalActionUtil.isVisible(_webDriver, _lfrMenuEdit));
-
-		BladeSampleFunctionalActionUtil.mouseOverClick(_webDriver, _lfrMenuEdit);
-
-		Assert.assertTrue(
-			BladeSampleFunctionalActionUtil.isVisible(_webDriver, _field1Form));
-
-		_field1Form.clear();
-
-		_field1Form.sendKeys("field1 with Updated Name");
-
-		BladeSampleFunctionalActionUtil.mouseOverClick(_webDriver, _saveButton);
-
-		Thread.sleep(5000);
-
-		_webDriver.navigate().to(url);
-
-		_webDriver.navigate().refresh();
-
-		Assert.assertTrue(
-			"Service Builder Table does not contain Updated Name" +
-				_table.getText(),
-			_table.getText().contains("field1 with Updated Name"));
+			_table.getText().contains("aDeletableEntry"));
 
 		Assert.assertTrue(
 			"Liferay Icon menu is not visible",
@@ -159,11 +111,12 @@ public class BladeServiceBuilderTest {
 		_webDriver.navigate().refresh();
 
 		Assert.assertTrue(
-			_table.getText(), !_table.getText().contains("aSBDeletableEntry"));
+			_table.getText(), !_table.getText().contains("aDeletableEntry"));
 	}
 
 	private static String _fooApiJarBSN = "blade.servicebuilder.api";
 	private static String _fooServiceJarBSN = "blade.servicebuilder.svc";
+	private static String _testJarBSN = "blade.servicebuilder.test";
 
 	@FindBy(xpath = "//span[@class='lfr-btn-label']")
 	private WebElement _addButton;

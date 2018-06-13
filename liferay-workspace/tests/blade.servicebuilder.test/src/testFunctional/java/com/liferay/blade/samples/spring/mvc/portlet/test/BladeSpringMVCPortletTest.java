@@ -54,6 +54,8 @@ public class BladeSpringMVCPortletTest {
 	public static void cleanUp() throws Exception {
 		new JMXBundleDeployer().uninstall(_fooApiJarBSN);
 		new JMXBundleDeployer().uninstall(_fooServiceJarBSN);
+		new JMXBundleDeployer().uninstall(_testJarBSN);
+
 		BladeCLIUtil.uninstallBundle(_springmvcbundleId);
 	}
 
@@ -63,11 +65,13 @@ public class BladeSpringMVCPortletTest {
 		final File fooServiceJar = new File(
 			System.getProperty("fooServiceJarFile"));
 		final File fooWebJar = new File(System.getProperty("fooWebJarFile"));
+		final File jarFile = new File(System.getProperty("jarFile"));
 		final File springmvcPortletWar = new File(
 			System.getProperty("springmvcPortletWarFile"));
 
 		new JMXBundleDeployer().deploy(_fooApiJarBSN, fooApiJar);
 		new JMXBundleDeployer().deploy(_fooServiceJarBSN, fooServiceJar);
+		new JMXBundleDeployer().deploy(_testJarBSN, jarFile);
 
 		_springmvcbundleId = BladeCLIUtil.installBundle(springmvcPortletWar);
 
@@ -80,66 +84,16 @@ public class BladeSpringMVCPortletTest {
 	public void testSpringBasic() throws InterruptedException, PortalException {
 		_webDriver.get(_portletURL.toExternalForm());
 
+		String url = _webDriver.getCurrentUrl();
+
 		BladeSampleFunctionalActionUtil.implicitWait(_webDriver);
 
 		String windowHandler = _webDriver.getWindowHandle();
 
-		String url = _webDriver.getCurrentUrl();
-
-		BladeSampleFunctionalActionUtil.mouseOverClick(_webDriver, _addButton);
-
 		Assert.assertTrue(
-			BladeSampleFunctionalActionUtil.isVisible(_webDriver, _field1Form));
-
-		_field1Form.sendKeys("aSpringDeletableEntry");
-
-		_field5Form.clear();
-
-		_field5Form.sendKeys("aSpringDeletableEntryfield5");
-
-		BladeSampleFunctionalActionUtil.mouseOverClick(_webDriver, _saveButton);
-
-		Thread.sleep(5000);
-
-		_webDriver.navigate().to(url);
-
-		_webDriver.navigate().refresh();
-
-		Assert.assertTrue(
-			"Spring Service Builder Table does not contain aSpringDeletableEntry" +
+			"Service Builder Table does not contain aDeletableEntry" +
 				_table.getText(),
-			_table.getText().contains("aSpringDeletableEntry"));
-
-		Assert.assertTrue(
-			"Liferay Icon menu is not visible",
-			BladeSampleFunctionalActionUtil.isVisible(_webDriver, _lfrIconMenu));
-
-		BladeSampleFunctionalActionUtil.mouseOverClick(_webDriver, _lfrIconMenu);
-
-		Assert.assertTrue(
-			"Liferay Menu Edit is not visible",
-			BladeSampleFunctionalActionUtil.isVisible(_webDriver, _lfrMenuEdit));
-
-		BladeSampleFunctionalActionUtil.mouseOverClick(_webDriver, _lfrMenuEdit);
-
-		Assert.assertTrue(
-			BladeSampleFunctionalActionUtil.isVisible(_webDriver, _field1Form));
-
-		_field1Form.clear();
-
-		_field1Form.sendKeys("Spring Updated Name");
-
-		BladeSampleFunctionalActionUtil.mouseOverClick(_webDriver, _saveButton);
-
-		Thread.sleep(1000);
-
-		_webDriver.navigate().to(url);
-
-		_webDriver.navigate().refresh();
-
-		Assert.assertTrue(
-			"Service Builder Table does not contain Spring Updated Name" +
-			_table.getText(), _table.getText().contains("Spring Updated Name"));
+			_table.getText().contains("aDeletableEntry"));
 
 		Assert.assertTrue(
 			"Liferay Icon menu is not visible",
@@ -159,20 +113,20 @@ public class BladeSpringMVCPortletTest {
 
 		_webDriver.switchTo().window(windowHandler);
 
-		Thread.sleep(1000);
+		Thread.sleep(5000);
 
 		_webDriver.navigate().to(url);
 
 		_webDriver.navigate().refresh();
 
 		Assert.assertTrue(
-			_table.getText(),
-			!_table.getText().contains("aSpringDeletableEntry"));
+			_table.getText(), !_table.getText().contains("aDeletableEntry"));
 	}
 
 	private static String _fooApiJarBSN = "blade.servicebuilder.api";
 	private static String _fooServiceJarBSN = "blade.servicebuilder.svc";
 	private static String _springmvcbundleId;
+	private static String _testJarBSN = "blade.servicebuilder.test";
 
 	@FindBy(xpath = "//span[@class='lfr-btn-label']")
 	private WebElement _addButton;
