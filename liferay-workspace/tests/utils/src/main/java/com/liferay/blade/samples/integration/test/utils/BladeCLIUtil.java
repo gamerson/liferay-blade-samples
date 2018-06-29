@@ -194,9 +194,9 @@ public class BladeCLIUtil {
 	public static String startBundle(String bundleID) throws Exception {
 		String output = execute("sh", "start", bundleID);
 
-		if (output.toLowerCase().contains("exception")) {
+		/*(if (output.toLowerCase().contains("exception")) {
 			throw new Exception(output);
-		}
+		}*/
 
 		return output;
 	}

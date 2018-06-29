@@ -104,10 +104,6 @@ public class BladeSamplesTest {
 
 	@Test
 	public void testAllBladeSamples() throws Exception {
-		Assume.assumeTrue(
-			BladeSampleFunctionalActionUtil.getPortalVersion().equals("7.0") &&
-			!System.getProperty("portalVersion").contains("master"));
-
 		List<String> bladeSampleOutputFiles = new ArrayList<>();
 		Map<String, String> bundleIDAllMap = new HashMap<>();
 		Map<String, String> bundleIDStartMap = new HashMap<>();
@@ -154,13 +150,18 @@ public class BladeSamplesTest {
 				}
 			}
 		}
+		List<String> startErrorList = new ArrayList<>();
 
 		for (String startBundleID : bundleIDStartMap.keySet()) {
-			BladeCLIUtil.startBundle(startBundleID);
+			startErrorList.add(BladeCLIUtil.startBundle(startBundleID));
 		}
 
 		for (String allBundleID : bundleIDAllMap.keySet()) {
 			BladeCLIUtil.uninstallBundle(allBundleID);
+		}
+
+		if (startErrorList.toString().toLowerCase().contains("exception")) {
+			throw new Exception(startErrorList.toString());
 		}
 	}
 
@@ -217,8 +218,15 @@ public class BladeSamplesTest {
 
 	@Test
 	public void testPanelAppGradleTemplates() throws Exception {
-		_projectPath = BladeCLIUtil.createProject(
-			_testDir, "panel-app", "pahelloworld");
+		if (!BladeSampleFunctionalActionUtil.getPortalVersion().equals("7.0")) {
+			_projectPath = BladeCLIUtil.createProject(
+				_testDir, "panel-app", "pahelloworld", "-v", "7.1");
+		}
+
+		else {
+			_projectPath = BladeCLIUtil.createProject(
+				_testDir, "panel-app", "pahelloworld");
+		}
 
 		BuildTask buildtask = GradleRunnerUtil.executeGradleRunner(
 			_projectPath, "build");
