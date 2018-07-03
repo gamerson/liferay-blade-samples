@@ -80,7 +80,7 @@ task testFunctional(type: Test) {
 		systemProperty 'projectDir', rootProject.projectDir
 	}
 
-	systemProperty 'bladeURL', System.getProperty('bladeURL', "https://releases.liferay.com/tools/blade-cli/latest/blade.jar")
+	systemProperty 'bladeURL', System.getProperty('bladeURL', "http://release-1/1/userContent/liferay-blade-cli/3.1.0.201807032155/blade.jar")
 	systemProperty 'portalVersion', project.getProperty("liferay.workspace.bundle.url")
 
 	doLast {
