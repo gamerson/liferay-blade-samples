@@ -56,8 +56,6 @@ task testFunctional(type: Test) {
 	classpath = sourceSets.testFunctional.runtimeClasspath
 	outputs.upToDateWhen { false }
 
-//	dependsOn ":initBundle", startTestableTomcat
-
 	dependsOn ":apps:action-command-portlet:jar"
 	dependsOn ":apps:configuration-action:jar"
 	dependsOn ":apps:control-panel-portlet:jar"
@@ -101,7 +99,7 @@ task testFunctional(type: Test) {
 		systemProperty 'renderCommandPortletJarFile', project(':apps:render-command-portlet').jar.archivePath
 	}
 
-	systemProperty 'bladeURL', System.getProperty('bladeURL', "https://releases.liferay.com/tools/blade-cli/latest/blade.jar")
+	systemProperty 'bladeURL', System.getProperty('bladeURL', "https://liferay-test-01.ci.cloudbees.com/job/liferay-blade-cli/lastSuccessfulBuild/artifact/cli/build/libs/blade.jar")
 
 	doLast {
 		delete new File("blade.jar")

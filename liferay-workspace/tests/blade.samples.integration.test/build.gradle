@@ -64,7 +64,7 @@ testIntegration {
 
 	}
 
-	systemProperty 'bladeURL', System.getProperty('bladeURL', "https://releases.liferay.com/tools/blade-cli/latest/blade.jar")
+	systemProperty 'bladeURL', System.getProperty('bladeURL', "https://liferay-test-01.ci.cloudbees.com/job/liferay-blade-cli/lastSuccessfulBuild/artifact/cli/build/libs/blade.jar")
 	systemProperty 'portalVersion', project.getProperty("liferay.workspace.bundle.url")
 
 	finalizedBy {

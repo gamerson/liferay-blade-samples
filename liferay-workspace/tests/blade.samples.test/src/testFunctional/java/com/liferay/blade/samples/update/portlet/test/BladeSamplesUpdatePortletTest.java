@@ -69,7 +69,7 @@ public class BladeSamplesUpdatePortletTest {
 		_appsDir = new File(System.getProperty("projectDir"), "apps");
 
 		_projectPath = BladeCLIUtil.createProject(
-			_appsDir, "mvc-portlet", "helloworld");
+			_appsDir, "mvc-portlet", "helloworld", "-v", "7.0");
 
 		BladeCLIUtil.execute(_projectPath, "gw", "assemble");
 
@@ -101,12 +101,8 @@ public class BladeSamplesUpdatePortletTest {
 			"Portlet was not deployed",
 			_helloWorldPortlet.isDisplayed());
 		Assert.assertTrue(
-			_portletTitle.getText(),
-			BladeSampleFunctionalActionUtil.getTextToLowerCase(
-				_portletTitle).equals("helloworld portlet"));
-		Assert.assertTrue(
-			_portletBody.getText(),
-			_portletBody.getText().equals("Hello from helloworld JSP!"));
+			_helloWorldPortlet.getText().contains(
+				"Hello from Helloworld!"));
 
 		File dynamicFile = new File(
 			_projectPath +
@@ -195,13 +191,8 @@ public class BladeSamplesUpdatePortletTest {
 			"Portlet was not deployed",
 			_helloWorldPortlet.isDisplayed());
 		Assert.assertTrue(
-			_portletTitle.getText(),
-			BladeSampleFunctionalActionUtil.getTextToLowerCase(
-				_portletTitle).equals("helloworld portlet"));
-		Assert.assertTrue(
-			_portletBody.getText(),
-			_portletBody.getText().equals(
-				"Hello from helloworld JSP!bar"));
+			_helloWorldPortlet.getText().contains(
+				"Hello from Helloworld!bar"));
 	}
 
 	private static File _appsDir;
@@ -209,16 +200,10 @@ public class BladeSamplesUpdatePortletTest {
 	private static String _helloWorldJarBSN = "helloworld";
 	private static File _projectPath;
 
-	@FindBy(xpath = "//div[contains(@id,'_Helloworld')]")
+	@FindBy(xpath = "//div[contains(@id,'_helloworld')]")
 	private WebElement _helloWorldPortlet;
 
-	@FindBy(xpath = "//div[contains(@id,'_Helloworld')]//..//p")
-	private WebElement _portletBody;
-
-	@FindBy(xpath = "//div[contains(@id,'_Helloworld')]//..//h2")
-	private WebElement _portletTitle;
-
-	@PortalURL("Helloworld")
+	@PortalURL("helloworld")
 	private URL _portletURL;
 
 	@Drone
