@@ -144,9 +144,9 @@ public class BladeCLIUtil {
 
 			int bundleVersion = new Version(jar.getBundleVersion()).getMajor();
 
-			if (bundleVersion != 3) {
+			if (bundleVersion != 2) {
 				throw new Exception(
-					"Expecting bladejar with major version 3, found version: " +
+					"Expecting bladejar with major version 2, found version: " +
 						bundleVersion);
 			}
 
